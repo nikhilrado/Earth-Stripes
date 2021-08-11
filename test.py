@@ -1,0 +1,1 @@
+print("hi %s how are you doing %d" % ("john",7)) 
