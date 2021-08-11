@@ -30,7 +30,10 @@ def createChart(csvPath,imagePath):
     #adds the years to a list
     years = []
     for row in rowsList:
-        years.append(float(row[0][:-2]))
+        if len(row[0]) == 6:
+            years.append(float(row[0][:-2]))
+        else:
+            years.append(float(row[0]))
     #print(years)
 
     firstYear = years[0]
@@ -128,7 +131,7 @@ def createChart(csvPath,imagePath):
 
     def drawInfo(text="New York, NY", infoType="bar stack"):
         #draw = ImageDraw.Draw(img)
-        fnt = ImageFont.truetype("Earth Stripes/Roboto/Roboto-Regular.ttf", 130)
+        fnt = ImageFont.truetype("Roboto/Roboto-Regular.ttf", 130)
         
         if infoType == "stripes":
             #font = ImageFont.truetype('E:/PythonPillow/Fonts/FreeMono.ttf', 40)
@@ -164,9 +167,9 @@ def createChart(csvPath,imagePath):
     #TODO test the algorithim
     #TODO investiate why alaska won't work
 
-    img.show() #will display the image in popup
+    #img.show() #will display the image in popup
     #actually saves the image
-    #img.save(imagePath + ".png")
+    img.save(imagePath + ".png")
 
 
 
@@ -176,4 +179,5 @@ statesList = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","ID","IL","IN","
 #    createChart(state)
 #createChart("World Data Stuff\data\processed\Japan COUNTRY - AnnTemp 1901-2020.csv","World Data Stuff\data\processed\Japan COUNTRY - AnnTemp 1901-2020.png")
 #createChart("G:/.shortcut-targets-by-id/1-78WtuBsUrKVKWF1NKxPcsrf1nvacux2/AP CSP VS Code Workspace/USA.csv","test12.jpg")
-createChart("Earth Stripes\state-data\AK.csv","test7.png")
+#createChart("state-data\AK.csv","test7.png")
+createChart("data\country-data-berkley-earth\processed\AR - AnnTemp 1901-2020.csv","test7.png")
