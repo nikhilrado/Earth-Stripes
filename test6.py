@@ -1,3 +1,5 @@
+from numpy.core.numeric import NaN
+from numpy.lib.type_check import nan_to_num
 import gradient
 import numpy
 import math
@@ -7,7 +9,7 @@ import csv
 
 counter = 0
 
-def createChart(csvPath,imagePath):
+def createChart(csvPath,imagePath,chartType="bars"):
     global counter
     counter += 1
     print("Image %s: %s" % (str(counter),imagePath))
@@ -49,17 +51,26 @@ def createChart(csvPath,imagePath):
     def rgb_to_hex(rgb):
         return '#%02x%02x%02x' % rgb
 
-    def drawBars(chartType="bar stack"):
+    def drawBars(chartType=chartType):
+        #creates a new list without any "nan" values so statistics can be calculated
+        def removeNAN(list):
+            newList = []
+            for item in list:
+                if not(math.isnan(item)):
+                    newList.append(item)
+            return newList
+        cleanTemps = removeNAN(temps)
+
         #runs a bunch of stats on the data
-        mean1971_2000 = numpy.mean(temps[76:-21]) #mean temperature from 1971-2000
-        temps1901_2000 = temps[6:-21] #all temps from 1901-2000
+        mean1971_2000 = numpy.mean(removeNAN(temps[76:-21])) #mean temperature from 1971-2000
+        temps1901_2000 = removeNAN(temps[6:-21]) #all temps from 1901-2000 without NaN
         max1901_2000 = max(temps1901_2000) + 2.6*numpy.std(temps1901_2000)
         min1901_2000 = min(temps1901_2000) - 2.6*numpy.std(temps1901_2000)
-        meanTemp = numpy.mean(temps) #mean of all temperatures
-        maxTemp = max(temps) #max of all temps
-        minTemp = min(temps) #min of all temps
-        upperBoundTemp = meanTemp + 2.6*numpy.std(temps) #if any temp is higher than this it will be pushed down to highest bar color
-        lowerBoundTemp = meanTemp - 2.6*numpy.std(temps) #if any temp is lower than this it will be pushed up to lowest bar color
+        meanTemp = numpy.mean(cleanTemps) #mean of all temperatures
+        maxTemp = max(cleanTemps) #max of all temps
+        minTemp = min(cleanTemps) #min of all temps
+        upperBoundTemp = meanTemp + 2.6*numpy.std(cleanTemps) #if any temp is higher than this it will be pushed down to highest bar color
+        lowerBoundTemp = meanTemp - 2.6*numpy.std(cleanTemps) #if any temp is lower than this it will be pushed up to lowest bar color
         #gradientPercent = round(mean1971_2000-lowerBoundTemp,3)/(upperBoundTemp-lowerBoundTemp)
 
         #print("Gradient List Length: %s" % len(gradientList))
@@ -78,6 +89,10 @@ def createChart(csvPath,imagePath):
             else:
             img1.rectangle([(i*barWidth,0),(i*barWidth+barWidth,h)], fill ="#ff3333")"""
 
+            #if the data is not reliable this will not draw a box for "nan" value
+            if numpy.isnan(temps[i]):
+                #print("yeeeeeeet")
+                continue
             
             anomaly = temps[i]-mean1971_2000
             anomalyList.append(round(anomaly,3))
@@ -100,6 +115,7 @@ def createChart(csvPath,imagePath):
             elif gradientPercent < 0:
                 gradientPercent = 0
 
+
             gradientListIndex = gradientPercent*(len(gradientList))
 
             """lenOfGradientList = len(gradientList)
@@ -119,17 +135,17 @@ def createChart(csvPath,imagePath):
 
             if chartType == "stripes":
                 barWidth = w/len(temps) #how wide each bar should be
-                img1.rectangle([(i*barWidth,0),(i*barWidth+barWidth,h)], fill =color)
-            elif chartType == "bar stack":
+                img1.rectangle([(i*barWidth,0),(i*barWidth+barWidth,h)], fill=color)
+            elif chartType == "bars":
                 height = h/2-(gradientPercent-.5)*2000
                 sideBorder = 100
                 barWidth = (w-2*sideBorder)/len(temps)
-                img1.rectangle([(round(i*barWidth+sideBorder),h/2),(i*barWidth+sideBorder+barWidth,height)], fill =color)            
+                img1.rectangle([(round(i*barWidth+sideBorder),h/2),(i*barWidth+sideBorder+barWidth,height)], fill=color)            
 
             #print(i)
         #print(anomalyList)
 
-    def drawInfo(text="New York, NY", infoType="bar stack"):
+    def drawInfo(text="New York, NY", infoType=chartType):
         #draw = ImageDraw.Draw(img)
         fnt = ImageFont.truetype("Roboto/Roboto-Regular.ttf", 130)
         
@@ -139,7 +155,7 @@ def createChart(csvPath,imagePath):
             textLength = img1.textlength(text,font=fnt) #gets the width in px of the text so we know where to end background
             img1.rectangle([(50,h-200),(textLength+50+30,h-50)], fill ="#ffffff")
             img1.text((50+10,h-200),text,(0,0,0),font=fnt)
-        elif infoType == "bar stack":
+        elif infoType == "bars":
             img1.text((100+10,120),text + " Temperature %i-%i" %(firstYear,lastYear),(255,255,255),font=fnt)
     
     w, h = 3780, 2126 
@@ -161,12 +177,12 @@ def createChart(csvPath,imagePath):
     #gradientList = gradient.generateGradient(heatmap)
     gradientList = ["#08306bff", "#08519cff", "#2171b5ff", "#4292c6ff", "#6baed6ff", "#9ecae1ff", "#c6dbefff", "#deebf7ff", "#fee0d2ff", "#fcbba1ff", "#fc9272ff", "#fb6a4aff", "#ef3b2cff", "#cb181dff", "#a50f15ff", "#67000dff"]
 
-    drawBars("bar stack")
-    drawInfo(location,"bar stack")
+    drawBars(chartType)
+    drawInfo(location,chartType)
     #TODO figure out how to add the info
     #TODO test the algorithim
     #TODO investiate why alaska won't work
-
+    print("done")
     #img.show() #will display the image in popup
     #actually saves the image
     img.save(imagePath + ".png")
@@ -180,4 +196,4 @@ statesList = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","ID","IL","IN","
 #createChart("World Data Stuff\data\processed\Japan COUNTRY - AnnTemp 1901-2020.csv","World Data Stuff\data\processed\Japan COUNTRY - AnnTemp 1901-2020.png")
 #createChart("G:/.shortcut-targets-by-id/1-78WtuBsUrKVKWF1NKxPcsrf1nvacux2/AP CSP VS Code Workspace/USA.csv","test12.jpg")
 #createChart("state-data\AK.csv","test7.png")
-createChart("data\country-data-berkley-earth\processed\AR - AnnTemp 1901-2020.csv","test7.png")
+createChart("G:\My Drive\CLIENTS\Earth Stripes\data\country-data-berkley-earth\processed\TZ - AnnTemp 1901-2015.csv","test7")

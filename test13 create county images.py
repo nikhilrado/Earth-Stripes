@@ -24,11 +24,11 @@ for row in rowsList:
     fileName = "County Data Stuff/data/" + getStateAbrev(row[0][-2:]) + "/"+row[0]+" - AnnTemp 1895-2020.csv"
     
     #https://stackoverflow.com/questions/1274405/how-to-create-new-folder #https://stackoverflow.com/a/1274465
-    newpath = 'G:\.shortcut-targets-by-id/1-78WtuBsUrKVKWF1NKxPcsrf1nvacux2/AP CSP VS Code Workspace/County Data Stuff/images2/'+row[0][-2:] 
+    newpath = 'County Data Stuff/bars/'+row[0][-2:] 
     if not os.path.exists(newpath):
         os.makedirs(newpath)
 
-    imagePath = 'G:\.shortcut-targets-by-id/1-78WtuBsUrKVKWF1NKxPcsrf1nvacux2/AP CSP VS Code Workspace/County Data Stuff/images2/'+row[0][-2:]+"/"+row[0]
+    imagePath = 'County Data Stuff/bars/'+row[0][-2:]+"/"+row[0]
     try:
         test6.createChart(fileName,imagePath)
     except:

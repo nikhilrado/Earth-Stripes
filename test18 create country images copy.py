@@ -12,23 +12,29 @@ def getTerritoryAbrev(state):
         return berklyTerritories[berklyTerritoriesAbbreviations.index(state)]
     return berklyTerritoriesAbbreviations[berklyTerritories.index(state)]
 
-for country in berklyTerritoriesAbbreviations:
-    fileName = "World Data Stuff/data/processed/" + country + " - AnnTemp 1901-2020.csv"
-    
-    #https://stackoverflow.com/questions/1274405/how-to-create-new-folder #https://stackoverflow.com/a/1274465
-    #newpath = 'G:\.shortcut-targets-by-id/1-78WtuBsUrKVKWF1NKxPcsrf1nvacux2/AP CSP VS Code Workspace/World Data Stuff/images/'+country
-    #if not os.path.exists(newpath):
-    #    os.makedirs(newpath)
-
-    imagePath = 'G:\.shortcut-targets-by-id/1-78WtuBsUrKVKWF1NKxPcsrf1nvacux2/AP CSP VS Code Workspace/World Data Stuff/images/'+country
-    try:
-        test6.createChart(fileName,imagePath)
-    except:
-        try:
-            fileName = "World Data Stuff/data/processed/" + country + " - AnnTemp 1901-2015.csv"
-            test6.createChart(fileName,imagePath)
-        except:
-            continue
-    
+def main(chartType="bars"):
+    for country in berklyTerritoriesAbbreviations:
+        dataFileName = "data/country-data-berkley-earth/processed/" + country + " - AnnTemp 1901-2020.csv"
         
-    #TODO: figure out what to do with countries that have data only to 2015
+        #https://stackoverflow.com/questions/1274405/how-to-create-new-folder #https://stackoverflow.com/a/1274465
+        #newpath = 'G:\.shortcut-targets-by-id/1-78WtuBsUrKVKWF1NKxPcsrf1nvacux2/AP CSP VS Code Workspace/World Data Stuff/images/'+country
+        #if not os.path.exists(newpath):
+        #    os.makedirs(newpath)
+
+        
+
+        imagePath = 'results/'+chartType+'/'+country
+        try:
+            test6.createChart(dataFileName,imagePath,chartType)
+        except:
+            try:
+                dataFileName = "data/country-data-berkley-earth/processed/" + country + " - AnnTemp 1901-2015.csv"
+                test6.createChart(dataFileName,imagePath,chartType)
+            except:
+                print("error: "+dataFileName)
+                continue
+        
+            
+        #TODO: figure out what to do with countries that have data only to 2015
+
+main("bars")
