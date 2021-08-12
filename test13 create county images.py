@@ -10,26 +10,32 @@ def getStateAbrev(state):
         return stateFullName[stateShortName.index(state)]
     return stateShortName[stateFullName.index(state)]
 
-f = open('County Data Stuff/list of US counties.csv', "r")
-csv_f = csv.reader(f)
+def main(chartType="bars"):
+    f = open('data/list of US counties.csv', "r")
+    csv_f = csv.reader(f)
 
-rowsList = []
-for row in csv_f:
-    rowsList.append(row)
-#print(rowsList)
+    rowsList = []
+    for row in csv_f:
+        rowsList.append(row)
+    #print(rowsList)
 
-for row in rowsList:
-    #if row[0] == "County" or row[1]!="complete2":
-    #    continue
-    fileName = "County Data Stuff/data/" + getStateAbrev(row[0][-2:]) + "/"+row[0]+" - AnnTemp 1895-2020.csv"
-    
-    #https://stackoverflow.com/questions/1274405/how-to-create-new-folder #https://stackoverflow.com/a/1274465
-    newpath = 'County Data Stuff/bars/'+row[0][-2:] 
-    if not os.path.exists(newpath):
-        os.makedirs(newpath)
+    for row in rowsList:
+        #if row[0] == "County" or row[1]!="complete2":
+        #    continue
+        dataFileName = "data/us-county-data-NOAA/" + getStateAbrev(row[0][-2:]) + "/"+row[0]+" - AnnTemp 1895-2020.csv"
+        
+        #https://stackoverflow.com/questions/1274405/how-to-create-new-folder #https://stackoverflow.com/a/1274465
+        newpath = 'results/'+chartType+'/US/'+row[0][-2:] 
+        if not os.path.exists(newpath):
+            os.makedirs(newpath)
 
-    imagePath = 'County Data Stuff/bars/'+row[0][-2:]+"/"+row[0]
-    try:
-        test6.createChart(fileName,imagePath)
-    except:
-        pass
+        imagePath = 'results/'+chartType+'/US/'+row[0][-2:]+"/"+row[0]
+        try:
+            test6.createChart(dataFileName,imagePath,chartType)
+        except:
+            print("----------error: "+dataFileName)
+            continue
+        #test6.createChart(fileName,imagePath,chartType)
+
+
+main("stripes")

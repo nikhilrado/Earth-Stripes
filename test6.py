@@ -12,8 +12,6 @@ counter = 0
 def createChart(csvPath,imagePath,chartType="bars"):
     global counter
     counter += 1
-    print("Image %s: %s" % (str(counter),imagePath))
-
     #f = open('testdata.csv')
     #f = open('state-data/'+csvName + '.csv')
     f = open(csvPath)
@@ -182,10 +180,14 @@ def createChart(csvPath,imagePath,chartType="bars"):
     #TODO figure out how to add the info
     #TODO test the algorithim
     #TODO investiate why alaska won't work
-    print("done")
+
     #img.show() #will display the image in popup
     #actually saves the image
     img.save(imagePath + ".png")
+
+
+    print("Done: Image %s: %s" % (str(counter),imagePath))
+
 
 
 
