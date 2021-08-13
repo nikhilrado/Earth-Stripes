@@ -1,7 +1,15 @@
 import csv
 import json
 
-f = open("Earth Stripes\JSON stuff\states.csv")
+#convert between long or short name of the state
+stateFullName = ["County","District of Columbia","Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"]
+stateShortName = ["ty","DC","AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"]
+def getStateAbrev(state):
+    if len(state) == 2:
+        return stateFullName[stateShortName.index(state)]
+    return stateShortName[stateFullName.index(state)]
+
+f = open("JSON stuff\states.csv")
 
 csv_f = csv.reader(f)
 
@@ -49,21 +57,21 @@ def columnToJSON(column):
 
     #loads data from current file
     try:
-        f = open('Earth Stripes/JSON stuff/'+location+'.json')
+        f = open('results/json/US/'+getStateAbrev(location)+'.json')
     except:
         #will create the JSON file if not found, cause this program was the first program to create/access the JSON files
-        f = open("Earth Stripes/JSON stuff/template.json")
+        f = open("JSON stuff/template.json")
         
     f = f.read()
     f = json.loads(f)
-    if f["Metadata"]["Name"] == "Template State":
-        f["Metadata"]["Name"] = location
-    f["Local Impacts"] = localImpactData
+    if f["metadata"]["name"] == "Template State":
+        f["metadata"]["name"] = location
+    f["local impacts"] = localImpactData
     #print("")
     #print(f)
 
     #saves file with county name
-    with open('Earth Stripes/JSON stuff/'+location+'.json', "w") as myfile:
+    with open('results/json/US/'+getStateAbrev(location)+'.json', "w") as myfile:
         myfile.write(json.dumps(f, indent=2))
 
 for k in range(len(transposedSheet)):

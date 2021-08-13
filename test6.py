@@ -7,6 +7,8 @@ import matplotlib
 from PIL import Image, ImageDraw, ImageFont
 import csv
 
+import createJSON
+
 counter = 0
 
 def createChart(csvPath,imagePath,chartType="bars"):
@@ -26,7 +28,8 @@ def createChart(csvPath,imagePath,chartType="bars"):
         location = rowsList[0][1]
     rowsList = rowsList[5:] #removes data headers and descriptions
     #print(rowsList)
-
+    createJSON.main(imagePath,location)
+    
     #adds the years to a list
     years = []
     for row in rowsList:
@@ -183,8 +186,7 @@ def createChart(csvPath,imagePath,chartType="bars"):
 
     #img.show() #will display the image in popup
     #actually saves the image
-    img.save(imagePath + ".png")
-
+    #img.save(imagePath + ".png")
 
     print("Done: Image %s: %s" % (str(counter),imagePath))
 
