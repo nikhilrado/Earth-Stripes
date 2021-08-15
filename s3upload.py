@@ -5,18 +5,20 @@ import json
 from datetime import datetime
 import csv
 
+#declaration of basic variables
 s3putCost = 0.005/1000
 upload_bucket = "ortana-test"
 client = boto3.client('s3', aws_access_key_id=access_key, aws_secret_access_key=secret_access_key)
 
+#returns a list of all files in a directory
 def getAllFilesInDir(root):
-    #print(os.listdir("results"))
     fileList = []
     for path, subdirs, files in os.walk(root):
         for name in files:
             fileList.append(os.path.join(path, name))
     return fileList
 
+#will upload a file to s3 and print a statement stating which file was uploaded
 def uploadFile(file):
     upload_file_path = file.replace("results/","")
     client.upload_file(file, upload_bucket, upload_file_path,ExtraArgs={'ACL':'public-read', "ContentType":'image/png'})
@@ -35,6 +37,7 @@ def getFileType(filePath):
         if resourceType in filePath:
             return resourceType
 
+#when run it will upload all files in a directory to s3, if smartUpload is "True", it will only upload files that have been changed since last upload
 def uploadNewChanges(directory="results",smartUpload=True):
     #opens the log file
     f = open("s3upload-log.csv","r")
@@ -42,6 +45,7 @@ def uploadNewChanges(directory="results",smartUpload=True):
     rowsList = []
     for row in csv_f:
         rowsList.append(row)
+    #sets variables from log file
     lastUpload = rowsList[1][0]
     costToDate = float(rowsList[1][-1])
     savingsToDate = float(rowsList[1][-3])
@@ -51,10 +55,13 @@ def uploadNewChanges(directory="results",smartUpload=True):
     #counters, metrics and analytics
     itemsProcessed = 0
     numUploaded = 0
+
+    #will loop through all of the files
     for file in getAllFilesInDir(directory):
-        file = file.replace("\\","/")
+        file = file.replace("\\","/") #fixes annoying formating issue that messes up s3
         itemsProcessed += 1
 
+        #if this is a smart upload then, read the json file, and determine if it needs to be uploaded
         if smartUpload:
             fileType = getFileType(file)
             jsonFile = file.replace(fileType,"json").replace(".png",".json").replace(".jpeg",".json")
@@ -62,6 +69,8 @@ def uploadNewChanges(directory="results",smartUpload=True):
             f = f.read()
             f = json.loads(f)
             #print(f)
+
+            #find the date in the json file, if no date is present, skip file 
             try:
                 lastUpdated = f["resources"][fileType]["last updated"]
                 lastUpdated = datetime.strptime(lastUpdated, '%Y-%m-%d %H:%M:%S.%f')
@@ -70,12 +79,13 @@ def uploadNewChanges(directory="results",smartUpload=True):
                     numUploaded += 1
             except:
                 continue
+        #when smartUpload isn't true, just upload everything
         else:
             uploadFile(file)
             numUploaded += 1
         
 
-        
+    #open up the log file, and record data from the day's upload
     with open('s3upload-log.csv', 'w', newline="") as f:
         # using csv.writer method from CSV package
         #['dateTimeStart', 'dateTimeFinish', 'numUploaded', 'numFailed', 'cost', '', 'smartUpload', 'itemsProcessed', 'itemsSaved', 'initialCost', 'smartCost', 'savings', 'savingsToDate' ,'costToDate']
@@ -86,8 +96,6 @@ def uploadNewChanges(directory="results",smartUpload=True):
 
         write = csv.writer(f)
         write.writerows(rowsList)
-
-
 
 
 uploadNewChanges()
