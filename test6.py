@@ -1,17 +1,18 @@
-from numpy.core.numeric import NaN
-from numpy.lib.type_check import nan_to_num
+#from numpy.core.numeric import NaN
+#from numpy.lib.type_check import nan_to_num
 import gradient
 import numpy
 import math
 import matplotlib
 from PIL import Image, ImageDraw, ImageFont
 import csv
+from datetime import datetime
 
-import createJSON
+import manageJSON
 
 counter = 0
 
-def createChart(csvPath,imagePath,chartType="bars"):
+def createChart(csvPath,imagePath,chartType="bars",width=3780,height=2126): 
     global counter
     counter += 1
     #f = open('testdata.csv')
@@ -28,7 +29,8 @@ def createChart(csvPath,imagePath,chartType="bars"):
         location = rowsList[0][1]
     rowsList = rowsList[5:] #removes data headers and descriptions
     #print(rowsList)
-    createJSON.main(imagePath,location)
+    manageJSON.main(imagePath,location)
+    manageJSON.updateMetadata(imagePath,chartType,width=width,height=height)
     
     #adds the years to a list
     years = []
@@ -52,7 +54,7 @@ def createChart(csvPath,imagePath,chartType="bars"):
     def rgb_to_hex(rgb):
         return '#%02x%02x%02x' % rgb
 
-    def drawBars(chartType=chartType):
+    def drawBars(chartType=chartType,width=width, height=height):
         #creates a new list without any "nan" values so statistics can be calculated
         def removeNAN(list):
             newList = []
@@ -135,13 +137,13 @@ def createChart(csvPath,imagePath,chartType="bars"):
             #print(color)
 
             if chartType == "stripes":
-                barWidth = w/len(temps) #how wide each bar should be
-                img1.rectangle([(i*barWidth,0),(i*barWidth+barWidth,h)], fill=color)
+                barWidth = width/len(temps) #how wide each bar should be
+                img1.rectangle([(i*barWidth,0),(i*barWidth+barWidth,height)], fill=color)
             elif chartType == "bars":
-                height = h/2-(gradientPercent-.5)*2000
+                height = height/2-(gradientPercent-.5)*2000
                 sideBorder = 100
-                barWidth = (w-2*sideBorder)/len(temps)
-                img1.rectangle([(round(i*barWidth+sideBorder),h/2),(i*barWidth+sideBorder+barWidth,height)], fill=color)            
+                barWidth = (width-2*sideBorder)/len(temps)
+                img1.rectangle([(round(i*barWidth+sideBorder),height/2),(i*barWidth+sideBorder+barWidth,height)], fill=color)            
 
             #print(i)
         #print(anomalyList)
@@ -154,16 +156,16 @@ def createChart(csvPath,imagePath,chartType="bars"):
             #font = ImageFont.truetype('E:/PythonPillow/Fonts/FreeMono.ttf', 40)
             # draw.text((x, y),"Sample Text",(r,g,b))
             textLength = img1.textlength(text,font=fnt) #gets the width in px of the text so we know where to end background
-            img1.rectangle([(50,h-200),(textLength+50+30,h-50)], fill ="#ffffff")
-            img1.text((50+10,h-200),text,(0,0,0),font=fnt)
+            img1.rectangle([(50,height-200),(textLength+50+30,height-50)], fill ="#ffffff")
+            img1.text((50+10,height-200),text,(0,0,0),font=fnt)
         elif infoType == "bars":
             img1.text((100+10,120),text + " Temperature %i-%i" %(firstYear,lastYear),(255,255,255),font=fnt)
     
-    w, h = 3780, 2126 
-    shape = [(40, 40), (w - 10, h - 10)]
+    
+    shape = [(40, 40), (width - 10, height - 10)]
     
     # creating new Image object
-    img = Image.new("RGB", (w, h))
+    img = Image.new("RGB", (width, height))
     
     # create rectangle image
     img1 = ImageDraw.Draw(img)  
@@ -200,4 +202,4 @@ statesList = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","ID","IL","IN","
 #createChart("World Data Stuff\data\processed\Japan COUNTRY - AnnTemp 1901-2020.csv","World Data Stuff\data\processed\Japan COUNTRY - AnnTemp 1901-2020.png")
 #createChart("G:/.shortcut-targets-by-id/1-78WtuBsUrKVKWF1NKxPcsrf1nvacux2/AP CSP VS Code Workspace/USA.csv","test12.jpg")
 #createChart("state-data\AK.csv","test7.png")
-createChart("G:\My Drive\CLIENTS\Earth Stripes\data\country-data-berkley-earth\processed\TZ - AnnTemp 1901-2015.csv","test7")
+#createChart("G:\My Drive\CLIENTS\Earth Stripes\data\country-data-berkley-earth\processed\TZ - AnnTemp 1901-2015.csv","test7")

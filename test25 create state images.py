@@ -25,4 +25,4 @@ def main(chartType="bars"):
             print("----------error: "+dataFileName)
             continue
         
-main("bars")
+main("stripes")
