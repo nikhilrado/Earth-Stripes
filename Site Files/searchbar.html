@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<style>
+  input {
+    height: 30px;
+    padding-left: 10px;
+    border-radius: 4px;
+    border: 1px solid rgb(186, 178, 178);
+    box-shadow: 0px 0px 12px #EFEFEF;
+  }
+</style>
+    
+<body>
+<input type="text" id="autocomplete"/>
+    
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhsd3GE-OA66vjOIE_8yGIap1E6L-WVqk&libraries=places"></script>
+
+<script>
+      var input = document.getElementById('autocomplete');
+      var autocomplete = new google.maps.places.Autocomplete(input,{types: ["(regions)"], fields: ['address_components','adr_address','formatted_address']});
+      google.maps.event.addListener(autocomplete, 'place_changed', function(){
+    var place = autocomplete.getPlace();
+
+var county = getCountry(place.address_components,"administrative_area_level_2");
+var state = getCountry(place.address_components,"administrative_area_level_1");
+var country = getCountry(place.address_components,"country");
+
+// extract country short name (e.g. GB for Great Britain) from google geocode API result
+function getCountry(addrComponents,locality) {
+    for (var i = 0; i < addrComponents.length; i++) {
+        if (addrComponents[i].types[0] == locality) {
+            return addrComponents[i].short_name;
+        }
+        if (addrComponents[i].types.length == 2) {
+            if (addrComponents[i].types[0] == "political") {
+                return addrComponents[i].short_name;
+            }
+        }
+    }
+    return false;
+}
+
+console.log(getCountry(place.address_components,"country"));//gets country
+console.log(getCountry(place.address_components,"administrative_area_level_1"));//gets state
+console.log(getCountry(place.address_components,"administrative_area_level_2"));//gets county
+console.log(getCountry(place.address_components,"locality"));//gets locality
+
+window.location.href = "https://www.yelry.com/?state="+state+"&country="+country+"&county="+county; })
+
+</script>
+</body>
