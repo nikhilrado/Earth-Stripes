@@ -38,4 +38,5 @@ def main(chartType="bars"):
         #test6.createChart(fileName,imagePath,chartType)
 
 
-main("bars")
+main("stripes")
+
