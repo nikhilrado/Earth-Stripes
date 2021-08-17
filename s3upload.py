@@ -6,8 +6,10 @@ from datetime import datetime
 import csv
 
 #declaration of basic variables
+resultsDirectory = "results/"
+logFile = "s3upload-log.csv"
 s3putCost = 0.005/1000
-upload_bucket = "ortana-test"
+upload_bucket = "earth-stripes"
 client = boto3.client('s3', aws_access_key_id=access_key, aws_secret_access_key=secret_access_key)
 
 #returns a list of all files in a directory
@@ -20,9 +22,9 @@ def getAllFilesInDir(root):
 
 #will upload a file to s3 and print a statement stating which file was uploaded
 def uploadFile(file):
-    upload_file_path = file.replace("results/","")
-    client.upload_file(file, upload_bucket, upload_file_path,ExtraArgs={'ACL':'public-read', "ContentType":'image/png'})
-    print("Uploaded: "+file)
+    upload_file_path = file.replace(resultsDirectory,"")
+    #client.upload_file(file, upload_bucket, upload_file_path,ExtraArgs={'ACL':'public-read', "ContentType":'image/png'})
+    print("Uploaded: "+ file +" --to-- "+upload_bucket+"/"+upload_file_path)
 
 
 #allowed us to add a object to all the json files-----------------
@@ -31,16 +33,24 @@ for file in getAllFilesInDir("results/json"):
     createJSON.updateMetadata(file,"")'''
 
 #find the type of file from the directory (ex. bars, json, stripes)
+#sorts list by length, so it will recognize labeled versions
+#https://www.geeksforgeeks.org/python-sort-list-according-length-elements/
+def sorting(lst):
+    lst2 = sorted(lst, key=len)
+    return lst2
+
+resourceTypes = sorting(os.listdir(resultsDirectory))
+resourceTypes.reverse()
+print(resourceTypes)
 def getFileType(filePath):
-    resourceTypes = os.listdir("results")
     for resourceType in resourceTypes:
         if resourceType in filePath:
             return resourceType
 
 #when run it will upload all files in a directory to s3, if smartUpload is "True", it will only upload files that have been changed since last upload
-def uploadNewChanges(directory="results",smartUpload=True):
+def uploadNewChanges(directory=resultsDirectory,smartUpload=True):
     #opens the log file
-    f = open("s3upload-log.csv","r")
+    f = open(logFile,"r")
     csv_f = csv.reader(f)
     rowsList = []
     for row in csv_f:
@@ -70,6 +80,7 @@ def uploadNewChanges(directory="results",smartUpload=True):
             f = json.loads(f)
             #print(f)
 
+            #todo make it upload everything if no last updated object present
             #find the date in the json file, if no date is present, skip file 
             try:
                 lastUpdated = f["resources"][fileType]["last updated"]
@@ -86,7 +97,7 @@ def uploadNewChanges(directory="results",smartUpload=True):
         
 
     #open up the log file, and record data from the day's upload
-    with open('s3upload-log.csv', 'w', newline="") as f:
+    with open(logFile, 'w', newline="") as f:
         # using csv.writer method from CSV package
         #['dateTimeStart', 'dateTimeFinish', 'numUploaded', 'numFailed', 'cost', '', 'smartUpload', 'itemsProcessed', 'itemsSaved', 'initialCost', 'smartCost', 'savings', 'savingsToDate' ,'costToDate']
         cost = s3putCost*numUploaded
@@ -96,6 +107,7 @@ def uploadNewChanges(directory="results",smartUpload=True):
 
         write = csv.writer(f)
         write.writerows(rowsList)
+        print(uploadLogData)
 
 
-uploadNewChanges()
+#uploadNewChanges()

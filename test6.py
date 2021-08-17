@@ -7,12 +7,12 @@ import matplotlib
 from PIL import Image, ImageDraw, ImageFont
 import csv
 from datetime import datetime
-
+import os
 import manageJSON
 
 counter = 0
 
-def createChart(csvPath,imagePath,chartType="bars",width=3780,height=2126): 
+def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2126): 
     global counter
     counter += 1
     #f = open('testdata.csv')
@@ -29,7 +29,7 @@ def createChart(csvPath,imagePath,chartType="bars",width=3780,height=2126):
         location = rowsList[0][1]
     rowsList = rowsList[5:] #removes data headers and descriptions
     #print(rowsList)
-    manageJSON.main(imagePath,location)
+    #manageJSON.main(imagePath,location)
     manageJSON.updateMetadata(imagePath,chartType,width=width,height=height)
     
     #adds the years to a list
@@ -136,14 +136,14 @@ def createChart(csvPath,imagePath,chartType="bars",width=3780,height=2126):
             #print(round(gradientListIndex)-1)
             #print(color)
 
-            if chartType == "stripes":
+            if "stripes" in chartType:
                 barWidth = width/len(temps) #how wide each bar should be
                 img1.rectangle([(i*barWidth,0),(i*barWidth+barWidth,height)], fill=color)
-            elif chartType == "bars":
-                height = height/2-(gradientPercent-.5)*2000
+            elif "bars" in chartType:
+                barHeight = height/2-(gradientPercent-.5)*2000
                 sideBorder = 100
                 barWidth = (width-2*sideBorder)/len(temps)
-                img1.rectangle([(round(i*barWidth+sideBorder),height/2),(i*barWidth+sideBorder+barWidth,height)], fill=color)            
+                img1.rectangle([(round(i*barWidth+sideBorder),height/2),(i*barWidth+sideBorder+barWidth,barHeight)], fill=color)            
 
             #print(i)
         #print(anomalyList)
@@ -152,13 +152,13 @@ def createChart(csvPath,imagePath,chartType="bars",width=3780,height=2126):
         #draw = ImageDraw.Draw(img)
         fnt = ImageFont.truetype("Roboto/Roboto-Regular.ttf", 130)
         
-        if infoType == "stripes":
+        if "stripes" in infoType:
             #font = ImageFont.truetype('E:/PythonPillow/Fonts/FreeMono.ttf', 40)
             # draw.text((x, y),"Sample Text",(r,g,b))
             textLength = img1.textlength(text,font=fnt) #gets the width in px of the text so we know where to end background
             img1.rectangle([(50,height-200),(textLength+50+30,height-50)], fill ="#ffffff")
             img1.text((50+10,height-200),text,(0,0,0),font=fnt)
-        elif infoType == "bars":
+        elif "bars" in infoType:
             img1.text((100+10,120),text + " Temperature %i-%i" %(firstYear,lastYear),(255,255,255),font=fnt)
     
     
@@ -181,14 +181,19 @@ def createChart(csvPath,imagePath,chartType="bars",width=3780,height=2126):
     gradientList = ["#08306bff", "#08519cff", "#2171b5ff", "#4292c6ff", "#6baed6ff", "#9ecae1ff", "#c6dbefff", "#deebf7ff", "#fee0d2ff", "#fcbba1ff", "#fc9272ff", "#fb6a4aff", "#ef3b2cff", "#cb181dff", "#a50f15ff", "#67000dff"]
 
     drawBars(chartType)
-    drawInfo(location,chartType)
+    #only draws info on the thing if the file name says labeled in it
+    if "labeled" in chartType:
+        drawInfo(location,chartType)
     #TODO figure out how to add the info
     #TODO test the algorithim
     #TODO investiate why alaska won't work
 
     #img.show() #will display the image in popup
-    #actually saves the image
-    #img.save(imagePath + ".png")
+    #actually saves the image unless save is false
+    if save:
+        if not(os.path.isdir(os.path.dirname(imagePath))):
+            os.mkdir(os.path.dirname(imagePath))
+        img.save(imagePath + ".png")
 
     print("Done: Image %s: %s" % (str(counter),imagePath))
 
@@ -202,4 +207,4 @@ statesList = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","ID","IL","IN","
 #createChart("World Data Stuff\data\processed\Japan COUNTRY - AnnTemp 1901-2020.csv","World Data Stuff\data\processed\Japan COUNTRY - AnnTemp 1901-2020.png")
 #createChart("G:/.shortcut-targets-by-id/1-78WtuBsUrKVKWF1NKxPcsrf1nvacux2/AP CSP VS Code Workspace/USA.csv","test12.jpg")
 #createChart("state-data\AK.csv","test7.png")
-#createChart("G:\My Drive\CLIENTS\Earth Stripes\data\country-data-berkley-earth\processed\TZ - AnnTemp 1901-2015.csv","test7")
+createChart("data\country-data-berkley-earth\processed\TZ - AnnTemp 1901-2015.csv","results/bars/TZ")

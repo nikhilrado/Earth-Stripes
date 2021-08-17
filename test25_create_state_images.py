@@ -24,5 +24,6 @@ def main(chartType="bars"):
         except:
             print("----------error: "+dataFileName)
             continue
-        
-main("stripes")
+
+
+main("bars")
