@@ -70,26 +70,26 @@
             background-color: DodgerBlue !important;
             color: #ffffff;
         }
+        #autocomplete-mapbox {
+            border-width: 2px;
+            border-color: black;
+            border-radius: 50px;
+            padding-bottom: 10px;
+        }
     </style>
 </head>
 <body>
+<input type="text" class="autocomplete-input" id="autocomplete-mapbox"/>
 
-<h2>Autocomplete</h2>
-
-<p>Start typing:</p>
 
 <!--Make sure the form has the autocomplete function switched off:-->
 <form autocomplete="off" action="/result">
-    <div class="autocomplete" style="width:300px;">
-        <input id="myInput" type="text" name="country" placeholder="Country">
-    </div>
-    <input type="submit">
 </form>
 
 <script>
 //modified from https://stackoverflow.com/a/60447419
 
-    var geocodingClient = mapboxSdk({accessToken: 'pk.eyJ1Ijoib3J0YW5hdGVjaCIsImEiOiJja3NnYXZhaTMxaXp5Mnd1ZmIxejU0OTdzIn0.jduZkCJcSYzdcoOC-bB80A'});
+    var geocodingClient = mapboxSdk({accessToken: 'pk.eyJ1Ijoib3J0YW5hdGVjaCIsImEiOiJja3NnaDQ5YmUxazlzMm9udnNqNGd5a2ZuIn0.igvWjSd5QsKCz_e-XSMChA'});
 
     function autocompleteSuggestionMapBoxAPI(inputParams, callback) {
         geocodingClient.geocoding.forwardGeocode({
@@ -177,7 +177,7 @@
             this.parentNode.appendChild(a);
 
             // suggestion list MapBox api called with callback
-            autocompleteSuggestionMapBoxAPI($('#myInput').val(), function (results) {
+            autocompleteSuggestionMapBoxAPI($('#autocomplete-mapbox').val(), function (results) {
                 results.features.forEach(function (key) {
                     b = document.createElement("DIV");
                     b.innerHTML = "<strong>" + key.place_name.substr(0, val.length) + "</strong>";
@@ -260,7 +260,7 @@
         });
     }
 
-    autocompleteInputBox(document.getElementById("myInput"));
+    autocompleteInputBox(document.getElementById("autocomplete-mapbox"));
 </script>
 
 
