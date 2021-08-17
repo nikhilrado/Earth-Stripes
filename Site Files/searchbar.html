@@ -8,13 +8,44 @@
     border-radius: 4px;
     border: 1px solid rgb(186, 178, 178);
     box-shadow: 0px 0px 12px #EFEFEF;
-    
   }
+  .button {
+  background-color: #FFFFFF;
+  border: solid;
+  color: black;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 8px 2px;
+  border-radius: 50px;
+  
+}
+.button:hover {
+    background-color: white;
+    color: black;
+}
+.flex-parent {
+    display: flex;
+    justify-content: center;
+}
 </style>
     
 <body>
-<input type="text" id="autocomplete"/>
-    
+<input type="text" class="button" id="autocomplete"/>
+
+<div class="flex-parent jc-center">
+<a href="https://earthstripes.org/result/?state=NY&country=US&county=New%20York%20County"><button class="button button1">New York</button></a>
+<a href="https://earthstripes.org/result/?state=CA&country=US&county=Los%20Angeles%20County"><button class="button button2">Los Angeles</button></a>
+<a href="https://earthstripes.org/result/?state=FL&country=US&county=Miami-Dade%20County"><button class="button button3">Miami</button></a>
+<a href="https://earthstripes.org/result/?state=IL&country=US&county=Cook%20County"><button class="button button4">Chicago</button></a>
+<a href="https://earthstripes.org/result/?state=DC&country=US&county=District%20of%20Columbia"><button class="button button5">Washington</button></a>
+</div>
+     
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhsd3GE-OA66vjOIE_8yGIap1E6L-WVqk&libraries=places"></script>
 
 <script>
@@ -47,7 +78,7 @@ console.log(getCountry(place.address_components,"administrative_area_level_1"));
 console.log(getCountry(place.address_components,"administrative_area_level_2"));//gets county
 console.log(getCountry(place.address_components,"locality"));//gets locality
 
-window.location.href = "https://www.yelry.com/?state="+state+"&country="+country+"&county="+county; })
+window.location.href = "https://earthstripes.org/result/?state="+state+"&country="+country+"&county="+county; })
 
 </script>
 </body>
