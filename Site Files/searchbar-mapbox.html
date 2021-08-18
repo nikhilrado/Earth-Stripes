@@ -98,12 +98,13 @@
             autocomplete: true,
             types: ["country","region","postcode","district","place","locality"],
             limit: 5,
+            proximity: [-78,39]
         })
             .send()
             .then(response => {
                 const match = response.body;
                 callback(match);
-                console.log(match)
+                //console.log(match)
             });
     }
     
@@ -123,44 +124,7 @@
         return false;
     }
     
-    //custom function to redirect
-    function redirect(jsonPlaceData) {
-        placeName = jsonPlaceData.place_name
-        
-        //gets the country code of location
-        try {
-        countryCode = jsonPlaceData.properties.short_code
-        }
-        catch(err) {
-            countryCode = jsonPlaceData.context[jsonPlaceData.context.length-1].short_code
-        }
-        if (countryCode == undefined || countryCode.length != 2){
-            countryCode = jsonPlaceData.context[jsonPlaceData.context.length-1].short_code
-        }
-        countryCode = countryCode.toUpperCase()
-        
-        //get stateCode
-        try{
-        stateCode = jsonPlaceData.context[jsonPlaceData.context.length-2].short_code
-        stateCode = stateCode.slice(3)
-        }
-        catch(err) {
-            stateCode = false
-        }
-        
-        //get county 
-        try{
-        countyName = jsonPlaceData.context[jsonPlaceData.context.length-3].text
-        }
-        catch(err) {
-            countyName = jsonPlaceData.text
-        }
-        console.log(placeName)
-        console.log(countryCode)
-        console.log(stateCode)
-        console.log(countyName)
-        window.location.href = "/result/?state="+stateCode+"&country="+countryCode+"&county="+countyName; 
-    }
+    
     
     function autocompleteInputBox(inp) {
         var currentFocus;
@@ -190,8 +154,8 @@
                         $(inp).attr('data-lat', lat);
                         $(inp).attr('data-lng', long);
                         closeAllLists();
-                        //console.log(key);
-                        redirect(key);
+                        console.log(key);
+                        getRedirectURL(key);
                     });
                     a.appendChild(b);
                 });

@@ -23,30 +23,193 @@
   font-size: 16px;
   margin: 8px 2px;
   border-radius: 50px;
+  outline: none;
   
 }
-.button:hover {
+.button:hover, .button:focus {
     background-color: white;
     color: black;
+    outline: none;
+
 }
 .flex-parent {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
+}
+#autocomplete {
+    border-width: 2px;
+    border-color: black;
+    border-radius: 50px;
+    /*padding-bottom: px;*/
+}
+button.button5::before {
+  font-family: fontAwesome;
+  content: "\f041""\00a0";
 }
 </style>
     
 <body>
-<input type="text" class="button" id="autocomplete"/>
+<input type="text" class="autocomplete-input" id="autocomplete"/>
 
 <div class="flex-parent jc-center">
 <a href="https://earthstripes.org/result/?state=NY&country=US&county=New%20York%20County"><button class="button button1">New York</button></a>
 <a href="https://earthstripes.org/result/?state=CA&country=US&county=Los%20Angeles%20County"><button class="button button2">Los Angeles</button></a>
 <a href="https://earthstripes.org/result/?state=FL&country=US&county=Miami-Dade%20County"><button class="button button3">Miami</button></a>
 <a href="https://earthstripes.org/result/?state=IL&country=US&county=Cook%20County"><button class="button button4">Chicago</button></a>
-<a href="https://earthstripes.org/result/?state=DC&country=US&county=District%20of%20Columbia"><button class="button button5">Washington</button></a>
+<a onclick="getLocationForButton()"><button id="b5" class="button button5">Your Location</button></a>
 </div>
      
+<! –– loads font-awesome scripts ––>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhsd3GE-OA66vjOIE_8yGIap1E6L-WVqk&libraries=places"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+
+<script>
+//custom function to get Redirect URL
+function getRedirectURL(jsonPlaceData) {
+    placeName = jsonPlaceData.place_name
+    if (jsonPlaceData.place_type[0]=="country"){
+        countryCode = jsonPlaceData.properties.short_code
+        countryName = jsonPlaceData.text
+        console.log("ran")
+    }
+    //gets the country code of location
+    //try {
+    //countryCode = jsonPlaceData.properties.short_code
+    //countryName = jsonPlaceData.properties.text
+    //}
+    else {
+        countryCode = jsonPlaceData.context[jsonPlaceData.context.length-1].short_code
+        countryName = jsonPlaceData.context[jsonPlaceData.context.length-1].text
+    }
+    //if (countryCode == undefined || countryCode.length != 2){
+    //    countryCode = jsonPlaceData.context[jsonPlaceData.context.length-1].short_code
+    //}
+    countryCode = countryCode.toUpperCase()
+    
+    //get stateCode
+    if (jsonPlaceData.place_type[0]=="region"){
+        stateCode = jsonPlaceData.properties.short_code
+        stateName = jsonPlaceData.text
+        stateCode = stateCode.slice(3)
+        console.log("ranstate")
+    }
+    else{
+    try{
+    stateCode = jsonPlaceData.context[jsonPlaceData.context.length-2].short_code
+    stateName = jsonPlaceData.context[jsonPlaceData.context.length-2].text
+    stateCode = stateCode.slice(3)
+    }
+    catch(err) {
+        stateCode = false
+        stateName = false
+    }}
+    
+    //get county
+    if (jsonPlaceData.place_type[0]=="district"){
+        countyName = jsonPlaceData.text
+        console.log("rancty")
+    }
+    else{
+    try{
+    countyName = jsonPlaceData.context[jsonPlaceData.context.length-3].text
+    }
+    catch(err) {
+        countyName = false
+    }}
+
+    //console.log(placeName)
+    //console.log(countryCode)
+    //console.log(stateCode)
+    //console.log(countyName)
+    //window.location.href = "/result/?state="+stateCode+"&country="+countryCode+"&county="+countyName; 
+    
+    //get lowest location name which will be used as the label for the location btn
+    lowestLocationName = countryName
+    //tried to insert this stuff next to if statement to run when country is just US
+    if (countryCode != "US"){
+        lowestLocationName = countyName //sets it to country name if not US
+    }
+    else{
+        if (stateCode != false){lowestLocationName=stateName}
+        if (countyName != false){lowestLocationName=countyName}
+    }
+    //else if (stateCode.length == 2){
+    //    lowestLocationName = stateName
+    //}
+    //else if (stateCode.length == 2){
+    //    lowestLocationName = countyName
+    locationAutomaticURL = "/result/?state="+stateCode+"&country="+countryCode+"&county="+countyName
+    x.innerHTML = lowestLocationName
+    return locationAutomaticURL; 
+}
+
+//geolocation test stuff
+var locationGranted; //declares global variable
+var locationAutomaticURL; //declares the automatic 
+var lowestLocationName; //
+function getLocationForButton(){
+    getLocation();
+    if (locationGranted){
+        window.location.href = locationAutomaticURL
+        console.log(locationAutomaticURL)
+        console.log("yo")
+    }
+    if (locationAutomaticURL != undefined){
+        x.innerHTML = lowestLocationName
+    }
+}
+
+
+
+function handlePermission() {
+  navigator.permissions.query({name:'geolocation'}).then(function(result) {
+    if (result.state == 'granted') {
+      locationGranted = true
+      getLocation();
+      
+    }
+  });
+}
+handlePermission()
+      
+var x = document.getElementById("b5");
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function showPosition(position) {
+  //x.innerHTML = lowestLocationName//"Latitude: " + position.coords.latitude +
+  "<br>Longitude: " + position.coords.longitude;
+console.log("API called")
+fetch("https://api.mapbox.com/geocoding/v5/mapbox.places/"+position.coords.longitude+","+position.coords.latitude+".json?access_token=pk.eyJ1Ijoib3J0YW5hdGVjaCIsImEiOiJja3NnaDRqZDkxanl2Mm5xdDc0bWxvdDhtIn0.9gY_o6DxQy3LHBw6h3V1Fg").then(
+function(u){ return u.json();}
+).then(
+function(json){
+data_function(json); //calling and passing json to another function data_function
+}
+)
+
+//another functions
+function data_function(data){
+    console.log(data)
+    console.log(getRedirectURL(data.features[0]))
+    locationGranted = true
+    if (locationGranted){
+        document.getElementById("b5").onclick = getRedirectURL(data.features[0]);
+    }
+}
+}
+</script>
+
 
 <script>
       var input = document.getElementById('autocomplete');
@@ -54,9 +217,9 @@
       google.maps.event.addListener(autocomplete, 'place_changed', function(){
     var place = autocomplete.getPlace();
 
-var county = getCountry(place.address_components,"administrative_area_level_2");
-var state = getCountry(place.address_components,"administrative_area_level_1");
-var country = getCountry(place.address_components,"country");
+var countyName = getCountry(place.address_components,"administrative_area_level_2");
+var stateCode = getCountry(place.address_components,"administrative_area_level_1");
+var countryCode = getCountry(place.address_components,"country");
 
 // extract country short name (e.g. GB for Great Britain) from google geocode API result
 function getCountry(addrComponents,locality) {
@@ -78,7 +241,7 @@ console.log(getCountry(place.address_components,"administrative_area_level_1"));
 console.log(getCountry(place.address_components,"administrative_area_level_2"));//gets county
 console.log(getCountry(place.address_components,"locality"));//gets locality
 
-window.location.href = "https://earthstripes.org/result/?state="+state+"&country="+country+"&county="+county; })
+window.location.href = "/result/?state="+stateCode+"&country="+countryCode+"&county="+countyName; })
 
 </script>
 </body>
