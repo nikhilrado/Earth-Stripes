@@ -12,7 +12,7 @@ import manageJSON
 
 counter = 0
 
-def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2126): 
+def createChart(csvPath,imagePath,chartType="bars",save=False,width=3780,height=2126): 
     global counter
     counter += 1
     #f = open('testdata.csv')
@@ -30,7 +30,6 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
     rowsList = rowsList[5:] #removes data headers and descriptions
     #print(rowsList)
     #manageJSON.main(imagePath,location)
-    manageJSON.updateMetadata(imagePath,chartType,width=width,height=height)
     
     #adds the years to a list
     years = []
@@ -43,6 +42,8 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
 
     firstYear = years[0]
     lastYear = years[-1]
+
+    manageJSON.updateMetadata(imagePath,chartType,width=width,height=height,startYear=firstYear,endYear=lastYear)
 
     #adds the temperatures to a list
     temps = []
