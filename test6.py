@@ -65,19 +65,20 @@ def createChart(csvPath,imagePath,chartType="bars",save=False,width=3780,height=
             return newList
         cleanTemps = removeNAN(temps)
 
-        def getMean1971_2000(listOfTemperatures):
-            temps1971_2000 = []
+        #returns temperatures between two dates inclusive with date1 being lower than date2
+        def getDatesBetween(listOfTemperatures,date1,date2):
+            tempsBetweenDates = []
             if len(years) != len(listOfTemperatures): #just a check
                 print("----------ERROR: temps and years don't have same length")
             for i in range(len(listOfTemperatures)):
-                if years[i] >= 1971 and  years[i] <= 2000:
-                    temps1971_2000.append(listOfTemperatures[i])
-            return numpy.mean(removeNAN(temps1971_2000))
+                if years[i] >= date1 and  years[i] <= date2:
+                    tempsBetweenDates.append(listOfTemperatures[i])
+            return tempsBetweenDates
             
                     
         #runs a bunch of stats on the data
-        mean1971_2000 = getMean1971_2000(temps) #numpy.mean(removeNAN(temps[76:-21])) #mean temperature from 1971-2000
-        temps1901_2000 = removeNAN(temps[6:-21]) #all temps from 1901-2000 without NaN
+        mean1971_2000 = numpy.mean(removeNAN(getDatesBetween(temps,1971,2000))) #QualityControlDone #mean temperature from 1971-2000
+        temps1901_2000 = removeNAN(getDatesBetween(temps,1901,2000)) #QualityControlDone #all temps from 1901-2000 without NaN
         maxstd1901_2000 = numpy.average(temps1901_2000) + 2.6*numpy.std(temps1901_2000)
         minstd1901_2000 = numpy.average(temps1901_2000) - 2.6*numpy.std(temps1901_2000)
         meanTemp = numpy.mean(cleanTemps) #mean of all temperatures
@@ -124,6 +125,7 @@ def createChart(csvPath,imagePath,chartType="bars",save=False,width=3780,height=
             #gradientPercent = round(temps[i]-minTemp,3)/(maxTemp-minTemp)
 
             #--sets the gradint Percent to the min and max of 0 or 1 when the data goes over
+            unboundedGradientPercent = gradientPercent #this keeps the original gradient percent so it can be used as height in the bars, but allows the gradientPercent to continue so colors will fall in their consistant categories
             if gradientPercent > 1: 
                 gradientPercent = 1
             elif gradientPercent < 0:
@@ -151,7 +153,9 @@ def createChart(csvPath,imagePath,chartType="bars",save=False,width=3780,height=
                 barWidth = width/len(temps) #how wide each bar should be
                 img1.rectangle([(i*barWidth,0),(i*barWidth+barWidth,height)], fill=color)
             elif "bars" in chartType:
-                barHeight = height/2-(gradientPercent-.5)*2000
+                #barHeight = height/2-(gradientPercent-.5)*2000
+                barHeight = height/2-(unboundedGradientPercent-.5)*900
+
                 sideBorder = 100
                 barWidth = (width-2*sideBorder)/len(temps)
                 img1.rectangle([(round(i*barWidth+sideBorder),height/2),(i*barWidth+sideBorder+barWidth,barHeight)], fill=color)            
@@ -218,4 +222,4 @@ statesList = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","ID","IL","IN","
 #createChart("World Data Stuff\data\processed\Japan COUNTRY - AnnTemp 1901-2020.csv","World Data Stuff\data\processed\Japan COUNTRY - AnnTemp 1901-2020.png")
 #createChart("G:/.shortcut-targets-by-id/1-78WtuBsUrKVKWF1NKxPcsrf1nvacux2/AP CSP VS Code Workspace/USA.csv","test12.jpg")
 #createChart("state-data\AK.csv","test7.png")
-createChart("data\country-data-berkley-earth\processed\ZW - AnnTemp 1901-2020.csv","results/stripes/ZW",chartType="stripes")
+createChart("data\country-data-berkley-earth\processed\AE - AnnTemp 1901-2020.csv","results/labeled-bars/AE",chartType="labeled-bars")
