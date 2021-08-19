@@ -12,7 +12,7 @@ import manageJSON
 
 counter = 0
 
-def createChart(csvPath,imagePath,chartType="bars",save=False,width=3780,height=2126): 
+def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2126): 
     global counter
     counter += 1
     #f = open('testdata.csv')
@@ -203,7 +203,7 @@ def createChart(csvPath,imagePath,chartType="bars",save=False,width=3780,height=
     #TODO test the algorithim
     #TODO investiate why alaska won't work
 
-    img.show() #will display the image in popup
+    #img.show() #will display the image in popup
     #actually saves the image unless save is false
     if save:
         if not(os.path.isdir(os.path.dirname(imagePath))):
@@ -222,4 +222,4 @@ statesList = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","ID","IL","IN","
 #createChart("World Data Stuff\data\processed\Japan COUNTRY - AnnTemp 1901-2020.csv","World Data Stuff\data\processed\Japan COUNTRY - AnnTemp 1901-2020.png")
 #createChart("G:/.shortcut-targets-by-id/1-78WtuBsUrKVKWF1NKxPcsrf1nvacux2/AP CSP VS Code Workspace/USA.csv","test12.jpg")
 #createChart("state-data\AK.csv","test7.png")
-createChart("data\country-data-berkley-earth\processed\AE - AnnTemp 1901-2020.csv","results/labeled-bars/AE",chartType="labeled-bars")
+#createChart("data\country-data-berkley-earth\processed\AE - AnnTemp 1901-2020.csv","results/labeled-bars/AE",chartType="labeled-bars")

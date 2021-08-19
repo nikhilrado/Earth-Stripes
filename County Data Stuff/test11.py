@@ -49,7 +49,7 @@ with open('County Data Stuff/test11.txt', "r") as myfile:
 
 newData = ""
 counter = 0
-for state in stateShortName2:
+for state in stateShortName:
     for i in range(400):
         counter += 1
         resourceURL = "https://www.ncdc.noaa.gov/cag/county/time-series/%s-%s-tavg-12-12-1895-2021.csv" % (state,f"{i*2+1:03d}")
