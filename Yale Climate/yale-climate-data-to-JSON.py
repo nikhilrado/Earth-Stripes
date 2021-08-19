@@ -2,6 +2,7 @@ import csv
 import json
 
 #This program takes the data from the Yale Climate Opinion Survey and places it in the respective JSON files
+#Note: changed the name of DC state from "District of Columbia" to "Washington D.C." then deleted the DC county line in the data file
 
 #convert between long or short name of the state
 stateFullName = ["County","Washington D.C.","Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"]
@@ -21,6 +22,7 @@ for row in csv_f:
 dataHeader = rowsList[0] #sets first row as headers
 rowsList.pop(0) #removes first row
 
+#gets the resource ID of the file
 def getYaleResourceID(row):
     resourceID = None
     if row[0] == "County":
@@ -44,6 +46,7 @@ for row in rowsList:
     f = f.read()
     f = json.loads(f)
 
+    #template JSON/python dict
     y = {
         "YaleClimateOpinionData2020":{
             "metadata":{
@@ -55,13 +58,13 @@ for row in rowsList:
     }
     
     print(y)
-    if len(dataHeader) != len(row):
+    if len(dataHeader) != len(row): #just a check
         print("---------Error: potentially missing data")
     for i in range(len(dataHeader)):
         y["YaleClimateOpinionData2020"]["data"][dataHeader[i]]=row[i]
     f.update(y)
     print(y)
     
-    #sets name
+    #sets name and saves file
     with open('results/json/'+resourceID+'.json', "w") as myfile:
         myfile.write(json.dumps(f, indent=2))
