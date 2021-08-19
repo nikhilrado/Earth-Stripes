@@ -65,16 +65,26 @@ def createChart(csvPath,imagePath,chartType="bars",save=False,width=3780,height=
             return newList
         cleanTemps = removeNAN(temps)
 
+        def getMean1971_2000(listOfTemperatures):
+            temps1971_2000 = []
+            if len(years) != len(listOfTemperatures): #just a check
+                print("----------ERROR: temps and years don't have same length")
+            for i in range(len(listOfTemperatures)):
+                if years[i] >= 1971 and  years[i] <= 2000:
+                    temps1971_2000.append(listOfTemperatures[i])
+            return numpy.mean(removeNAN(temps1971_2000))
+            
+                    
         #runs a bunch of stats on the data
-        mean1971_2000 = numpy.mean(removeNAN(temps[76:-21])) #mean temperature from 1971-2000
+        mean1971_2000 = getMean1971_2000(temps) #numpy.mean(removeNAN(temps[76:-21])) #mean temperature from 1971-2000
         temps1901_2000 = removeNAN(temps[6:-21]) #all temps from 1901-2000 without NaN
-        max1901_2000 = max(temps1901_2000) + 2.6*numpy.std(temps1901_2000)
-        min1901_2000 = min(temps1901_2000) - 2.6*numpy.std(temps1901_2000)
+        maxstd1901_2000 = numpy.average(temps1901_2000) + 2.6*numpy.std(temps1901_2000)
+        minstd1901_2000 = numpy.average(temps1901_2000) - 2.6*numpy.std(temps1901_2000)
         meanTemp = numpy.mean(cleanTemps) #mean of all temperatures
         maxTemp = max(cleanTemps) #max of all temps
         minTemp = min(cleanTemps) #min of all temps
-        upperBoundTemp = meanTemp + 2.6*numpy.std(cleanTemps) #if any temp is higher than this it will be pushed down to highest bar color
-        lowerBoundTemp = meanTemp - 2.6*numpy.std(cleanTemps) #if any temp is lower than this it will be pushed up to lowest bar color
+        upperBoundTemp = maxstd1901_2000#meanTemp + 2.6*numpy.std(cleanTemps) #if any temp is higher than this it will be pushed down to highest bar color
+        lowerBoundTemp = minstd1901_2000 #meanTemp - 2.6*numpy.std(cleanTemps) #if any temp is lower than this it will be pushed up to lowest bar color
         #gradientPercent = round(mean1971_2000-lowerBoundTemp,3)/(upperBoundTemp-lowerBoundTemp)
 
         #print("Gradient List Length: %s" % len(gradientList))
@@ -189,7 +199,7 @@ def createChart(csvPath,imagePath,chartType="bars",save=False,width=3780,height=
     #TODO test the algorithim
     #TODO investiate why alaska won't work
 
-    #img.show() #will display the image in popup
+    img.show() #will display the image in popup
     #actually saves the image unless save is false
     if save:
         if not(os.path.isdir(os.path.dirname(imagePath))):
@@ -208,4 +218,4 @@ statesList = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","ID","IL","IN","
 #createChart("World Data Stuff\data\processed\Japan COUNTRY - AnnTemp 1901-2020.csv","World Data Stuff\data\processed\Japan COUNTRY - AnnTemp 1901-2020.png")
 #createChart("G:/.shortcut-targets-by-id/1-78WtuBsUrKVKWF1NKxPcsrf1nvacux2/AP CSP VS Code Workspace/USA.csv","test12.jpg")
 #createChart("state-data\AK.csv","test7.png")
-createChart("data\country-data-berkley-earth\processed\TZ - AnnTemp 1901-2015.csv","results/bars/TZ")
+createChart("data\country-data-berkley-earth\processed\ZW - AnnTemp 1901-2020.csv","results/stripes/ZW",chartType="stripes")
