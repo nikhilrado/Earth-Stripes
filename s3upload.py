@@ -43,7 +43,7 @@ def sorting(lst):
 
 resourceTypes = sorting(os.listdir(resultsDirectory))
 resourceTypes.reverse()
-print(resourceTypes)
+#print(resourceTypes)
 def getFileType(filePath):
     for resourceType in resourceTypes:
         if resourceType in filePath:
