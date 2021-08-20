@@ -9,7 +9,7 @@ def getStateAbrev(state):
         return stateFullName[stateShortName.index(state)]
     return stateShortName[stateFullName.index(state)]
 
-f = open("JSON stuff\states.csv")
+f = open("JSON stuff\State Data Information - CleanData8.csv")
 
 csv_f = csv.reader(f)
 
@@ -28,11 +28,67 @@ for i in range(len(rowsList[0])):
     transposedSheet.append(temp)
     
 headings = transposedSheet[0]
-transposedSheet.pop(0)
+transposedSheet.pop(0) #removes first line
 
 #print(headings)
-#print(transposedSheet)
+#for line in transposedSheet:
+#    print(line)
+def sanitizeText(text):
+    text.replace("\n", " ") #removes newlines, although they should already be removed
+    text.replace("’", "'")
+    return text
 
+def columnToJSON(column):
+    #print(column)
+    container = {
+        "local impact": []
+    }
+
+
+    contentNum = 1
+    for i in range(len(column)):
+        z = {
+        #"category": None,
+        "headline": None,
+        "content": [],
+        }
+        if column[i] == "END":
+            break
+        if column[i] == "CONTENT " + str(contentNum):
+            #z["category"] = column[i+1]
+            z["headline"] = column[i+3]
+
+            
+            #gets the content, could make this code more compact, but want it to be modular for the future
+            if column[i+4] != "":
+                z["content"].append(sanitizeText(column[i+4]))
+            if column[i+5] != "":
+                z["content"].append(sanitizeText(column[i+5]))
+            if column[i+6] != "":
+                z["content"].append(sanitizeText(column[i+6]))
+            if column[i+7] != "":
+                z["content"].append(sanitizeText(column[i+7]))
+            if column[i+8] != "":
+                z["content"].append(sanitizeText(column[i+8]))
+            
+            if z["headline"] != "":
+                container["local impact"].append(z)
+            
+            
+            contentNum += 1
+
+
+
+
+
+
+    print(json.dumps(container, indent=2))
+    with open('test33.json', "w") as myfile:
+        myfile.write(json.dumps(container, indent=2))
+
+columnToJSON(transposedSheet[0])
+
+"""
 def columnToJSON(column):
     localImpactData = []
     location = transposedSheet[column][0]
@@ -78,3 +134,4 @@ for k in range(len(transposedSheet)):
     if transposedSheet[k][1] == "":
         continue
     columnToJSON(k)
+    """
