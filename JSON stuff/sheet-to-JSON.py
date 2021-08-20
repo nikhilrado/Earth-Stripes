@@ -9,7 +9,7 @@ def getStateAbrev(state):
         return stateFullName[stateShortName.index(state)]
     return stateShortName[stateFullName.index(state)]
 
-f = open("JSON stuff\State Data Information - CleanData8.csv")
+f = open("JSON stuff\State Data Information - CleanData9.csv", encoding='utf-8-sig')
 
 csv_f = csv.reader(f)
 
@@ -36,12 +36,15 @@ transposedSheet.pop(0) #removes first line
 def sanitizeText(text):
     text.replace("\n", " ") #removes newlines, although they should already be removed
     text.replace("’", "'")
+    text.replace("â€™","HHHH")
+    print(text)
     return text
 
 def columnToJSON(column):
     #print(column)
+    state = column[0]
     container = {
-        "local impact": []
+        "local impacts": []
     }
 
 
@@ -72,21 +75,24 @@ def columnToJSON(column):
                 z["content"].append(sanitizeText(column[i+8]))
             
             if z["headline"] != "":
-                container["local impact"].append(z)
+                container["local impacts"].append(z)
             
             
             contentNum += 1
 
 
-
-
-
+    f2 = open('JSON stuff/'+getStateAbrev(state)+"test.json")
+    f2 = f2.read()
+    f2 = json.loads(f2)
+    f2["local impacts"] = container["local impacts"]
 
     print(json.dumps(container, indent=2))
-    with open('test33.json', "w") as myfile:
-        myfile.write(json.dumps(container, indent=2))
+    with open('JSON stuff/'+getStateAbrev(state)+"test.json", "w") as myfile:
+        myfile.write(json.dumps(f2, indent=2))
 
-columnToJSON(transposedSheet[0])
+for row in transposedSheet:
+    columnToJSON(row)
+#columnToJSON(transposedSheet[0])
 
 """
 def columnToJSON(column):
