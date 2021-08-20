@@ -36,6 +36,7 @@ def deleteObject(directoryOfJSONFiles,object,subobject=False):
                 continue
         with open(file, "w") as myfile:
             myfile.write(json.dumps(f, indent=2))
+deleteObject("results/json","resources","bars")
 
 def updateMetadata(resourceID,resourceType,width=None,height=None,startYear=None,endYear=None):
     #f = open('results/json/'+resourceID+'.json')
