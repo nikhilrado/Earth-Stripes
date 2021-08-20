@@ -43,7 +43,14 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
     firstYear = years[0]
     lastYear = years[-1]
 
-    manageJSON.updateMetadata(imagePath,chartType,width=width,height=height,startYear=firstYear,endYear=lastYear)
+    if "NOAA" in csvPath:
+        dataSource = "NOAA"
+        dataSourceLink = "https://www.noaa.gov/"
+    if "berkley-earth" in csvPath:
+        dataSource = "Berkley Earth"
+        dataSourceLink = "http://berkeleyearth.org/"
+
+    manageJSON.updateMetadata(imagePath,chartType,width=width,height=height,startYear=firstYear,endYear=lastYear,dataSource=dataSource, dataSourceLink=dataSourceLink)
 
     #adds the temperatures to a list
     temps = []
@@ -208,7 +215,7 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
     if save:
         if not(os.path.isdir(os.path.dirname(imagePath))):
             os.mkdir(os.path.dirname(imagePath))
-        img.save(imagePath + ".png")
+        #img.save(imagePath + ".png")
 
     print("Done: Image %s: %s" % (str(counter),imagePath))
 
