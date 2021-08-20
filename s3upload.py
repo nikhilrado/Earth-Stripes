@@ -9,7 +9,7 @@ import csv
 resultsDirectory = "results/"
 logFile = "s3upload-log.csv"
 s3putCost = 0.005/1000
-upload_bucket = "earth-stripes"
+upload_bucket = "ortana-test"
 client = boto3.client('s3', aws_access_key_id=access_key, aws_secret_access_key=secret_access_key)
 
 #returns a list of all files in a directory
@@ -23,7 +23,9 @@ def getAllFilesInDir(root):
 #will upload a file to s3 and print a statement stating which file was uploaded
 def uploadFile(file):
     upload_file_path = file.replace(resultsDirectory,"")
-    #client.upload_file(file, upload_bucket, upload_file_path,ExtraArgs={'ACL':'public-read', "ContentType":'image/png'})
+    contentType = 'image/png' if '.png' in upload_file_path else False
+    contentType = 'application/json' if '.json' in upload_file_path else False
+    #client.upload_file(file, upload_bucket, upload_file_path,ExtraArgs={'ACL':'public-read', "ContentType":contentType})
     print("Uploaded: "+ file +" --to-- "+upload_bucket+"/"+upload_file_path)
 
 
@@ -111,3 +113,4 @@ def uploadNewChanges(directory=resultsDirectory,smartUpload=True):
 
 
 #uploadNewChanges()
+uploadFile("results/json/US/NY.json")
