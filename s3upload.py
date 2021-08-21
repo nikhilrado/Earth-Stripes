@@ -25,7 +25,7 @@ def uploadFile(file):
     upload_file_path = file.replace(resultsDirectory,"")
     contentType = 'image/png' if '.png' in upload_file_path else False
     contentType = 'application/json' if '.json' in upload_file_path else False
-    #client.upload_file(file, upload_bucket, upload_file_path,ExtraArgs={'ACL':'public-read', "ContentType":contentType})
+    client.upload_file(file, upload_bucket, upload_file_path,ExtraArgs={'ACL':'public-read', "ContentType":contentType})
     print("Uploaded: "+ file +" --to-- "+upload_bucket+"/"+upload_file_path)
 
 
@@ -113,4 +113,5 @@ def uploadNewChanges(directory=resultsDirectory,smartUpload=True):
 
 
 #uploadNewChanges()
-uploadFile("results/json/US/NY.json")
+#uploadFile("results/json/US/NY.json")
+uploadNewChanges(directory="results/json",smartUpload=False)
