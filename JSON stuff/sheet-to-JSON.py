@@ -5,11 +5,12 @@ import json
 stateFullName = ["County","Washington D.C.","Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"]
 stateShortName = ["ty","DC","AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"]
 def getStateAbrev(state):
+    state = state.strip()
     if len(state) == 2:
         return stateFullName[stateShortName.index(state)]
     return stateShortName[stateFullName.index(state)]
 
-f = open("JSON stuff\State Data Information - CleanData9.csv", encoding='utf-8-sig')
+f = open("JSON stuff\State Data Information - CleanData11.csv", encoding='utf-8-sig')
 
 csv_f = csv.reader(f)
 
@@ -37,7 +38,7 @@ def sanitizeText(text):
     text.replace("\n", " ") #removes newlines, although they should already be removed
     text.replace("’", "'")
     text.replace("â€™","HHHH")
-    print(text)
+    #print(text)
     return text
 
 def columnToJSON(column):
@@ -80,15 +81,21 @@ def columnToJSON(column):
             
             contentNum += 1
 
+    #filePath = 'JSON stuff/'+getStateAbrev(state)+"test.json" #test folder
+    filePath = 'results/json/US/'+getStateAbrev(state)+".json" #real folder
+    try:
+        f2 = open(filePath)
+        f2 = f2.read()
+        f2 = json.loads(f2)
+        f2["local impacts"] = container["local impacts"]
 
-    f2 = open('JSON stuff/'+getStateAbrev(state)+"test.json")
-    f2 = f2.read()
-    f2 = json.loads(f2)
-    f2["local impacts"] = container["local impacts"]
+        print(json.dumps(container, indent=2))
 
-    print(json.dumps(container, indent=2))
-    with open('JSON stuff/'+getStateAbrev(state)+"test.json", "w") as myfile:
-        myfile.write(json.dumps(f2, indent=2))
+        
+        with open(filePath, "w") as myfile: #real folder
+            myfile.write(json.dumps(f2, indent=2))
+    except:
+        print("---------Error: " + filePath)
 
 for row in transposedSheet:
     columnToJSON(row)
