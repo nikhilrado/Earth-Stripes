@@ -69,6 +69,14 @@ button.button5::before {
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 
 <script>
+function generateURL (countryCode=null, stateCode=null, countyName=null){
+    locationAutomaticURL = "/result/?country="+countryCode
+    if (stateCode != false && stateCode != null){locationAutomaticURL=locationAutomaticURL+"&state="+stateCode}
+    if (countyName != false && countyName != null){locationAutomaticURL=locationAutomaticURL+"&county="+countyName}
+    console.log(locationAutomaticURL+"yeeeeeeeee")
+    return locationAutomaticURL
+}
+
 //custom function to get Redirect URL
 function getRedirectURL(jsonPlaceData) {
     placeName = jsonPlaceData.place_name
@@ -143,7 +151,8 @@ function getRedirectURL(jsonPlaceData) {
     //}
     //else if (stateCode.length == 2){
     //    lowestLocationName = countyName
-    locationAutomaticURL = "/result/?state="+stateCode+"&country="+countryCode+"&county="+countyName
+    generateURL(countryCode,stateCode,countyName);
+
     x.innerHTML = lowestLocationName
     return locationAutomaticURL; 
 }
@@ -202,6 +211,7 @@ data_function(json); //calling and passing json to another function data_functio
 function data_function(data){
     console.log(data)
     console.log(getRedirectURL(data.features[0]))
+    console.log(getRedirectURL(data["features"][0]["place_name"]))
     locationGranted = true
     if (locationGranted){
         document.getElementById("b5").onclick = getRedirectURL(data.features[0]);
@@ -212,36 +222,36 @@ function data_function(data){
 
 
 <script>
-      var input = document.getElementById('autocomplete');
-      var autocomplete = new google.maps.places.Autocomplete(input,{types: ["(regions)"], fields: ['address_components','adr_address','formatted_address']});
-      google.maps.event.addListener(autocomplete, 'place_changed', function(){
+var input = document.getElementById('autocomplete');
+var autocomplete = new google.maps.places.Autocomplete(input,{types: ["(regions)"], fields: ['address_components','adr_address','formatted_address']});
+google.maps.event.addListener(autocomplete, 'place_changed', function(){
     var place = autocomplete.getPlace();
 
-var countyName = getCountry(place.address_components,"administrative_area_level_2");
-var stateCode = getCountry(place.address_components,"administrative_area_level_1");
-var countryCode = getCountry(place.address_components,"country");
+    var countyName = getCountry(place.address_components,"administrative_area_level_2");
+    var stateCode = getCountry(place.address_components,"administrative_area_level_1");
+    var countryCode = getCountry(place.address_components,"country");
 
-// extract country short name (e.g. GB for Great Britain) from google geocode API result
-function getCountry(addrComponents,locality) {
-    for (var i = 0; i < addrComponents.length; i++) {
-        if (addrComponents[i].types[0] == locality) {
-            return addrComponents[i].short_name;
-        }
-        if (addrComponents[i].types.length == 2) {
-            if (addrComponents[i].types[0] == "political") {
+    // extract country short name (e.g. GB for Great Britain) from google geocode API result
+    function getCountry(addrComponents,locality) {
+        for (var i = 0; i < addrComponents.length; i++) {
+            if (addrComponents[i].types[0] == locality) {
                 return addrComponents[i].short_name;
             }
+            if (addrComponents[i].types.length == 2) {
+                if (addrComponents[i].types[0] == "political") {
+                    return addrComponents[i].short_name;
+                }
+            }
         }
+        return false;
     }
-    return false;
-}
 
-console.log(getCountry(place.address_components,"country"));//gets country
-console.log(getCountry(place.address_components,"administrative_area_level_1"));//gets state
-console.log(getCountry(place.address_components,"administrative_area_level_2"));//gets county
-console.log(getCountry(place.address_components,"locality"));//gets locality
+    console.log(getCountry(place.address_components,"country"));//gets country
+    console.log(getCountry(place.address_components,"administrative_area_level_1"));//gets state
+    console.log(getCountry(place.address_components,"administrative_area_level_2"));//gets county
+    console.log(getCountry(place.address_components,"locality"));//gets locality
 
-window.location.href = "/result/?state="+stateCode+"&country="+countryCode+"&county="+countyName; })
+    window.location.href = generateURL(countryCode,stateCode,countyName); })
 
 </script>
 </body>
