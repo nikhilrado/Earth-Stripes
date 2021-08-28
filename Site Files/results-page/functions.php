@@ -81,24 +81,27 @@ function add_copyright_meta_link() {
 	
 	$es_image_url = get_resource_id();
 	$es_canonical_url = get_results_canonical_URL();
-	$location_name = get_location_name();
+	$es_location_name = get_location_name();
+	$es_title_name = $es_location_name . ' - EarthStripes.org';
+	$es_image_alt = 'Warming Stripes for ' . $es_location_name;
+	$es_description_name = 'See how temperature is changing in ' . $es_location_name . ' and how climate change is impacting our communities.';
 	echo( '<title>Result - earthstripes.org</title>
-<meta name="description" content="Lorem ipsum dolor sit amet, consectetur."/>
+<meta name="description" content="' . $es_description_name . '"/>
 <meta name="robots" content="index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large"/>
 <link rel="canonical" href="' . $es_canonical_url . '" />
 <meta property="og:locale" content="en_US" />
 <meta property="og:type" content="article" />
-<meta property="og:title" content="' . $location_name . ' - earthstripes.org" />
-<meta property="og:description" content="Lorem ipsum dolor sit amet, consectetur." />
+<meta property="og:title" content="' . $es_title_name . '" />
+<meta property="og:description" content="' . $es_description_name . '" />
 <meta property="og:url" content="' . $es_canonical_url . '" />
-<meta property="og:site_name" content="earthstripes.org" />
+<meta property="og:site_name" content="Earth Stripes" />
 <meta property="og:updated_time" content="2021-08-25T21:55:07+00:00" />
 <meta property="og:image" content="' . $es_image_url . '" />
 <meta property="og:image:secure_url" content="' . $es_image_url . '" />
-<meta property="og:image:alt" content="Result" />
+<meta property="og:image:alt" content="' . $es_image_alt . '" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Result - earthstripes.org" />
-<meta name="twitter:description" content="Lorem ipsum dolor sit amet, consectetur." />
+<meta name="twitter:title" content="' . $es_title_name . '" />
+<meta name="twitter:description" content="' . $es_description_name . '" />
 <meta name="twitter:image" content="' . $es_image_url . '" />' );
 }
 
