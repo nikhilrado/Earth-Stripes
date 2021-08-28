@@ -30,6 +30,8 @@ for row in rowsList:
 
     
     bothSenatorsList.append(row)
+    if row[7] == "":
+        row[7] = 0
 
     #checks that there are two in the list and that the state code matches up:
     if len(bothSenatorsList) == 2 and bothSenatorsList[0][1] == bothSenatorsList[0][1]:
@@ -42,30 +44,48 @@ for row in rowsList:
         file = json.loads(file)
 
         #template JSON/python dict
+        senator1 = bothSenatorsList[0]
+        senator2 = bothSenatorsList[1]
+
         y = {
             "SenatorInfo":{
-                bothSenatorsList[0][0]:{
-                    "state": bothSenatorsList[0][1],
-                    "image": bothSenatorsList[0][2]
+                senator1[0]:{
+                    "state": senator1[1],
+                    "image": senator1[2],
+                    "current term": int(senator1[7]) + 1,
+                    "party": senator1[10],
+                    "position": senator1[11],
+                    "leadership": senator1[12],
+                    "positionScore": senator1[13],
+                    "voteScore": senator1[14],
+                    "leadershipScore": senator1[15],
+                    "carbonFree": senator1[16],
+                    "carbonFreeScore": senator1[17],
+                    "overallScore": senator1[18]
                 },
-                bothSenatorsList[1][0]:{
-                    "state": bothSenatorsList[1][1],
-                    "image": bothSenatorsList[1][2]
+                senator2[0]:{
+                    "state": senator2[1],
+                    "image": senator2[2],
+                    "current term": int(senator2[7]) + 1,
+                    "party": senator2[10],
+                    "position": senator2[11],
+                    "leadership": senator2[12],
+                    "positionScore": senator2[13],
+                    "voteScore": senator2[14],
+                    "leadershipScore": senator2[15],
+                    "carbonFree": senator2[16],
+                    "carbonFreeScore": senator2[17],
+                    "overallScore": senator2[18]
                 }
             }
         }
     
         print(json.dumps(y, indent=2))
-        bothSenatorsList = []
+        bothSenatorsList = [] #resets the list
 
-    """
-    if len(dataHeader) != len(row): #just a check
-        print("---------Error: potentially missing data")
-    for i in range(len(dataHeader)):
-        y["YaleClimateOpinionData2020"]["data"][dataHeader[i]]=row[i]
-    f.update(y)
-    print(y)
-    
-    #sets name and saves file
-    with open('results/json/'+resourceID+'.json', "w") as myfile:
-        myfile.write(json.dumps(f, indent=2))"""
+        file.update(y)
+        print(json.dumps(file, indent=2))
+        
+        #sets name and saves file
+        with open('results/json/US/'+state+'.json', "w") as myfile:
+            myfile.write(json.dumps(file, indent=2))
