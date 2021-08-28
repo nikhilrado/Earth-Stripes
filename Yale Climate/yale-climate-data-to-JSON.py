@@ -22,7 +22,7 @@ for row in csv_f:
 dataHeader = rowsList[0] #sets first row as headers
 rowsList.pop(0) #removes first row
 
-#gets the resource ID of the file
+#gets the resource ID of the file by seeing what location category the yale data belongs to
 def getYaleResourceID(row):
     resourceID = None
     if row[0] == "County":

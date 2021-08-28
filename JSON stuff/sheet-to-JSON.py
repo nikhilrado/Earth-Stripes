@@ -10,7 +10,7 @@ def getStateAbrev(state):
         return stateFullName[stateShortName.index(state)]
     return stateShortName[stateFullName.index(state)]
 
-f = open("JSON stuff\State Data Information - CleanData11.csv", encoding='utf-8-sig')
+f = open("JSON stuff\State Data Information - CleanData12.csv", encoding='utf-8-sig')
 
 csv_f = csv.reader(f)
 
