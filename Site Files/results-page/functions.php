@@ -99,6 +99,8 @@ function add_copyright_meta_link() {
 <meta property="og:image" content="' . $es_image_url . '" />
 <meta property="og:image:secure_url" content="' . $es_image_url . '" />
 <meta property="og:image:alt" content="' . $es_image_alt . '" />
+<meta name="twitter:site" content="@earthstripes" />
+<meta name="twitter:creator" content="@nikhilrado" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="' . $es_title_name . '" />
 <meta name="twitter:description" content="' . $es_description_name . '" />

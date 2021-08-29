@@ -23,6 +23,15 @@ for row in csv_f:
 dataHeader = rowsList[0] #sets first row as headers
 rowsList.pop(0) #removes first row
 
+def getHumanReadableTerm(termNum):
+    if termNum == 1:
+        return "1st"
+    if termNum == 2:
+        return "2nd"
+    if termNum == 3:
+        return "3rd"
+    return str(termNum) + "th"
+
 bothSenatorsList = []
 for row in rowsList:
     #print(row)
@@ -50,9 +59,11 @@ for row in rowsList:
         y = {
             "SenatorInfo":{
                 senator1[0]:{
-                    "state": senator1[1],
+                    "stateCode": senator1[1],
+                    "stateName": senator1[8],
                     "image": senator1[2],
                     "current term": int(senator1[7]) + 1,
+                    "current term readable": getHumanReadableTerm(int(senator1[7]) + 1),
                     "party": senator1[10],
                     "position": senator1[11],
                     "leadership": senator1[12],
@@ -64,9 +75,11 @@ for row in rowsList:
                     "overallScore": senator1[18]
                 },
                 senator2[0]:{
-                    "state": senator2[1],
+                    "stateCode": senator2[1],
+                    "stateName": senator2[8],
                     "image": senator2[2],
                     "current term": int(senator2[7]) + 1,
+                    "current term readable": getHumanReadableTerm(int(senator2[7]) + 1),
                     "party": senator2[10],
                     "position": senator2[11],
                     "leadership": senator2[12],

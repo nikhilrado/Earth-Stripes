@@ -9,7 +9,7 @@
 <svg viewBox="0 0 100 5">
     <rect id="line1" class="lineColors" x="0" y="0" width="100" height="5"/>
     <rect id="agree1" class="barColors" x="0" y="0" width="20" height="5"/>
-    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="3">50%</text>
+    <text id="agree1text" x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="3">50%</text>
     <rect id="disagree1" class="barColors" x="80" y="0" width="20" height="5"/>
 </svg>
 
@@ -31,4 +31,5 @@
     disagree1.style.fill="red";
     disagree1.setAttributeNS(null, 'x', 100-right);
     disagree1.setAttributeNS(null, 'width', right);
+    agree1text.innerHTML = "yrr"
 </script>  
