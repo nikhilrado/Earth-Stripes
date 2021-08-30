@@ -10,7 +10,7 @@ def getStateAbrev(state):
         return stateFullName[stateShortName.index(state)]
     return stateShortName[stateFullName.index(state)]
 
-f = open("JSON stuff\State Data Information - CleanData13.csv", encoding='utf-8-sig')
+f = open("JSON stuff\State Data Information - CleanData24.csv", encoding='utf-8-sig')
 
 csv_f = csv.reader(f)
 
@@ -35,10 +35,11 @@ transposedSheet.pop(0) #removes first line
 #for line in transposedSheet:
 #    print(line)
 def sanitizeText(text):
-    text.replace("\n", " ") #removes newlines, although they should already be removed
-    text.replace("’", "'")
-    text.replace("â€™","HHHH")
-    #print(text)
+    text = text.replace("\n", " ") #removes newlines, although they should already be removed
+    text = text.replace("’", "'")
+    text = text.replace("  ", " ").replace("  ", " ") #removes excess spaces
+    #text.replace("â€™","HHHH")
+    print(text)
     return text
 
 def columnToJSON(column):
@@ -55,11 +56,22 @@ def columnToJSON(column):
         #"category": None,
         "headline": None,
         "content": [],
+        "img": {
+            "file": None,
+            "alt": None,
+            "caption": None,
+            "credit": None
+        }
         }
         if column[i] == "END":
             break
         if column[i] == "CONTENT " + str(contentNum):
             #z["category"] = column[i+1]
+            if column[i+2] == False or column[i+2] == "FALSE" or column[i+2] == "null":
+                pass
+            else:
+                z["img"]["file"] = column[i+2]
+
             z["headline"] = column[i+3]
 
             
@@ -71,9 +83,11 @@ def columnToJSON(column):
             if column[i+6] != "":
                 z["content"].append(sanitizeText(column[i+6]))
             if column[i+7] != "":
-                z["content"].append(sanitizeText(column[i+7]))
+                z["img"]["alt"] = sanitizeText(column[i+7])
             if column[i+8] != "":
-                z["content"].append(sanitizeText(column[i+8]))
+                z["img"]["caption"] = sanitizeText(column[i+8])
+            if column[i+8] != "":
+                z["img"]["credit"] = sanitizeText(column[i+9])
             
             if z["headline"] != "":
                 container["local impacts"].append(z)
@@ -89,7 +103,7 @@ def columnToJSON(column):
         f2 = json.loads(f2)
         f2["local impacts"] = container["local impacts"]
 
-        print(json.dumps(container, indent=2))
+        #print(json.dumps(container, indent=2))
 
         
         with open(filePath, "w") as myfile: #real folder
@@ -99,52 +113,4 @@ def columnToJSON(column):
 
 for row in transposedSheet:
     columnToJSON(row)
-#columnToJSON(transposedSheet[0])
 
-"""
-def columnToJSON(column):
-    localImpactData = []
-    location = transposedSheet[column][0]
-    #Loops through each coloumn in the spreadsheet (transposed column in the transposedSheet)
-    for i in range(2):
-        #TODO: figure out why setting local Impact equal to local impact template makes them both equal
-        localImpact = {
-        "category": None,
-        "headline": None,
-        "content": None,}
-        
-        localImpact["category"] = transposedSheet[column][4*(i)+1]
-        localImpact["headline"] = transposedSheet[column][4*(i)+2]
-        localImpact["content"] = transposedSheet[column][4*(i)+3]
-        #localImpact["testList"].append("yeey")
-
-        localImpactData.append(localImpact)
-        print(json.dumps(localImpact))
-        print("ttt")
-
-    print(json.dumps(localImpactData))
-
-    #loads data from current file
-    try:
-        f = open('results/json/US/'+getStateAbrev(location)+'.json')
-    except:
-        #will create the JSON file if not found, cause this program was the first program to create/access the JSON files
-        f = open("JSON stuff/template.json")
-        
-    f = f.read()
-    f = json.loads(f)
-    if f["metadata"]["name"] == "Template State":
-        f["metadata"]["name"] = location
-    f["local impacts"] = localImpactData
-    #print("")
-    #print(f)
-
-    #saves file with county name
-    with open('results/json/US/'+getStateAbrev(location)+'.json', "w") as myfile:
-        myfile.write(json.dumps(f, indent=2))
-
-for k in range(len(transposedSheet)):
-    if transposedSheet[k][1] == "":
-        continue
-    columnToJSON(k)
-    """
