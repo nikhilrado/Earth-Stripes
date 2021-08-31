@@ -22,12 +22,12 @@ function hello_elementor_child_enqueue_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'hello_elementor_child_enqueue_scripts', 20 );
 
-function add_copyright_meta_link() {
+function generate_custom_meta_tags() {
 	//returns the url that this page should be (reorders, and removes extra query params ig)
 	function get_results_canonical_URL() {
 		$queries = array();
 		parse_str($_SERVER['QUERY_STRING'], $queries);
-		$es_canonical_url = 'https://earthstripes.org/result/?country=' . $queries['country'];
+		$es_canonical_url = 'https://www.earthstripes.org/result/?country=' . $queries['country'];
 		if( !is_null($queries['state'])) {
 			$es_canonical_url = $es_canonical_url . '&state=' . $queries['state'];
 		};
@@ -107,7 +107,7 @@ function add_copyright_meta_link() {
 <meta name="twitter:image" content="' . $es_image_url . '" />' );
 }
 
-add_action( 'wp_head', 'add_copyright_meta_link' );
+add_action( 'wp_head', 'generate_custom_meta_tags' );
 
 add_action( 'wp_head', function(){
 	if( is_page('52')) {
