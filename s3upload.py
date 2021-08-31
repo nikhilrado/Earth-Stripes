@@ -25,6 +25,8 @@ def uploadFile(file):
     upload_file_path = file.replace(resultsDirectory,"")
     if '.png' in upload_file_path:
         contentType = 'image/png'
+    if '.jpg' in upload_file_path:
+        contentType = 'image/jpg'
     if '.json' in upload_file_path:
         contentType = 'application/json'
     client.upload_file(file, upload_bucket, upload_file_path,ExtraArgs={'ACL':'public-read', "ContentType":contentType})
@@ -115,5 +117,6 @@ def uploadNewChanges(directory=resultsDirectory,smartUpload=True):
 
 
 #uploadNewChanges()
-uploadFile("results/labeled-stripes/US/MT/Gallatin County MT.png")
+#uploadFile("results/labeled-stripes/US/MT/Gallatin County MT.png")
 #uploadNewChanges(directory="results/json/US/",smartUpload=False)
+#uploadNewChanges(directory="photos/local-impact-photos/",smartUpload=False)
