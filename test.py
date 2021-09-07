@@ -8,7 +8,7 @@ with pdfplumber.open('G:\My Drive\CLIENTS\Earth Stripes\Earth Stripes Codebase\d
 # importing required modules 
 import PyPDF2
     
-# creating a pdf file object 
+# creating a pdf file object test
 pdfFileObj = open('G:\My Drive\CLIENTS\Earth Stripes\Earth Stripes Codebase\data\EPA Climate Impacts\climate-change-ak.pdf', 'rb') 
     
 # creating a pdf reader object 
