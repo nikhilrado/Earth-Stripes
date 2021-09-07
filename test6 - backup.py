@@ -5,7 +5,7 @@ import matplotlib
 from PIL import Image, ImageDraw, ImageFont
 import csv
 
-#test
+#test again
 
 def createChart(csvName):
     #f = open('30-tavg-12-12-1895-2020.csv')
