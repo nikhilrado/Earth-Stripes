@@ -9,7 +9,7 @@ import csv
 resultsDirectory = "results/"
 logFile = "s3upload-log.csv"
 s3putCost = 0.005/1000
-upload_bucket = "ortana-test"
+upload_bucket = "earth-stripes"
 client = boto3.client('s3', aws_access_key_id=access_key, aws_secret_access_key=secret_access_key)
 
 #returns a list of all files in a directory
@@ -21,14 +21,21 @@ def getAllFilesInDir(root):
     return fileList
 
 #will upload a file to s3 and print a statement stating which file was uploaded
-def uploadFile(file):
-    upload_file_path = file.replace(resultsDirectory,"")
-    if '.png' in upload_file_path:
+def uploadFile(file,uploadFilePath=False):
+    #lets the user specify if they want to add a custom file path
+    if uploadFilePath == False:
+        upload_file_path = "v2/" + file.replace(resultsDirectory,"")
+    else:
+        upload_file_path = uploadFilePath
+
+    if '.png' in file:
         contentType = 'image/png'
-    if '.jpg' in upload_file_path:
+    if '.jpg' in file:
         contentType = 'image/jpg'
-    if '.json' in upload_file_path:
+    if '.json' in file:
         contentType = 'application/json'
+    if '.xml' in file:
+        contentType = 'text/xml'
     client.upload_file(file, upload_bucket, upload_file_path,ExtraArgs={'ACL':'public-read', "ContentType":contentType})
     print("Uploaded: "+ file +" --to-- "+upload_bucket+"/"+upload_file_path)
 
@@ -120,3 +127,5 @@ def uploadNewChanges(directory=resultsDirectory,smartUpload=True):
 #uploadFile("results/labeled-stripes/US/MT/Gallatin County MT.png")
 #uploadNewChanges(directory="results/json/US/",smartUpload=False)
 #uploadNewChanges(directory="photos/local-impact-photos/",smartUpload=False)
+#uploadNewChanges(directory="results/",smartUpload=False)
+uploadFile("SEO/result-sitemap.xml",uploadFilePath="result-sitemap.xml")
