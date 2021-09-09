@@ -14,7 +14,7 @@ def getAllFilesInDir(root):
 
 files = getAllFilesInDir("results/json")
 
-xmlFileList = ['<?xml version="1.0" encoding="UTF-8"?>','<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+xmlFileList = ['<?xml version="1.0" encoding="UTF-8"?>','<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">']
 
 for filePath in files:
     filePath = filePath.replace("\\","/") #fixes annoying formating issue that messes up stuff
@@ -40,21 +40,33 @@ for filePath in files:
 
         url = url.replace("&","&amp;")
 
-        print(url)
-        print(splitPath)
+        #print(url)
+        #print(splitPath)
         return url
+
+    def addImage (imageURL,imageCaption,imageLocation,imageTitle,imageLicense):
+        imageXML = []
+        imageXML.append('<image:image>')
+        imageXML.append('<image:loc>' + imageURL + '</image:loc>')
+        imageXML.append('<image:caption>' + imageCaption + '</image:caption>')
+        imageXML.append('<image:geo_location>' + imageLocation + '</image:geo_location>')
+        imageXML.append('<image:title>' + imageTitle + '</image:title>')
+        imageXML.append('<image:license>' + imageLicense + '</image:license>')
+        imageXML.append('</image:image>')
+        return imageXML
 
     
 
     xmlFileList.append('<url>')
     xmlFileList.append('<loc>' + getPageURL() + '</loc>')
+    xmlFileList = xmlFileList + addImage()
     xmlFileList.append('</url>')
 
 xmlFileList.append('</urlset>')
 xmlFile = ""
 for line in xmlFileList:
     xmlFile = xmlFile + line #+ "\n"
-    #print(line)
+    print(line)
 
 
 
