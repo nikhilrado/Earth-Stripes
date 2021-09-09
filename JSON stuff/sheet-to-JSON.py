@@ -67,7 +67,7 @@ def columnToJSON(column):
             break
         if column[i] == "CONTENT " + str(contentNum):
             #z["category"] = column[i+1]
-            if column[i+2] == False or column[i+2] == "FALSE" or column[i+2] == "null":
+            if column[i+2] == False or column[i+2] == "FALSE" or column[i+2] == "null" or column[i+2].strip() == "":
                 pass
             else:
                 z["img"]["file"] = column[i+2]
