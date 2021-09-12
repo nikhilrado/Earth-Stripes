@@ -142,6 +142,7 @@
 
             // suggestion list MapBox api called with callback
             autocompleteSuggestionMapBoxAPI($('#autocomplete-mapbox').val(), function (results) {
+                console.log(results);
                 results.features.forEach(function (key) {
                     b = document.createElement("DIV");
                     b.innerHTML = "<strong>" + key.place_name.substr(0, val.length) + "</strong>";
@@ -155,7 +156,7 @@
                         $(inp).attr('data-lng', long);
                         closeAllLists();
                         console.log(key);
-                        getRedirectURL(key);
+                        getRedirectURLMapbox(key,true);
                     });
                     a.appendChild(b);
                 });

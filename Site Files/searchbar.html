@@ -53,10 +53,10 @@ button.button5::before {
 <input type="text" class="autocomplete-input" id="autocomplete"/>
 
 <div class="flex-parent jc-center">
-<a href="https://earthstripes.org/result/?state=NY&country=US&county=New%20York%20County"><button class="button button1">New York</button></a>
-<a href="https://earthstripes.org/result/?state=CA&country=US&county=Los%20Angeles%20County"><button class="button button2">Los Angeles</button></a>
-<a href="https://earthstripes.org/result/?state=FL&country=US&county=Miami-Dade%20County"><button class="button button3">Miami</button></a>
-<a href="https://earthstripes.org/result/?state=IL&country=US&county=Cook%20County"><button class="button button4">Chicago</button></a>
+<a href="https://earthstripes.org/result/?country=US&state=NY&county=New%20York%20County"><button class="button button1">New York</button></a>
+<a href="https://earthstripes.org/result/?country=US&state=CA&county=Los%20Angeles%20County"><button class="button button2">Los Angeles</button></a>
+<a href="https://earthstripes.org/result/?country=US&state=FL&county=Miami-Dade%20County"><button class="button button3">Miami</button></a>
+<a href="https://earthstripes.org/result/?country=US&state=IL&county=Cook%20County"><button class="button button4">Chicago</button></a>
 <a onclick="getLocationForButton()"><button id="b5" class="button button5">Your Location</button></a>
 </div>
      
@@ -78,7 +78,7 @@ function generateURL (countryCode=null, stateCode=null, countyName=null){
 }
 
 //custom function to get Redirect URL
-function getRedirectURL(jsonPlaceData) {
+function getRedirectURLMapbox(jsonPlaceData,redirectNow=false) {
     placeName = jsonPlaceData.place_name
     if (jsonPlaceData.place_type[0]=="country"){
         countryCode = jsonPlaceData.properties.short_code
@@ -152,6 +152,9 @@ function getRedirectURL(jsonPlaceData) {
     //else if (stateCode.length == 2){
     //    lowestLocationName = countyName
     generateURL(countryCode,stateCode,countyName);
+    if (redirectNow){
+        window.location.href = locationAutomaticURL
+    }
 
     x.innerHTML = lowestLocationName
     return locationAutomaticURL; 
@@ -177,7 +180,10 @@ function getLocationForButton(){
 
 function handlePermission() {
   navigator.permissions.query({name:'geolocation'}).then(function(result) {
+    console.log("yehaw")
+    console.log(result.state)
     if (result.state == 'granted') {
+      console.log("yehaw")
       locationGranted = true
       getLocation();
       
@@ -203,18 +209,21 @@ fetch("https://api.mapbox.com/geocoding/v5/mapbox.places/"+position.coords.longi
 function(u){ return u.json();}
 ).then(
 function(json){
-data_function(json); //calling and passing json to another function data_function
+process_mapbox_geocode(json); //calling and passing json to another function process_mapbox_geocode
 }
 )
 
 //another functions
-function data_function(data){
+function process_mapbox_geocode(data){
     console.log(data)
-    console.log(getRedirectURL(data.features[0]))
-    console.log(getRedirectURL(data["features"][0]["place_name"]))
+    console.log(getRedirectURLMapbox(data["features"][0]))
+    console.log("happy birthday2")
+    console.log(getRedirectURLMapbox(data["features"][0]))
+    console.log("happy birthday3")
     locationGranted = true
     if (locationGranted){
-        document.getElementById("b5").onclick = getRedirectURL(data.features[0]);
+        console.log("changed click function")
+        document.getElementById("b5").onclick = getRedirectURLMapbox(data.features[0]);
     }
 }
 }
