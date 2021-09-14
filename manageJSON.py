@@ -21,6 +21,22 @@ def main(fileLocation,name):
     with open(fileLocation.replace("stripes","json")+'.json', "w") as myfile:
         myfile.write(json.dumps(f, indent=2))
 
+#updates a property in the metadata
+def updateDataObjet(fileName,name,data):
+    f = open(fileName)
+    f = f.read()
+    f = json.loads(f)
+
+    f[name] = data
+
+    #creates directory is not present, need to use stripes cause I'm lazy
+    if not os.path.exists(fileName):
+        os.makedirs(fileName)
+
+    #sets name
+    with open(fileName, "w") as myfile:
+        myfile.write(json.dumps(f, indent=2))
+
 #deletes stuff from the files
 def deleteObject(directoryOfJSONFiles,object,subobject=False):
     for file in s3upload.getAllFilesInDir(directoryOfJSONFiles):
