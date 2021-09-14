@@ -35,6 +35,9 @@ def getCountiesOfState(stateCode):
 #returns the coordinates of the county
 def getCoordsOfCounty(county,countiesList):
     for row in countiesList:
+        if "[" in row[3]:
+            row[3] = row[3][:-4]
+            print(row[3])
         if  county == row[3] + " County":
             Latitude = float(row[12][1:-2]) #only works for lat coords in northern hemisphere
             Longitude = float("-"+row[13][3:-2]) #only works for long coords in western hemisphere
@@ -69,7 +72,7 @@ for filePath in files:
                 url = url + '&county=' + splitPath[2][:-3].replace(" ","%20")
 
                 stripeImgURL = "https://ortana-test.s3.us-east-2.amazonaws.com/v2/stripes/US/" + splitPath[1] + "/" + splitPath[2][:-3].replace(" ","+") + "+" + splitPath[1] + ".png"
-
+                #getCoordsOfCounty(splitPath[2][:-3],getCountiesOfState(splitPath[1]))
                 try:
                     mapData.append([f["metadata"]["name"],stripeImgURL,f["metadata"]["coords"][0],f["metadata"]["coords"][1],url])
                 except:
