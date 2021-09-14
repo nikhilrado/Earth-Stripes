@@ -9,7 +9,7 @@ import csv
 resultsDirectory = "results/"
 logFile = "s3upload-log.csv"
 s3putCost = 0.005/1000
-upload_bucket = "earth-stripes"
+upload_bucket = "ortana-test"
 client = boto3.client('s3', aws_access_key_id=access_key, aws_secret_access_key=secret_access_key)
 
 #returns a list of all files in a directory
@@ -36,6 +36,8 @@ def uploadFile(file,uploadFilePath=False):
         contentType = 'application/json'
     if '.xml' in file:
         contentType = 'text/xml'
+    if '.csv' in file:
+        contentType = 'text/csv'
     client.upload_file(file, upload_bucket, upload_file_path,ExtraArgs={'ACL':'public-read', "ContentType":contentType})
     print("Uploaded: "+ file +" --to-- "+upload_bucket+"/"+upload_file_path)
 
@@ -126,6 +128,8 @@ def uploadNewChanges(directory=resultsDirectory,smartUpload=True):
 #uploadNewChanges()
 #uploadFile("results/labeled-stripes/US/MT/Gallatin County MT.png")
 #uploadNewChanges(directory="results/json/US/",smartUpload=False)
+#uploadNewChanges(directory="results/stripes/BR/",smartUpload=False)
 #uploadNewChanges(directory="photos/local-impact-photos/",smartUpload=False)
-#uploadNewChanges(directory="results/",smartUpload=False)
-uploadFile("SEO/result-sitemap.xml",uploadFilePath="result-sitemap.xml")
+#uploadNewChanges(directory="photos/local-impact-photos",smartUpload=False)
+#uploadFile("SEO/result-sitemap.xml",uploadFilePath="result-sitemap.xml")
+#uploadFile("Map Stuff/mapData.csv",uploadFilePath="mapData2.csv")
