@@ -85,7 +85,7 @@ function generate_custom_meta_tags() {
 	$es_title_name = $es_location_name . ' - EarthStripes.org';
 	$es_image_alt = 'Warming Stripes for ' . $es_location_name;
 	$es_description_name = 'See how temperature is changing in ' . $es_location_name . ' and how climate change is impacting our communities.';
-	echo( '<title>Result - earthstripes.org</title>
+	echo( '<title>' . $es_title_name . '</title>
 <meta name="description" content="' . $es_description_name . '"/>
 <meta name="robots" content="index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large"/>
 <link rel="canonical" href="' . $es_canonical_url . '" />
@@ -112,6 +112,6 @@ add_action( 'wp_head', 'generate_custom_meta_tags' );
 add_action( 'wp_head', function(){
 	if( is_page('52')) {
 		remove_all_actions( 'rank_math/head' );
-		add_action( 'wp_head', '_wp_render_title_tag', 2 );
+		//add_action( 'wp_head', '_wp_render_title_tag', 2 );
 	}
 }, 1 );

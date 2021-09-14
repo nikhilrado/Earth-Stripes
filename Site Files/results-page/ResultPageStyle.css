@@ -1,3 +1,7 @@
+#image1 {
+    border-radius: 15px;
+    /*clip-path: circle(59 at 5, 5)*/
+  }
 .testclass {
     font-family: Arial, sans-serif; 
     font-weight: 600;
