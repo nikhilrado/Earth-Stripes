@@ -40,6 +40,7 @@ def getCoordsOfCounty(county,countiesList):
             Longitude = float("-"+row[13][3:-2]) #only works for long coords in western hemisphere
             return Latitude,Longitude
 
+mapData = []
 #taken from the sitemap generator
 for filePath in files:
     filePath = filePath.replace("\\","/") #fixes annoying formating issue that messes up stuff
@@ -67,17 +68,18 @@ for filePath in files:
             if i == 2 and splitPath[0] == 'US':
                 url = url + '&county=' + splitPath[2][:-3].replace(" ","%20")
 
-                stateList = getCountiesOfState(splitPath[1])
-                print()
+                stripeImgURL = "https://ortana-test.s3.us-east-2.amazonaws.com/v2/stripes/US/" + splitPath[1] + "/" + splitPath[2][:-3].replace(" ","+") + "+" + splitPath[1] + ".png"
 
-                y = {
-                    "coords":getCoordsOfCounty(splitPath[2][:-3],stateList)
-                }
-
-                f["metadata"].update(y)
-                    
-                print(json.dumps(f, indent=2))
-                with open(filePath, "w") as myfile:
-                    myfile.write(json.dumps(f, indent=2))
+                try:
+                    mapData.append([f["metadata"]["name"],stripeImgURL,f["metadata"]["coords"][0],f["metadata"]["coords"][1],url])
+                except:
+                    print("--------error: " + splitPath[2][:-3])
 
     getPageURL()
+
+with open('Map Stuff/mapData2.csv', 'w') as f:
+      
+    # using csv.writer method from CSV package
+    write = csv.writer(f)
+    for row in mapData:
+        write.writerow(row)
