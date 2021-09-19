@@ -49,8 +49,8 @@ fetch(bucketPrefix + "json/" + imageID + ".json")
   data_function(json); //calling and passing json to another function data_function
 });
 
+//deals with local impacts
 function setLocalImpacts(data){
-    //deals with local impacts
     if (country == "US" && typeof state == "string") {
         function combineParagraphs(index) {
             text = "";
@@ -125,6 +125,29 @@ function setYaleBars() {
     }
 }
 
+function setMerchBox(){
+merchLabel = encodedImageID + "&t_location_txt=" + locationName + " " + startYear + "-" + endYear;
+customMerchLink = "https://www.zazzle.com/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&tc=&ic=&t_labeledstripes_iid="
++ encodedImageID + "&t_stripes_iid=" + merchLabel;
+testmerchlink.href = customMerchLink;
+
+productNames = ["Magnet","Mug","Tie","Stickers"]
+productIDs = ['147662722592724730','168540946485519042','151119561160107608','217917661479101292']
+for (i=1; i<=productNames.length; i++){
+element = document.getElementById('ProductImage' + i);
+var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+productIDs[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedImageID + '&t_stripes2_url='+encodedImageID;
+element.src = imageID2;
+element.alt = "warming stripes " + productNames[i-1]
+element = document.getElementById('ProductName' + i);
+element.innerText = productNames[i-1];
+element = document.getElementById('Product'+i+"Link");
+element.href = customMerchLink;
+element = document.getElementById('Product'+i+'Link2');
+element.href = customMerchLink;
+console.log("product round "  + i);
+}
+}
+
 function getSenatorInfo(senatorData) { 
   //fetch function
   fetch(
@@ -179,16 +202,17 @@ if (country == "US" && typeof state == "string"){
 
 //main function that loads JSON data
 function data_function(jsonData) {
-
+console.log(jsonData)
 //if there is a county (hence in US) and there are no local impacts data for the county, fetch the state data
-if (typeof county == "string" && data["local impacts"] == null){
+if (typeof county == "string" && jsonData["local impacts"] == null){
     fetch(bucketPrefix + "json/" + country + "/" + state + ".json")
     .then(function (u) {return u.json();})
     .then(function (json) {
       handleStateJSON(json); //calling and passing json to another function data_function
     });
 } else {
-    setLocalImpacts(data["local impacts"])
+    setLocalImpacts(jsonData["local impacts"]);
+    getSenatorInfo(jsonData["SenatorInfo"]);
 
 }
 data = jsonData;
@@ -201,7 +225,7 @@ myHeader9.innerText = locationName;
 
 startYear = data.resources.stripes["startYear"];
 endYear = data.resources.stripes["endYear"];
-description1 = "These warming stripes shows how climate change has affected " + locationName + " from " + startYear + "-" + endYear + ", red stripes indicate warmer, and blue indicate lower temperatures.";
+description1 = "These warming stripes show how climate change has affected " + locationName + " from " + startYear + "-" + endYear + ", red stripes indicate warmer, and blue indicate lower temperatures.";
 img1description.innerText = description1;
 
 //yale information
@@ -212,7 +236,6 @@ setYaleBars();
     YaleOpinion.style.display = "none";
 }
 
-merchLabel = encodedImageID + "&t_location_txt=" + locationName + " " + startYear + "-" + endYear
-testmerchlink.href = "https://www.zazzle.com/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&tc=&ic=&t_labeledstripes_iid="
-+ encodedImageID + "&t_stripes_iid=" + merchLabel;
+setMerchBox();
+
 }
