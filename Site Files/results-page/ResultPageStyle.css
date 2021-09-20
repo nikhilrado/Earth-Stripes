@@ -1,80 +1,115 @@
+.social-icon{
+    vertical-align: middle;
+    display: inline-block;
+    color: black;
+}
+.social-text {
+    text-decoration: underline;
+    color: black;
+    padding: 0px;
+}
+.social-button{
+    border: none;
+    background-color: #00000000 !important;
+    padding: 5px ;
+    margin: 0px;
+}
+.social-button:hover{
+    background-color: #00000000;
+}
+.social-text:hover {
+    text-decoration-color: gray;
+    color: gray;
+}
+#product-details-page {
+    line-height: 10px;
+}
+.fb_iframe_widget {
+   vertical-align: top;
+ }
+#icon-extreme-heat{
+    color: tan;
+}
 #image1 {
-    border-radius: 15px;
-    /*clip-path: circle(59 at 5, 5)*/
-  }
+  border-radius: 15px;
+  /*clip-path: circle(59 at 5, 5)*/
+}
+#ProductImage1, #ProductImage2, #ProductImage3 {
+    border-radius: 5px;
+}
 .testclass {
-    font-family: Arial, sans-serif; 
-    font-weight: 600;
-    color: #000000;
-   }
-   #myHeader17 {
-   margin-bottom: 0px !important;
-   text-decoration: underline;
-   }
-   #myHeader9 {
-       margin-bottom: 10px;
-   }
-   .descriptiveText, .dText {
-       font-family: Roboto, Sans-Serif;
-       font-weight: 400;
-       color: #7a7a7a;
-   }
-   .ImgCaption {
-       font-family: Roboto, Sans-Serif;
-       font-weight: 400;
-       color: #7a7a7a;
-       font-size: 14px;
-   }
-   .button {
-     background-color: #FFFFFF;
-     border: none;
-     color: black;
-     box-shadow: 1px 3px 5px 1px #dadada;
-     padding-top: 5px;
-     padding-left: 10px;
-     padding-right: 10px;
-     padding-bottom: 5px;
-     margin-bottom: 10px;
-     margin-top: 0px;
-     text-align: center;
-     text-decoration: none;
-     display: inline-block;
-     font-size: 14px;
-     border-radius: 50px;
-   
-   }
-   .button:hover, .button:focus {
-       background-color: white;
-       color: black;
-       outline: none;
-   
-   }
-   .YaleBox{
-       fill: #e6e5e5;
-   }
-   .YaleRightline {
-       fill: rgb(150, 150, 250);
-   }
-   .YaleLeftline {
-       fill:rgb(255, 208, 0)
-   }
-   .YaleBarHeader {
-       margin-bottom: 5px;
-       /*color: orange;*/
-       font-size: 16px;
-   }
-   .YaleBottomText {
-       color: grey;
-       font-size: 14px;
-   }
-   #SenatorImage1, #SenatorImage2 {
-     width:100px;
-     height: 100px;
-     object-fit:cover;
-     object-position: center top;
-     border-radius: 50%;
-   }
-       
-   .center {
-       text-align: center;
-   }
+ font-family: Arial, sans-serif; 
+ font-weight: 600;
+ color: #000000;
+}
+#myHeader17 {
+margin-bottom: 0px !important;
+text-decoration: underline;
+}
+#myHeader9 {
+    margin-bottom: 10px;
+}
+.descriptiveText, .dText {
+    font-family: Roboto, Sans-Serif;
+    font-weight: 400;
+    color: #7a7a7a;
+}
+.ImgCaption {
+    font-family: Roboto, Sans-Serif;
+    font-weight: 400;
+    color: #7a7a7a;
+    font-size: 14px;
+}
+.button {
+  background-color: #FFFFFF;
+  border: none;
+  color: black;
+  box-shadow: 1px 3px 5px 1px #dadada;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  margin-top: 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 50px;
+
+}
+.button:hover, .button:focus {
+    background-color: white;
+    color: black;
+    outline: none;
+
+}
+.YaleBox{
+    fill: #e6e5e5;
+}
+.YaleRightline {
+    fill: rgb(150, 150, 250);
+}
+.YaleLeftline {
+    fill:rgb(255, 208, 0)
+}
+.YaleBarHeader {
+    margin-bottom: 5px;
+    /*color: orange;*/
+    font-size: 16px;
+}
+.YaleBottomText {
+    color: grey;
+    font-size: 14px;
+}
+#SenatorImage1, #SenatorImage2 {
+  width:100px;
+  height: 100px;
+  object-fit:cover;
+  object-position: center top;
+  border-radius: 50%;
+}
+    
+.center {
+    text-align: center;
+}

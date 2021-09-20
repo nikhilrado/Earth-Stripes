@@ -104,7 +104,11 @@ function generate_custom_meta_tags() {
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="' . $es_title_name . '" />
 <meta name="twitter:description" content="' . $es_description_name . '" />
-<meta name="twitter:image" content="' . $es_image_url . '" />' );
+<meta name="twitter:image" content="' . $es_image_url . '" />
+<meta property="snap:sticker" content="' . $es_image_url . '" />
+
+'
+);
 }
 
 add_action( 'wp_head', 'generate_custom_meta_tags' );

@@ -195,7 +195,7 @@ function handleStateJSON(json){
 }
 
 if (country == "US" && typeof state == "string"){
-    getSenatorInfo();
+
 } else {
     legislativeBox.style.display = "none";
 }
@@ -212,13 +212,17 @@ if (typeof county == "string" && jsonData["local impacts"] == null){
     });
 } else {
     setLocalImpacts(jsonData["local impacts"]);
+    
+    if (country == "US"){
     getSenatorInfo(jsonData["SenatorInfo"]);
+    }
 
 }
 data = jsonData;
 
 //alert(data.sentence);
 locationName = data.metadata.name;
+document.getElementById('image1').alt = "Warming stripes for " + locationName;
 
 myHeader9.innerText = locationName;
 //document.title = locationName + " - Earth Stripes"; //changed the title but now we use php
