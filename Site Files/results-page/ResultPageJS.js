@@ -1,6 +1,7 @@
 const bucketPrefix = "https://ortana-test.s3.us-east-2.amazonaws.com/v2/"
 
 //data acquired from query params that doesn't require json file
+const canonicalUrl = document.querySelector("link[rel='canonical']").getAttribute("href");
 const urlParams = new URLSearchParams(window.location.search);
 var state = urlParams.get('state');
 var county = urlParams.get('county');
@@ -131,11 +132,11 @@ customMerchLink = "https://www.zazzle.com/api/create/at-238391408801122257?rf=23
 + encodedImageID + "&t_stripes_iid=" + merchLabel;
 testmerchlink.href = customMerchLink;
 
-productNames = ["Magnet","Mug","Tie","Stickers"]
-productIDs = ['147662722592724730','168540946485519042','151119561160107608','217917661479101292']
+productNames = ["Mask","Mug","Tie","Stickers"]
+productIDs = ['256670743725195335','168540946485519042','151119561160107608','217917661479101292']
 for (i=1; i<=productNames.length; i++){
 element = document.getElementById('ProductImage' + i);
-var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+productIDs[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedImageID + '&t_stripes2_url='+encodedImageID;
+var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+productIDs[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedImageID + '&t_labeledstripes_url='+encodedImageID;
 element.src = imageID2;
 element.alt = "warming stripes " + productNames[i-1]
 element = document.getElementById('ProductName' + i);
@@ -242,4 +243,56 @@ setYaleBars();
 
 setMerchBox();
 
+//this needs to be here cause it needs to get locationName fro JSON
+tweetContent = "Warming Stripes from @earthstripes show how " + locationName + " is warming. Take a look at your region: " + encodeURI(canonicalUrl);
+facebookShareContent = "Warming Stripes from @earthstripes show how " + "country" + " is warming. Take a look at your region: "
+
 }
+
+//social media stuff
+//call functions when buttons clicked
+document.getElementById('twitter-share-button1').onclick = function() {
+window.open("https://twitter.com/intent/tweet?text="+encodeURIComponent(tweetContent)+"&related=earthstripes,nikhilrado&hashtags=showyourstripes", "pop", "width=600, height=400, scrollbars=no");
+
+}
+document.getElementById('facebook-share-button1').onclick = function() {
+window.open("https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(canonicalUrl)+"&hashtag=#showyourstripes", "pop", "width=600, height=400, scrollbars=no");
+
+window.open("https://www.facebook.com/dialog/share?app_id=604427890576897&display=popup&href="+encodeURIComponent(canonicalUrl)+"&redirect_uri=https%3A%2F%2Fwww.earthstripes.org"+"&hashtag="+encodeURIComponent("#showyourstripes")+"&quote=" + encodeURIComponent(facebookShareContent), "pop", "width=600, height=400, scrollbars=no");
+
+}
+
+//load twitter SDK
+window.twttr = (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0],
+      t = window.twttr || {};
+    if (d.getElementById(id)) return t;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://platform.twitter.com/widgets.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  
+    t._e = [];
+    t.ready = function(f) {
+      t._e.push(f);
+    };
+  
+    return t;
+  }(document, "script", "twitter-wjs"));
+  
+// Load the Snapchat SDK asynchronously
+  (function (d, s, id) {
+    var js,
+      sjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://sdk.snapkit.com/js/v1/create.js";
+    sjs.parentNode.insertBefore(js, sjs);
+  })(document, "script", "snapkit-creative-kit-sdk");
+
+  window.snapKitInit = function () {
+    snap.creativekit.initalizeShareButtons(
+      document.getElementsByClassName("snapchat-share-button")
+    );
+  };

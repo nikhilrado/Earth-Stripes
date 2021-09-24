@@ -1,124 +1,48 @@
-<script>window.twttr = (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0],
-      t = window.twttr || {};
-    if (d.getElementById(id)) return t;
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "https://platform.twitter.com/widgets.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  
-    t._e = [];
-    t.ready = function(f) {
-      t._e.push(f);
-    };
-  
-    return t;
-  }(document, "script", "twitter-wjs"));</script>
-  <!-- Load Facebook SDK for JavaScript -->
-  <div id="fb-root"></div>
-  <script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-  fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));</script>
-  
-  <h6 id="myHeader17"><a class="testclass" href="https://twitter.com/search?q=%23showyourstripes" target="_blank">#showyourstripes</a></h6>
-  <h3 class="testclass" id="myHeader9">Alabama</h3>
-  <div class="flex-parent jc-center">
-  <button onclick="switchStripes('stripes')" class="button button1">Stripes</button>
-  <button onclick="switchStripes('bars')" class="button button2">Bars</button>
-  
-  </div> 
-  <p id="img1description" class="descriptiveText">Lorem ipsum dolor sit amet, consectetur.</p>
-  
-  <div id=product-details-page>
-  <a class="twitter-share-button"
-    href="https://twitter.com/intent/tweet?text=Hello%20world"
-    data-size="large">
-  Tweet</a>
-  
-  <!-- Your share button code -->
-  <span class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button_count" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></span>
-  <span class="test44 snapchat-creative-kit-share" data-size="large"></span>
-  </div>
-  
-  <button class="social-button snapchat-share-button">
-  <span class=social-icon>
-  <svg version="1.1"
-       baseProfile="full"
-       width="17" height="16"
-       xmlns="http://www.w3.org/2000/svg">
-  <path id="snapchat-share-icon" d="M4.129 2.714c-.425.951-.257 2.656-.19 3.848-.458.254-1.048-.192-1.381-.192-.347 0-.762.228-.827.568-.047.245.063.602.85.913.305.12 1.03.262 1.198.657.236.555-1.211 3.117-3.484 3.49a.352.352 0 0 0-.294.368c.04.69 1.588.96 2.274 1.067.07.095.127.495.217.8.04.137.144.3.412.3.35 0 .93-.268 1.94-.101.99.165 1.92 1.568 3.708 1.568 1.66 0 2.652-1.41 3.605-1.568.552-.091 1.026-.062 1.556.04.365.072.692.112.796-.246.091-.31.147-.702.216-.795.68-.106 2.235-.375 2.274-1.066a.353.353 0 0 0-.294-.367c-2.234-.368-3.725-2.923-3.484-3.491.167-.394.887-.535 1.197-.657.577-.227.866-.507.86-.83-.008-.415-.507-.662-.874-.662-.373 0-.91.442-1.344.203.068-1.202.236-2.9-.189-3.85C12.067.91 10.28 0 8.491 0 6.714 0 4.939.898 4.129 2.714z" fill="currentColor"></path>
-  </svg>
-  </span>
-  <span class="social-text">Snap</span>
-  </button>
-  
-  <button class="social-button" id="twitter-share-button1">
-  <span class=social-icon>
-  <svg version="1.1"
-       baseProfile="full"
-       width="17" height="16"
-       xmlns="http://www.w3.org/2000/svg">
-  <path id="twitter-share-icon"d="M16.172 3.5v.438c0 1.166-.229 2.347-.686 3.542a10.017 10.017 0 0 1-2.021 3.239c-.89.964-1.99 1.753-3.296 2.364-1.307.611-2.81.917-4.509.917-.515 0-1.025-.034-1.53-.101a10.435 10.435 0 0 1-2.847-.8A9.927 9.927 0 0 1 0 12.42a10.295 10.295 0 0 0 .879.033c.855 0 1.679-.13 2.47-.387a6.942 6.942 0 0 0 2.135-1.127c-.808 0-1.529-.233-2.162-.699a3.63 3.63 0 0 1-1.318-1.758c.117.033.231.053.343.059.111.005.231.008.36.008a4.741 4.741 0 0 0 .984-.1 3.662 3.662 0 0 1-2.109-1.23 3.323 3.323 0 0 1-.844-2.237v-.068c.246.135.507.242.783.32.275.079.565.118.87.118a3.491 3.491 0 0 1-1.196-1.237 3.295 3.295 0 0 1-.457-1.69c0-.315.047-.624.14-.926.095-.303.224-.59.388-.859a9.61 9.61 0 0 0 1.511 1.464 10.647 10.647 0 0 0 3.859 1.902c.72.19 1.462.303 2.223.336a3.275 3.275 0 0 1-.105-.807c0-.483.097-.94.29-1.372.193-.432.457-.807.791-1.127A3.759 3.759 0 0 1 12.445 0c.54 0 1.04.101 1.503.303.463.202.864.471 1.204.808a8.246 8.246 0 0 0 1.23-.329c.4-.14.774-.31 1.126-.513-.14.404-.352.774-.633 1.11a3.85 3.85 0 0 1-.984.842c.363-.045.72-.112 1.072-.202.351-.09.697-.213 1.037-.37A8.305 8.305 0 0 1 16.172 3.5z" fill="currentColor"></path>
-  </svg>
-  </span>
-  <span class="social-text">Tweet</span>
-  </button>
-  
-  <button class="social-button" id=facebook-share-button1>
-  <span class=social-icon>
-  <svg version="1.1"
-       baseProfile="full"
-       width="16" height="16"
-       xmlns="http://www.w3.org/2000/svg">
-  <path id="facebook-share-icon" d="M14.047 0C15.125 0 16 .875 16 1.953v12.094A1.954 1.954 0 0 1 14.047 16h-3.328V9.973H12.8l.394-2.582H10.72V5.715c0-.707.344-1.395 1.453-1.395H13.3V2.121s-1.024-.176-2-.176c-2.04 0-3.375 1.239-3.375 3.477V7.39H5.66v2.582h2.266V16H1.953A1.954 1.954 0 0 1 0 14.047V1.953C0 .875.875 0 1.953 0Zm0 0" fill="currentColor"></path>
-  <!-- non rounded corners d="M10.424 16V9.96h2.014l.31-2.35h-2.324V6.113c0-.379.082-.663.245-.852.164-.19.47-.284.917-.284h1.239V2.886c-.276-.069-.878-.103-1.807-.103-.93 0-1.665.27-2.208.813-.542.542-.813 1.303-.813 2.284v1.73h-2.04v2.35h2.04V16H0V0h16v16h-5.576z"-->
-  </svg>
-  </span>
-  <span class="social-text">Share</span>
-  </button>
-  
-  <script>
-  
-  
-  const canonicalUrl = document.querySelector("link[rel='canonical']").getAttribute("href");
-  var tweetContent = "Warming Stripes from @earthstripes show how " + "country" + " is warming. Take a look at your region: " + canonicalUrl;
-  console.log(tweetContent)
-  
-  document.getElementById('twitter-share-button1').onclick = function() {
-  window.open("https://twitter.com/intent/tweet?text="+encodeURIComponent(tweetContent)+"&related=earthstripes,nikhilrado&hashtags=showyourstripes", "pop", "width=600, height=400, scrollbars=no");
-  
-  }
-  document.getElementById('facebook-share-button1').onclick = function() {
-  window.open("https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(canonicalUrl)+"&hashtag=#showyourstripes", "pop", "width=600, height=400, scrollbars=no");
-  
-  const facebookShareContent = "Warming Stripes from @earthstripes show how " + "country" + " is warming. Take a look at your region: "
-  window.open("https://www.facebook.com/dialog/share?app_id=604427890576897&display=popup&href="+encodeURIComponent(canonicalUrl)+"&redirect_uri=https%3A%2F%2Fwww.earthstripes.org"+"&hashtag="+encodeURIComponent("#showyourstripes")+"&quote=" + encodeURIComponent(facebookShareContent), "pop", "width=600, height=400, scrollbars=no");
-  
-  
-  
-  }
-  </script>
-  
-  <script>
-    // Load the SDK asynchronously
-    (function (d, s, id) {
-      var js,
-        sjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s);
-      js.id = id;
-      js.src = "https://sdk.snapkit.com/js/v1/create.js";
-      sjs.parentNode.insertBefore(js, sjs);
-    })(document, "script", "snapkit-creative-kit-sdk");
-  
-    window.snapKitInit = function () {
-      snap.creativekit.initalizeShareButtons(
-        document.getElementsByClassName("snapchat-share-button")
-      );
-    };
-  </script>
-  
+<h6 id="myHeader17"><a class="testclass" href="https://twitter.com/search?q=%23showyourstripes" target="_blank">#showyourstripes</a></h6>
+<h3 class="testclass" id="myHeader9">Alabama</h3>
+
+<div class="flex-parent jc-center">
+<button onclick="switchStripes('stripes')" class="button button1">Stripes</button>
+<button onclick="switchStripes('bars')" class="button button2">Bars</button>
+</div> 
+
+<p id="img1description" class="descriptiveText">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ac nibh eleifend velit volutpat imperdiet vel a mi.</p>
+
+<div id=social-share-box>
+<button class="social-button first-social-button" id="twitter-share-button1">
+<span class=social-icon>
+<svg version="1.1"
+     baseProfile="full"
+     width="17" height="16"
+     xmlns="http://www.w3.org/2000/svg">
+<path id="twitter-share-icon" d="M16.172 3.5v.438c0 1.166-.229 2.347-.686 3.542a10.017 10.017 0 0 1-2.021 3.239c-.89.964-1.99 1.753-3.296 2.364-1.307.611-2.81.917-4.509.917-.515 0-1.025-.034-1.53-.101a10.435 10.435 0 0 1-2.847-.8A9.927 9.927 0 0 1 0 12.42a10.295 10.295 0 0 0 .879.033c.855 0 1.679-.13 2.47-.387a6.942 6.942 0 0 0 2.135-1.127c-.808 0-1.529-.233-2.162-.699a3.63 3.63 0 0 1-1.318-1.758c.117.033.231.053.343.059.111.005.231.008.36.008a4.741 4.741 0 0 0 .984-.1 3.662 3.662 0 0 1-2.109-1.23 3.323 3.323 0 0 1-.844-2.237v-.068c.246.135.507.242.783.32.275.079.565.118.87.118a3.491 3.491 0 0 1-1.196-1.237 3.295 3.295 0 0 1-.457-1.69c0-.315.047-.624.14-.926.095-.303.224-.59.388-.859a9.61 9.61 0 0 0 1.511 1.464 10.647 10.647 0 0 0 3.859 1.902c.72.19 1.462.303 2.223.336a3.275 3.275 0 0 1-.105-.807c0-.483.097-.94.29-1.372.193-.432.457-.807.791-1.127A3.759 3.759 0 0 1 12.445 0c.54 0 1.04.101 1.503.303.463.202.864.471 1.204.808a8.246 8.246 0 0 0 1.23-.329c.4-.14.774-.31 1.126-.513-.14.404-.352.774-.633 1.11a3.85 3.85 0 0 1-.984.842c.363-.045.72-.112 1.072-.202.351-.09.697-.213 1.037-.37A8.305 8.305 0 0 1 16.172 3.5z" fill="currentColor"></path>
+</svg>
+</span>
+<span class="social-text">Tweet</span>
+</button>
+
+<button class="social-button" id=facebook-share-button1>
+<span class=social-icon>
+<svg version="1.1"
+     baseProfile="full"
+     width="16" height="16"
+     xmlns="http://www.w3.org/2000/svg">
+<path id="facebook-share-icon" d="M14.047 0C15.125 0 16 .875 16 1.953v12.094A1.954 1.954 0 0 1 14.047 16h-3.328V9.973H12.8l.394-2.582H10.72V5.715c0-.707.344-1.395 1.453-1.395H13.3V2.121s-1.024-.176-2-.176c-2.04 0-3.375 1.239-3.375 3.477V7.39H5.66v2.582h2.266V16H1.953A1.954 1.954 0 0 1 0 14.047V1.953C0 .875.875 0 1.953 0Zm0 0" fill="currentColor"></path>
+<!-- non rounded corners d="M10.424 16V9.96h2.014l.31-2.35h-2.324V6.113c0-.379.082-.663.245-.852.164-.19.47-.284.917-.284h1.239V2.886c-.276-.069-.878-.103-1.807-.103-.93 0-1.665.27-2.208.813-.542.542-.813 1.303-.813 2.284v1.73h-2.04v2.35h2.04V16H0V0h16v16h-5.576z"-->
+</svg>
+</span>
+<span class="social-text">Share</span>
+</button>
+
+<button class="social-button snapchat-share-button">
+<span class=social-icon>
+<svg version="1.1"
+     baseProfile="full"
+     width="17" height="16"
+     xmlns="http://www.w3.org/2000/svg">
+<path id="snapchat-share-icon" d="M4.129 2.714c-.425.951-.257 2.656-.19 3.848-.458.254-1.048-.192-1.381-.192-.347 0-.762.228-.827.568-.047.245.063.602.85.913.305.12 1.03.262 1.198.657.236.555-1.211 3.117-3.484 3.49a.352.352 0 0 0-.294.368c.04.69 1.588.96 2.274 1.067.07.095.127.495.217.8.04.137.144.3.412.3.35 0 .93-.268 1.94-.101.99.165 1.92 1.568 3.708 1.568 1.66 0 2.652-1.41 3.605-1.568.552-.091 1.026-.062 1.556.04.365.072.692.112.796-.246.091-.31.147-.702.216-.795.68-.106 2.235-.375 2.274-1.066a.353.353 0 0 0-.294-.367c-2.234-.368-3.725-2.923-3.484-3.491.167-.394.887-.535 1.197-.657.577-.227.866-.507.86-.83-.008-.415-.507-.662-.874-.662-.373 0-.91.442-1.344.203.068-1.202.236-2.9-.189-3.85C12.067.91 10.28 0 8.491 0 6.714 0 4.939.898 4.129 2.714z" fill="currentColor"></path>
+</svg>
+</span>
+<span class="social-text">Snap</span>
+</button>
+</div>
