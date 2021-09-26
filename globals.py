@@ -1,4 +1,5 @@
 #list of global data that needs to be accessed multiple times
+import os
 
 #convert between long or short name of the state
 stateFullName = ["County","Washington D.C.","Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"]
@@ -7,3 +8,11 @@ def getStateAbrev(state):
     if len(state) == 2:
         return stateFullName[stateShortName.index(state)]
     return stateShortName[stateFullName.index(state)]
+
+#returns a list of all files in a directory
+def getAllFilesInDir(root):
+    fileList = []
+    for path, subdirs, files in os.walk(root):
+        for name in files:
+            fileList.append(os.path.join(path, name))
+    return fileList
