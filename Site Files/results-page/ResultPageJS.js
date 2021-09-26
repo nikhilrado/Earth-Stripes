@@ -28,10 +28,6 @@ label.href = "?country=" + country;
 label2.innerText = state;
 label2.href = "?country=" + country + "&state=" + state;
 
-var encodedImageID = encodeURI(
-    bucketPrefix + "labeled-stripes/" + imageID + ".png"
-);
-
 //this operates the buttons that switch from Stripes to Bars
 function switchStripes(switchTo) {
     if (switchTo == 'stripes'){
@@ -61,7 +57,9 @@ function setLocalImpacts(data){
             }
             return text;
         }
-
+        
+        test23.style.width = "100%";
+        
         //set the names of all of the stuff
         for (k = 0; k < data.length; k++) {
             element = document.getElementById("ImpactText" + (k + 1));
@@ -109,7 +107,7 @@ function setLocalImpacts(data){
 //sets the bars for yale data_function
 function setYaleBars() {
     YaleSubHeader.innerText = "How people in " + data["YaleClimateOpinionData2020"]["data"]["GeoName"] + " view climate change";
-    datas = ["happening", "personal", "congress","fundrenewables"];
+    datas = ["happening", "personal","harmUS", "congress","fundrenewables","teachGW"];
 
     for (let i = 0; i < datas.length; i++) {
         var agree1 = document.getElementById("Yaleagree" + (i + 1));
@@ -127,18 +125,21 @@ function setYaleBars() {
 }
 
 function setMerchBox(){
-merchLabel = encodedImageID + "&t_location_txt=" + locationName + " " + startYear + "-" + endYear;
+var encodedLabeledStripesImageURL = encodeURI(bucketPrefix + "labeled-stripes/" + imageID + ".png");
+var encodedStripesImageURL = encodeURI(bucketPrefix + "stripes/" + imageID + ".png");
+
+merchLabel = "&t_location_txt=" + locationName + " " + startYear + "-" + endYear;
 customMerchLink = "https://www.zazzle.com/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&tc=&ic=&t_labeledstripes_iid="
-+ encodedImageID + "&t_stripes_iid=" + merchLabel;
++ encodedLabeledStripesImageURL + "&t_stripes_iid=" + encodedStripesImageURL + merchLabel;
 testmerchlink.href = customMerchLink;
 
-productNames = ["Mask","Mug","Tie","Stickers"]
+productNames = ["Cloth Mask","Mug","Tie","Stickers"]
 productIDs = ['256670743725195335','168540946485519042','151119561160107608','217917661479101292']
 for (i=1; i<=productNames.length; i++){
 element = document.getElementById('ProductImage' + i);
-var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+productIDs[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedImageID + '&t_labeledstripes_url='+encodedImageID;
+var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+productIDs[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedStripesImageURL + '&t_labeledstripes_url='+encodedLabeledStripesImageURL;
 element.src = imageID2;
-element.alt = "warming stripes " + productNames[i-1]
+element.alt = "Warming Stripes " + productNames[i-1]
 element = document.getElementById('ProductName' + i);
 element.innerText = productNames[i-1];
 element = document.getElementById('Product'+i+"Link");
@@ -180,9 +181,12 @@ function getSenatorInfo(senatorData) {
     console.log(JSON.stringify(json));
       //runs the images after in case there are any issues
       //SenatorImage2.src = json.officials[1].photoUrl  //photo from database
-      SenatorImage2.src = bucketPrefix + "photos/senators/" + senatorData[json.officials[1].name]["image"];
+      SenatorImage2.src = bucketPrefix + "photos/compressed/senators/" + senatorData[json.officials[1].name]["image"];
+      SenatorImage2.alt =  senator2json["stateName"] + " Senator " + json.officials[1].name
+
       //SenatorImage1.src = json.officials[0].photoUrl //photo from database
-      SenatorImage1.src = bucketPrefix + "photos/senators/" + senatorData[json.officials[0].name]["image"];
+      SenatorImage1.src = bucketPrefix + "photos/compressed/senators/" + senatorData[json.officials[0].name]["image"];
+      SenatorImage1.alt =  senator1json["stateName"] + " Senator " + json.officials[0].name
 
       console.log(bucketPrefix + "senators/" + senatorData[json.officials[0].name]["image"]
       );
@@ -232,6 +236,7 @@ startYear = data.resources.stripes["startYear"];
 endYear = data.resources.stripes["endYear"];
 description1 = "These warming stripes show how climate change has affected " + locationName + " from " + startYear + "-" + endYear + ", red stripes indicate warmer, and blue indicate lower temperatures.";
 img1description.innerText = description1;
+image1.alt = "Warming Stripes for " + locationName + " from " + startYear + "-" + endYear;
 
 //yale information
 try{
@@ -245,13 +250,14 @@ setMerchBox();
 
 //this needs to be here cause it needs to get locationName fro JSON
 tweetContent = "Warming Stripes from @earthstripes show how " + locationName + " is warming. Take a look at your region: " + encodeURI(canonicalUrl);
-facebookShareContent = "Warming Stripes from @earthstripes show how " + "country" + " is warming. Take a look at your region: "
+facebookShareContent = "Warming Stripes from @earthstripes show how " + locationName + " is warming. Take a look at your region: "
 
 }
 
 //social media stuff
 //call functions when buttons clicked
 document.getElementById('twitter-share-button1').onclick = function() {
+ga('send', 'social', "Twitter", "Tweet", canonicalUrl);
 window.open("https://twitter.com/intent/tweet?text="+encodeURIComponent(tweetContent)+"&related=earthstripes,nikhilrado&hashtags=showyourstripes", "pop", "width=600, height=400, scrollbars=no");
 
 }
