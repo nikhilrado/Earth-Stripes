@@ -38,7 +38,7 @@ def getCoordsOfCounty(county,countiesList):
         if "[" in row[3]:
             row[3] = row[3][:-4]
             print(row[3])
-        if  county == row[3] + " County":
+        if  county == row[3] + " County" or county == row[3] + " Parish":
             Latitude = float(row[12][1:-2]) #only works for lat coords in northern hemisphere
             Longitude = float("-"+row[13][3:-2]) #only works for long coords in western hemisphere
             return Latitude,Longitude
