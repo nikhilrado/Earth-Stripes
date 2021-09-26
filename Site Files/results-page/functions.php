@@ -111,11 +111,12 @@ function generate_custom_meta_tags() {
 );
 }
 
-add_action( 'wp_head', 'generate_custom_meta_tags' );
+
 
 add_action( 'wp_head', function(){
 	if( is_page('52')) {
 		remove_all_actions( 'rank_math/head' );
+		add_action( 'wp_head', 'generate_custom_meta_tags' );
 		//add_action( 'wp_head', '_wp_render_title_tag', 2 );
 	}
 }, 1 );
