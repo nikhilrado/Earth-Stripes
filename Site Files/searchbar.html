@@ -69,10 +69,12 @@ button.button5::before {
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 
 <script>
+document.getElementById("autocomplete").focus(); //focuses on search bar on page load
+
 function generateURL (countryCode=null, stateCode=null, countyName=null){
     locationAutomaticURL = "/result/?country="+countryCode
     if (stateCode != false && stateCode != null){locationAutomaticURL=locationAutomaticURL+"&state="+stateCode}
-    if (countyName != false && countyName != null){locationAutomaticURL=locationAutomaticURL+"&county="+countyName}
+    if (countryCode == "US" && countyName != null && countyName != false) {locationAutomaticURL=locationAutomaticURL+"&county="+countyName}
     console.log(locationAutomaticURL+"yeeeeeeeee")
     return locationAutomaticURL
 }
@@ -184,10 +186,13 @@ function handlePermission() {
     console.log(result.state)
     if (result.state == 'granted') {
       console.log("yehaw")
-      locationGranted = true
+      locationGranted = true;
       getLocation();
-      
     }
+    else if (result.state == 'denied') {
+        locationGranted = false;
+    }
+    
   });
 }
 handlePermission()
