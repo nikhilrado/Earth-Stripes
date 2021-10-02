@@ -1,4 +1,4 @@
-from s3keys import access_key, secret_access_key
+from secrets import s3
 import boto3
 import os
 import json
@@ -10,7 +10,7 @@ resultsDirectory = "results/"
 logFile = "s3upload-log.csv"
 s3putCost = 0.005/1000
 upload_bucket = "ortana-test"
-client = boto3.client('s3', aws_access_key_id=access_key, aws_secret_access_key=secret_access_key)
+client = boto3.client('s3', aws_access_key_id=s3.access_key, aws_secret_access_key=s3.secret_access_key)
 
 #returns a list of all files in a directory
 def getAllFilesInDir(root):
