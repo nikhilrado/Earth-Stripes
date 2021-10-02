@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw, ImageFont
 import csv
 from datetime import datetime
 import os
-import manageJSON
+#import manageJSON
 import statistics
 
 counter = 0
@@ -54,7 +54,7 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
         dataSource = "unknown"
         dataSourceLink = None
 
-    manageJSON.updateMetadata(imagePath,chartType,width=width,height=height,startYear=firstYear,endYear=lastYear,dataSource=dataSource, dataSourceLink=dataSourceLink, name=location)
+    #manageJSON.updateMetadata(imagePath,chartType,width=width,height=height,startYear=firstYear,endYear=lastYear,dataSource=dataSource, dataSourceLink=dataSourceLink, name=location)
 
     #adds the temperatures to a list
     temps = []
@@ -139,14 +139,15 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
 
             #--sets the gradint Percent to the min and max of 0 or 1 when the data goes over
             unboundedGradientPercent = gradientPercent #this keeps the original gradient percent so it can be used as height in the bars, but allows the gradientPercent to continue so colors will fall in their consistant categories
-            if gradientPercent > 1: 
-                gradientPercent = 1
-            elif gradientPercent < 0:
-                gradientPercent = 0
+            #if gradientPercent > 1: 
+                #gradientPercent = 1       
+            #elif gradientPercent < 0:
+                #gradientPercent = 0
 
 
             gradientListIndex = gradientPercent*(len(gradientList))
-            #print(gradientListIndex)
+
+            #this segment breaks the colors up into buckets instead of rounding
             for m in range(len(gradientList)):
                 gradientListIndex = gradientPercent*(len(gradientList))
                 if gradientListIndex > m and gradientListIndex <= m+1:
@@ -158,9 +159,17 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
             #color = matplotlib.colors.to_hex((float(gradientList[gradientListIndex][0])/256, float(gradientList[gradientListIndex][1])/256, float(gradientList[gradientListIndex][2])/256))
             #if gradientListIndex < 1:
             #    gradientListIndex = 1
-            color = gradientList[round(gradientListIndex-1)]
-            print(round(gradientListIndex)-1)
-            #print(color)
+            try:
+                color = gradientList[round(gradientListIndex-1)]
+                print(round(gradientListIndex)-1)
+                #print(color)
+            except:
+                pass
+
+            if gradientPercent > 1: 
+                color = "#67000dff"
+            elif gradientPercent < 0:
+                color = "#08306bff"
 
             if "stripes" in chartType:
                 barWidth = width/len(temps) #how wide each bar should be
@@ -206,7 +215,9 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
     [1, (1.0, 0, 0)],
     ] 
     #gradientList = gradient.generateGradient(heatmap)
-    gradientList = ["#08306bff", "#08519cff", "#2171b5ff", "#4292c6ff", "#6baed6ff", "#9ecae1ff", "#c6dbefff", "#deebf7ff", "#fee0d2ff", "#fcbba1ff", "#fc9272ff", "#fb6a4aff", "#ef3b2cff", "#cb181dff", "#a50f15ff", "#67000dff"]
+    #gradientList = ["#08306bff", "#08519cff", "#2171b5ff", "#4292c6ff", "#6baed6ff", "#9ecae1ff", "#c6dbefff", "#deebf7ff", "#fee0d2ff", "#fcbba1ff", "#fc9272ff", "#fb6a4aff", "#ef3b2cff", "#cb181dff", "#a50f15ff", "#67000dff"]
+    gradientList = ["#08519cff", "#2171b5ff", "#4292c6ff", "#6baed6ff", "#9ecae1ff", "#c6dbefff", "#deebf7ff", "#fee0d2ff", "#fcbba1ff", "#fc9272ff", "#fb6a4aff", "#ef3b2cff", "#cb181dff", "#a50f15ff"]
+
 
     drawBars(chartType)
     #only draws info on the thing if the file name says labeled in it
@@ -223,7 +234,7 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
             os.mkdir(os.path.dirname(imagePath))
         img.save(imagePath + ".png")
 
-    #img.save("C:/Users/radon/Downloads/test99" + ".png")
+    img.save("C:/Users/radon/Downloads/test201" + ".png")
     print("Done: Image %s: %s" % (str(counter),imagePath))
 
 
@@ -238,5 +249,5 @@ statesList = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","ID","IL","IN","
 #createChart("state-data\AK.csv","test7.png")
 #createChart("state-province data stuff/Acre - AnnTemp 1901-2020.csv","results/stripes/EG",chartType="stripes",save=False)
 #createChart("data/us-state-data-NOAA/CA.csv","results/stripes/US/CA",chartType="stripes",save=False)
-createChart("data\country-data-berkley-earth\processed\PH - AnnTemp 1901-2020.csv","results/labeled-bars/PH",chartType="labeled-bars",save=False)
+createChart("data/us-state-data-NOAA/CA.csv","results/labeled-bars/US/CA",chartType="labeled-bars",save=False)
 
