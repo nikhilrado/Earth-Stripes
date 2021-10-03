@@ -58,8 +58,6 @@ function setLocalImpacts(data){
             return text;
         }
         
-        test23.style.width = "100%";
-        
         //set the names of all of the stuff
         for (k = 0; k < data.length; k++) {
             element = document.getElementById("ImpactText" + (k + 1));
@@ -75,11 +73,24 @@ function setLocalImpacts(data){
                 console.log(data[k]["img"]["file"])
             if (data[k]["img"]["file"] == null || data[k]["img"]["file"] == ""){
                 element.style.display = "none";
+                
+                column = document.getElementById("LocalImpactBox" + (k + 1) + "Column1")
+                column.style.width = "100%";
+                column = document.getElementById("LocalImpactBox" + (k + 1) + "Column2")
+                column.style.width = "100%";
             }
             else {
                 element.src = bucketPrefix + 'photos/local-impact-photos/'+state+'/' + data[k]["img"]["file"] + ".jpg";
                 element.alt = data[k]["img"]["alt"];
             }
+        
+        console.log(element.height/element.width);
+        if (true){//element.height/element.width < 0.5) {
+            column = document.getElementById("LocalImpactBox" + (k + 1) + "Column1")
+            column.style.width = "100%";
+            column = document.getElementById("LocalImpactBox" + (k + 1) + "Column2")
+            column.style.width = "100%";
+        }
         
         //if there isn't a caption hide it, if there is fill in the data and credit
         element = document.getElementById("ImpactPhotoCaption" + (k + 1));
@@ -132,6 +143,7 @@ merchLabel = "&t_location_txt=" + locationName + " " + startYear + "-" + endYear
 customMerchLink = "https://www.zazzle.com/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&tc=&ic=&t_labeledstripes_iid="
 + encodedLabeledStripesImageURL + "&t_stripes_iid=" + encodedStripesImageURL + merchLabel;
 testmerchlink.href = customMerchLink;
+MerchButton.href = customMerchLink;
 
 productNames = ["Cloth Mask","Mug","Tie","Stickers"]
 productIDs = ['256670743725195335','168540946485519042','151119561160107608','217917661479101292']
@@ -146,6 +158,7 @@ element = document.getElementById('Product'+i+"Link");
 element.href = customMerchLink;
 element = document.getElementById('Product'+i+'Link2');
 element.href = customMerchLink;
+
 console.log("product round "  + i);
 }
 }
@@ -257,7 +270,11 @@ facebookShareContent = "Warming Stripes from @earthstripes show how " + location
 //social media stuff
 //call functions when buttons clicked
 document.getElementById('twitter-share-button1').onclick = function() {
-ga('send', 'social', "Twitter", "Tweet", canonicalUrl);
+gtag('event', "Share Intent", {
+  'event_category': "Social",
+  'event_label': canonicalUrl,
+  'value': "5"
+});
 window.open("https://twitter.com/intent/tweet?text="+encodeURIComponent(tweetContent)+"&related=earthstripes,nikhilrado&hashtags=showyourstripes", "pop", "width=600, height=400, scrollbars=no");
 
 }
