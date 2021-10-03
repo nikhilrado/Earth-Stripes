@@ -12,7 +12,7 @@ def getStateAbrev(state):
         return stateFullName[stateShortName.index(state)]
     return stateShortName[stateFullName.index(state)]
 
-f = open('data/Congress Data/Senator Data - main.csv', "r", encoding = 'utf8')
+f = open('data/Congress Data/Senator Data2 - main.csv', "r", encoding = 'utf8')
 csv_f = csv.reader(f)
 
 rowsList = []
