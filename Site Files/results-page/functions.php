@@ -95,7 +95,7 @@ function generate_custom_meta_tags() {
 <meta property="og:description" content="' . $es_description_name . '" />
 <meta property="og:url" content="' . $es_canonical_url . '" />
 <meta property="og:site_name" content="Earth Stripes" />
-<meta property="og:updated_time" content="2021-08-25T21:55:07+00:00" />
+
 <meta property="og:image" content="' . $es_image_url . '" />
 <meta property="og:image:secure_url" content="' . $es_image_url . '" />
 <meta property="og:image:alt" content="' . $es_image_alt . '" />
@@ -111,12 +111,12 @@ function generate_custom_meta_tags() {
 );
 }
 
-
+//<meta property="og:updated_time" content="2021-08-25T21:55:07+00:00" />
 
 add_action( 'wp_head', function(){
 	if( is_page('52')) {
 		remove_all_actions( 'rank_math/head' );
-		add_action( 'wp_head', 'generate_custom_meta_tags' );
+		add_action( 'wp_head', 'generate_custom_meta_tags', 1 );
 		//add_action( 'wp_head', '_wp_render_title_tag', 2 );
 	}
 }, 1 );
