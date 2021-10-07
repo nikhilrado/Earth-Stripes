@@ -1,7 +1,12 @@
 const bucketPrefix = "https://ortana-test.s3.us-east-2.amazonaws.com/v2/"
 
 //data acquired from query params that doesn't require json file
-const canonicalUrl = document.querySelector("link[rel='canonical']").getAttribute("href");
+try {
+    const canonicalUrl = document.querySelector("link[rel='canonical']").getAttribute("href");
+} catch (error) {
+    canonicalUrl = ""
+    console.error("can't find canonical Url in HTML")
+}
 const urlParams = new URLSearchParams(window.location.search);
 var state = urlParams.get('state');
 var county = urlParams.get('county');
@@ -159,7 +164,6 @@ element.href = customMerchLink;
 element = document.getElementById('Product'+i+'Link2');
 element.href = customMerchLink;
 
-console.log("product round "  + i);
 }
 }
 
@@ -206,6 +210,125 @@ function getSenatorInfo(senatorData) {
     });
 }
 
+function setEnergyGraph(energyData){
+var ctx = document.getElementById("myChart").getContext("2d");
+
+//console.log(energyData['years']);
+
+const colors = {
+  green: {
+    fill: '#5eb84d',
+    stroke: '#5eb84d',
+  },
+  lightBlue: {
+    stroke: '#bbbbbb',
+    fill: '#bbbbbb',
+  },
+  yellow: {
+    fill: '#FFD000',
+    stroke: '#FFD000',
+  },
+  purple: {
+    fill: 'purple',
+    stroke: 'purple',
+  },
+  charcoal: {
+    fill: '#323232',
+    stroke: '#323232',
+  },
+};
+
+const coal = energyData['coal'];
+const naturalGas = energyData['natural gas'];
+const petroleum = energyData['petroleum and other liquids'];
+const nuclear = energyData['nuclear'];
+const renewables = energyData['renewables and others'];
+const xData = energyData['years'];
+
+const myChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: xData,
+    datasets: [{
+      label: "Coal",
+      fill: true,
+      backgroundColor: colors.charcoal.fill,
+      pointBackgroundColor: colors.charcoal.stroke,
+      borderColor: colors.charcoal.stroke,
+      pointHighlightStroke: colors.charcoal.stroke,
+      borderCapStyle: 'butt',
+      data: coal,
+
+    }, {
+      label: "Natural Gas",
+      fill: true,
+      backgroundColor: colors.purple.fill,
+      pointBackgroundColor: colors.purple.stroke,
+      borderColor: colors.purple.stroke,
+      pointHighlightStroke: colors.purple.stroke,
+      borderCapStyle: 'butt',
+      data: naturalGas,
+    }, {
+      label: "Petroleum",
+      fill: true,
+      backgroundColor: colors.lightBlue.fill,
+      pointBackgroundColor: colors.lightBlue.stroke,
+      borderColor: colors.lightBlue.stroke,
+      pointHighlightStroke: colors.lightBlue.stroke,
+      borderCapStyle: 'butt',
+      data: petroleum,
+    }, {
+      label: "Nuclear",
+      fill: true,
+      backgroundColor: colors.yellow.fill,
+      pointBackgroundColor: colors.yellow.stroke,
+      borderColor: colors.yellow.stroke,
+      pointHighlightStroke: colors.yellow.stroke,
+      data: nuclear,
+    }, {
+      label: "Renewables & Other",
+      fill: true,
+      backgroundColor: colors.green.fill,
+      pointBackgroundColor: colors.green.stroke,
+      borderColor: colors.green.stroke,
+      pointHighlightStroke: colors.green.stroke,
+      data: renewables,
+    }]
+  },
+  options: {
+  responsive: true,
+  // Can't just just `stacked: true` like the docs say
+  scales: {
+    yAxes: {
+      stacked: true,
+      max: 100,
+      min: 0,
+    },
+  },
+  animation: {
+    duration: 750,
+  },
+  tooltips: {
+    mode: "index",
+    intersect: false,
+  },
+  hover: {
+    mode: "nearest",
+    intersect: false,
+  },
+  elements: {
+    point: {
+      radius: 0,
+    },
+    line: {
+      tension: 0.3,
+    },
+  },
+
+  }
+});
+}
+
 
 function handleStateJSON(json){
     setLocalImpacts(json["local impacts"]);
@@ -247,7 +370,7 @@ myHeader9.innerText = locationName;
 
 startYear = data.resources.stripes["startYear"];
 endYear = data.resources.stripes["endYear"];
-description1 = "These warming stripes show how climate change has affected " + locationName + " from " + startYear + "-" + endYear + ", red stripes indicate warmer, and blue indicate lower temperatures.";
+description1 = "These warming stripes show how climate change has affected " + locationName + " from " + startYear + "-" + endYear + ", red and blue stripes represent warmer and cooler temperatures respectively";
 img1description.innerText = description1;
 image1.alt = "Warming Stripes for " + locationName + " from " + startYear + "-" + endYear;
 
@@ -261,7 +384,14 @@ setYaleBars();
 
 setMerchBox();
 
-//this needs to be here cause it needs to get locationName fro JSON
+if (data["energy consumption"] == null){
+    console.warn("No Energy Data Found");
+    energyBox.style.display = "none";
+} else {
+    setEnergyGraph(data["energy consumption"]);
+}
+
+//this needs to be here cause it needs to get locationName from JSON
 tweetContent = "Warming Stripes from @earthstripes show how " + locationName + " is warming. Take a look at your region: " + encodeURI(canonicalUrl);
 facebookShareContent = "Warming Stripes from @earthstripes show how " + locationName + " is warming. Take a look at your region: "
 
