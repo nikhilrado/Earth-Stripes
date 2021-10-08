@@ -66,7 +66,7 @@ button.button5::before {
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/> 
 
 <script>
-//document.getElementById("autocomplete").focus(); //focuses on search bar on page load
+document.getElementById("autocomplete").focus(); //focuses on search bar on page load
 
 function generateURL (countryCode=null, stateCode=null, countyName=null){
     locationAutomaticURL = "/result/?country="+countryCode
@@ -154,6 +154,8 @@ function getRedirectURLMapbox(jsonPlaceData,redirectNow=false) {
     if (redirectNow){
         window.location.href = locationAutomaticURL
     }
+    
+    console.log("Hello Bob")
 
     x.innerHTML = lowestLocationName
     return locationAutomaticURL; 
@@ -174,8 +176,6 @@ function getLocationForButton(){
         x.innerHTML = lowestLocationName
     }
 }
-
-
 
 function handlePermission() {
   navigator.permissions.query({name:'geolocation'}).then(function(result) {
@@ -217,11 +217,7 @@ process_mapbox_geocode(json); //calling and passing json to another function pro
 
 //another functions
 function process_mapbox_geocode(data){
-    console.log(data)
-    console.log(getRedirectURLMapbox(data["features"][0]))
-    console.log("happy birthday2")
-    console.log(getRedirectURLMapbox(data["features"][0]))
-    console.log("happy birthday3")
+    document.cookie = "locationAutomaticURL=" + getRedirectURLMapbox(data.features[0]);
     locationGranted = true
     if (locationGranted){
         console.log("changed click function")
