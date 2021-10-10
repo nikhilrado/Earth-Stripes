@@ -31,6 +31,7 @@ def main(chartType="bars"):
 
         imagePath = 'results/'+chartType+'/US/'+row[0][-2:]+"/"+row[0]
         try:
+            print(chartType)
             test6.createChart(dataFileName,imagePath,chartType)
         except:
             print("----------error: "+dataFileName)
@@ -38,5 +39,5 @@ def main(chartType="bars"):
         #test6.createChart(fileName,imagePath,chartType)
 
 
-main("stripes")
+#main("stripes")
 

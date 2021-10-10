@@ -26,4 +26,4 @@ def main(chartType="bars"):
             continue
 
 
-main("stripes")
+#main("stripes")

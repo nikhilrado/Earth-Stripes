@@ -53,4 +53,4 @@ def main(chartType="bars"):
             
         #TODO: figure out what to do with countries that have data only to 2015
 
-main("stripes")
+#main("stripes")
