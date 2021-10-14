@@ -1,12 +1,8 @@
 const bucketPrefix = "https://ortana-test.s3.us-east-2.amazonaws.com/v2/"
 
 //data acquired from query params that doesn't require json file
-try {
-    const canonicalUrl = document.querySelector("link[rel='canonical']").getAttribute("href");
-} catch (error) {
-    canonicalUrl = ""
-    console.error("can't find canonical Url in HTML")
-}
+const canonicalUrl = document.querySelector("link[rel='canonical']").getAttribute("href");
+
 const urlParams = new URLSearchParams(window.location.search);
 var state = urlParams.get('state');
 var county = urlParams.get('county');
@@ -26,7 +22,20 @@ else {var imageID = country}
 else {var imageID = country}
 console.log(county)
 console.log(imageID)
-document.getElementById('image1').src = "https://ortana-test.s3.us-east-2.amazonaws.com/v2/stripes/" + imageID+'.png';
+document.getElementById('image1').src = bucketPrefix + "labeled-stripes/" + imageID+'.png';
+
+const script = document.createElement('script');
+script.setAttribute('type', 'application/ld+json');
+script.textContent = `
+    {
+      "@context": "https://schema.org/",
+      "@type": "ImageObject",
+      "contentUrl": "`+bucketPrefix + "stripes/" + imageID+'.png'+`",
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "acquireLicensePage": "https://www.earthstripes.org/content-license"
+    }
+`;
+document.head.appendChild(script);
 
 label.innerText = country + "  › ";
 label.href = "?country=" + country;
@@ -140,6 +149,8 @@ function setYaleBars() {
     }
 }
 
+const productNames = ["Cloth Mask","Mug","Tie","Stickers"]
+const productIDs = ['256670743725195335','168540946485519042','151119561160107608','217917661479101292']
 function setMerchBox(){
 var encodedLabeledStripesImageURL = encodeURI(bucketPrefix + "labeled-stripes/" + imageID + ".png");
 var encodedStripesImageURL = encodeURI(bucketPrefix + "stripes/" + imageID + ".png");
@@ -150,8 +161,7 @@ customMerchLink = "https://www.zazzle.com/api/create/at-238391408801122257?rf=23
 testmerchlink.href = customMerchLink;
 MerchButton.href = customMerchLink;
 
-productNames = ["Cloth Mask","Mug","Tie","Stickers"]
-productIDs = ['256670743725195335','168540946485519042','151119561160107608','217917661479101292']
+
 for (i=1; i<=productNames.length; i++){
 element = document.getElementById('ProductImage' + i);
 var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+productIDs[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedStripesImageURL + '&t_labeledstripes_url='+encodedLabeledStripesImageURL;
@@ -449,3 +459,17 @@ window.twttr = (function(d, s, id) {
       document.getElementsByClassName("snapchat-share-button")
     );
   };
+  
+function zazzleClicked(element) {
+    console.log("bbbbbbbbbbbbbbbb");
+    if (element.includes("Product")) {
+        let listId = element.charAt(element.length-1)-1
+        element = productNames[listId] + " " + productIDs[listId];
+    }
+    console.log(element)
+    gtag('event', "Zazzle Link Clicked", {
+  'event_category': "commerce",
+  'event_label': element,
+  'value': "5"
+});
+};
