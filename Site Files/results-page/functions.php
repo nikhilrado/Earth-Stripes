@@ -40,7 +40,7 @@ function generate_custom_meta_tags() {
 	function get_resource_id(){
 		$queries = array();
 		parse_str($_SERVER['QUERY_STRING'], $queries);
-		$resource_id = 'https://ortana-test.s3.us-east-2.amazonaws.com/stripes/' . $queries['country'];
+		$resource_id = 'https://ortana-test.s3.us-east-2.amazonaws.com/v2/stripes/' . $queries['country'];
 		if( !is_null($queries['state'])) {
 			$resource_id = $resource_id . '/' . $queries['state'];
 		};
@@ -78,8 +78,10 @@ function generate_custom_meta_tags() {
 		};
 	}
 
-	
-	$es_image_url = get_resource_id();
+	$es_resource_id = get_resource_id();
+	$es_image_url = $es_resource_id;
+	$es_snap_sticker_url = str_replace("stripes", "snap-sticker", $es_resource_id);
+	$es_twitter_card_url = str_replace("stripes", "twitter-card", $es_resource_id);
 	$es_canonical_url = get_results_canonical_URL();
 	$es_location_name = get_location_name();
 	$es_title_name = $es_location_name . ' - EarthStripes.org';
@@ -104,8 +106,8 @@ function generate_custom_meta_tags() {
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="' . $es_title_name . '" />
 <meta name="twitter:description" content="' . $es_description_name . '" />
-<meta name="twitter:image" content="' . $es_image_url . '" />
-<meta property="snap:sticker" content="' . $es_image_url . '" />
+<meta name="twitter:image" content="' . $es_twitter_card_url . '" />
+<meta property="snap:sticker" content="' . $es_snap_sticker_url . '" />
 
 '
 );
@@ -116,7 +118,7 @@ function generate_custom_meta_tags() {
 add_action( 'wp_head', function(){
 	if( is_page('52')) {
 		remove_all_actions( 'rank_math/head' );
-		add_action( 'wp_head', 'generate_custom_meta_tags', 1 );
+		add_action( 'wp_head', 'generate_custom_meta_tags');
 		//add_action( 'wp_head', '_wp_render_title_tag', 2 );
 	}
 }, 1 );
