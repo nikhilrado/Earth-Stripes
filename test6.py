@@ -231,7 +231,21 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
                 barWidth = (width-2*sideBorder)/len(temps)
                 img1.rectangle([(round(i*barWidth+sideBorder),height/2),(i*barWidth+sideBorder+barWidth,barHeight)], fill=color)  
                 #img1.text((i*barWidth+sideBorder,barHeight),str(round(anomaly,2)),(255,255,255),font=fnt)
-          
+            
+        #attempts to get a color for the last 20 years, to show rate of warming
+        jsonPath = imagePath.replace(chartType,"json")+".json"
+        last20YrsAnomaly = numpy.mean(anomalyList[-20:])
+        if last20YrsAnomaly < 0:
+            #gradientPercent = anomaly/(min1901_2000-mean1971_2000)
+            last20YrsAnomaly = 0.5-(last20YrsAnomaly/(lowerBoundTemp-mean1971_2000))/2
+        if last20YrsAnomaly >= 0:
+            #gradientPercent = anomaly/(max1901_2000-mean1971_2000)
+            last20YrsAnomaly = 0.5+(last20YrsAnomaly/(upperBoundTemp-mean1971_2000))/2
+        if last20YrsAnomaly > 1:
+            last20YrsAnomaly = 1
+        AveColor = gradientList[round(last20YrsAnomaly*len(gradientList)-1)]
+        manageJSON.updateDataObjet(jsonPath,"metadata",AveColor,"color")
+        #(fileName,name,data)
 
             #print(i)
         #print(anomalyList)
@@ -301,7 +315,7 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
             os.makedirs(os.path.dirname(imagePath))
         img.save(imagePath + ".png")
         
-
+    
     img.save("C:/Users/radon/Downloads/test201" + ".png")
     print("Done: Image %s: %s" % (str(counter),imagePath))
 
@@ -313,7 +327,7 @@ statesList = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","ID","IL","IN","
 #for state in statesList:
 #    createChart(state)
 #createChart("data/us-state-data-NOAA/AL.csv","results/labeled-stripes/US/AL",chartType="labeled-stripes")
-createChart("data/country-data-berkley-earth/processed/CN - AnnTemp 1901-2020.csv","results/labeled-bars/CN",chartType="labeled-bars")
+createChart("data/USA.csv","results/twitter-card/US",chartType="twitter-card")
 #createChart("G:/.shortcut-targets-by-id/1-78WtuBsUrKVKWF1NKxPcsrf1nvacux2/AP CSP VS Code Workspace/USA.csv","test12.jpg")
 #createChart("state-data\AK.csv","test7.png")
 #createChart("state-province data stuff/Acre - AnnTemp 1901-2020.csv","results/stripes/EG",chartType="stripes",save=False)
