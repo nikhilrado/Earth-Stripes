@@ -38,6 +38,10 @@ def uploadFile(file,uploadFilePath=False):
         contentType = 'text/xml'
     if '.csv' in file:
         contentType = 'text/csv'
+    if '.html' in file:
+        contentType = 'text/html'
+    if '.js' in file:
+        contentType = 'application/javascript'
     client.upload_file(file, upload_bucket, upload_file_path,ExtraArgs={'ACL':'public-read', "ContentType":contentType})
     print("Uploaded: "+ file +" --to-- "+upload_bucket+"/"+upload_file_path)
 
@@ -128,8 +132,8 @@ def uploadNewChanges(directory=resultsDirectory,smartUpload=True):
 #uploadNewChanges()
 #uploadFile("results/labeled-stripes/US/MT/Gallatin County MT.png")
 #uploadNewChanges(directory="results/json/US/",smartUpload=False)
-#uploadNewChanges(directory="results/stripes/BR/",smartUpload=False)
+#uploadNewChanges(directory="results/",smartUpload=False)
 #uploadNewChanges(directory="photos/local-impact-photos/",smartUpload=False)
 #uploadNewChanges(directory="photos/local-impact-photos",smartUpload=False)
-#uploadFile("SEO/result-sitemap.xml",uploadFilePath="result-sitemap.xml")
+uploadFile("Site Files/map-page/countries2.js", uploadFilePath="map-stuff.js")
 #uploadFile("Map Stuff/mapData.csv",uploadFilePath="mapData2.csv")
