@@ -84,7 +84,7 @@ function generate_custom_meta_tags() {
 	$es_twitter_card_url = str_replace("stripes", "twitter-card", $es_resource_id);
 	$es_canonical_url = get_results_canonical_URL();
 	$es_location_name = get_location_name();
-	$es_title_name = $es_location_name . ' - EarthStripes.org';
+	$es_title_name = $es_location_name . ' - Climate Change - Earth Stripes';
 	$es_image_alt = 'Warming Stripes for ' . $es_location_name;
 	$es_description_name = 'See how temperature is changing in ' . $es_location_name . ' and how climate change is impacting our communities.';
 	echo( '<title>' . $es_title_name . '</title>
