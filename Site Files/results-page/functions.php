@@ -40,7 +40,7 @@ function generate_custom_meta_tags() {
 	function get_resource_id(){
 		$queries = array();
 		parse_str($_SERVER['QUERY_STRING'], $queries);
-		$resource_id = 'https://earthstripes.s3.us-east-2.amazonaws.com/v2/stripes/' . $queries['country'];
+		$resource_id = 'https://earthstripes.s3.us-east-2.amazonaws.com/v3/stripes/' . $queries['country'];
 		if( !is_null($queries['state'])) {
 			$resource_id = $resource_id . '/' . $queries['state'];
 		};
