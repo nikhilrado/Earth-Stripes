@@ -36,7 +36,7 @@
         }
 
         input[type=submit] {
-            background-color: DodgerBlue;
+            background-color: blue;
             color: #fff;
             cursor: pointer;
         }
@@ -79,14 +79,23 @@
     </style>
 </head>
 <body>
-<input type="text" class="autocomplete-input" id="autocomplete-mapbox"/>
+<input type="text" placeholder="Enter a location" autocomplete="off" class="autocomplete-input" id="autocomplete-mapbox"/>
 
+<div class="flex-parent jc-center">
+<a href="/result/?country=US&state=NY&county=New%20York%20County"><button class="button button1">New York</button></a>
+<a href="/result/?country=US&state=CA&county=Los%20Angeles%20County"><button class="button button2">Los Angeles</button></a>
+<a href="/result/?country=US&state=FL&county=Miami-Dade%20County"><button class="button button3">Miami</button></a>
+<a href="/result/?country=US&state=IL&county=Cook%20County"><button class="button button4">Chicago</button></a>
+<a onclick="getLocationForButton()"><button id="b5" class="button button5">Your Location</button></a>
+</div>
 
 <!--Make sure the form has the autocomplete function switched off:-->
-<form autocomplete="off" action="/result">
+<form autocomplete="false" action="/result">
 </form>
 
 <script>
+document.getElementById("autocomplete-mapbox").focus(); //focuses on search bar on page load
+
 //modified from https://stackoverflow.com/a/60447419
 
     var geocodingClient = mapboxSdk({accessToken: 'pk.eyJ1Ijoib3J0YW5hdGVjaCIsImEiOiJja3NnaDQ5YmUxazlzMm9udnNqNGd5a2ZuIn0.igvWjSd5QsKCz_e-XSMChA'});
@@ -138,6 +147,7 @@
             a = document.createElement("DIV");
             a.setAttribute("id", this.id + "autocomplete-list");
             a.setAttribute("class", "autocomplete-items");
+            a.style.marginTop = "-45px";
             this.parentNode.appendChild(a);
 
             // suggestion list MapBox api called with callback

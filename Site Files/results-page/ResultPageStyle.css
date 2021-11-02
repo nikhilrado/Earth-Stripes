@@ -1,3 +1,32 @@
+#bbbox{
+    line-height: 0px;
+}
+img{
+    border-radius: 5px;
+}
+.inline-stuff {
+    vertical-align: middle;
+    display: inline-block;
+    color: black;
+    margin: 3px;
+}
+.big-button {
+    color: white;
+    border-color: white;
+    border-radius: 50px;
+    background-color: #2d4739 !important;
+}
+.big-button:hover{
+    background-color: green;
+    text-decoration: underline;
+}
+.pbox:hover{
+    background-color: #ffffff;
+    border-radius: 5px;
+}
+.product-name {
+    color: black;
+}
 .social-icon{
     vertical-align: middle;
     display: inline-block;
@@ -21,6 +50,9 @@
     text-decoration-color: gray;
     color: gray;
 }
+.first-social-button {
+    padding-left: 0px;
+}
 #product-details-page {
     line-height: 10px;
 }
@@ -32,9 +64,11 @@
 }
 #image1 {
   border-radius: 15px;
+  border-color: black;
+  border-width: 5px;
   /*clip-path: circle(59 at 5, 5)*/
 }
-#ProductImage1, #ProductImage2, #ProductImage3 {
+#ProductImage1, #ProductImage2, #ProductImage3, #ProductImage4 {
     border-radius: 5px;
 }
 .testclass {
@@ -88,10 +122,10 @@ text-decoration: underline;
     fill: #e6e5e5;
 }
 .YaleRightline {
-    fill: rgb(150, 150, 250);
+    fill:#2d4739;
 }
 .YaleLeftline {
-    fill:rgb(255, 208, 0)
+    fill:#e5c687
 }
 .YaleBarHeader {
     margin-bottom: 5px;
@@ -102,6 +136,15 @@ text-decoration: underline;
     color: grey;
     font-size: 14px;
 }
+
+h2{
+    color: #2d4739;
+    font-weight: 700
+}
+#site-title{
+    font-size: 20;
+}
+
 #SenatorImage1, #SenatorImage2 {
   width:100px;
   height: 100px;
@@ -112,4 +155,11 @@ text-decoration: underline;
     
 .center {
     text-align: center;
+}
+.source{
+    font-family: Monospace;
+    text-decoration: underline;
+    text-transform: uppercase;
+    font-size: 14px;
+    align-items: bottom;
 }

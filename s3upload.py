@@ -9,7 +9,7 @@ import csv
 resultsDirectory = "results/"
 logFile = "s3upload-log.csv"
 s3putCost = 0.005/1000
-upload_bucket = "ortana-test"
+upload_bucket = "earthstripes"
 client = boto3.client('s3', aws_access_key_id=s3.access_key, aws_secret_access_key=s3.secret_access_key)
 
 #returns a list of all files in a directory
@@ -24,10 +24,11 @@ def getAllFilesInDir(root):
 def uploadFile(file,uploadFilePath=False):
     #lets the user specify if they want to add a custom file path
     if uploadFilePath == False:
-        upload_file_path = "v2/" + file.replace(resultsDirectory,"")
+        upload_file_path = "v3/" + file.replace(resultsDirectory,"")
     else:
         upload_file_path = uploadFilePath
-
+    
+    contentType = "txt"
     if '.png' in file:
         contentType = 'image/png'
     if '.jpg' in file:
@@ -42,6 +43,8 @@ def uploadFile(file,uploadFilePath=False):
         contentType = 'text/html'
     if '.js' in file:
         contentType = 'application/javascript'
+    if '.css' in file:
+        contentType = 'text/css'
     client.upload_file(file, upload_bucket, upload_file_path,ExtraArgs={'ACL':'public-read', "ContentType":contentType})
     print("Uploaded: "+ file +" --to-- "+upload_bucket+"/"+upload_file_path)
 
@@ -134,6 +137,6 @@ def uploadNewChanges(directory=resultsDirectory,smartUpload=True):
 #uploadNewChanges(directory="results/json/US/",smartUpload=False)
 #uploadNewChanges(directory="results/",smartUpload=False)
 #uploadNewChanges(directory="photos/local-impact-photos/",smartUpload=False)
-#uploadNewChanges(directory="photos/local-impact-photos",smartUpload=False)
-uploadFile("Site Files/map-page/countries2.js", uploadFilePath="map-stuff.js")
+uploadNewChanges(directory="results/",smartUpload=False)
+#uploadFile("Site Files/map-page/countries2.js", uploadFilePath="map-stuff.js")
 #uploadFile("Map Stuff/mapData.csv",uploadFilePath="mapData2.csv")

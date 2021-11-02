@@ -70,8 +70,6 @@ button.button5::before {
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/> 
 
 <script>
-//document.getElementById("autocomplete").focus(); //focuses on search bar on page load
-
 function generateURL (countryCode=null, stateCode=null, countyName=null){
     locationAutomaticURL = "/result/?country="+countryCode
     if (stateCode != false && stateCode != null){locationAutomaticURL=locationAutomaticURL+"&state="+stateCode}
@@ -211,7 +209,7 @@ function showPosition(position) {
   //x.innerHTML = lowestLocationName//"Latitude: " + position.coords.latitude +
   "<br>Longitude: " + position.coords.longitude;
 console.log("API called")
-fetch("https://api.mapbox.com/geocoding/v5/mapbox.places/"+position.coords.longitude+","+position.coords.latitude+".json?access_token=pk.eyJ1Ijoib3J0YW5hdGVjaCIsImEiOiJja3NnaDRqZDkxanl2Mm5xdDc0bWxvdDhtIn0.9gY_o6DxQy3LHBw6h3V1Fg").then(
+fetch("https://api.mapbox.com/geocoding/v5/mapbox.places/"+position.coords.longitude+","+position.coords.latitude+".json?access_token=pk.eyJ1Ijoib3J0YW5hdGVjaCIsImEiOiJja3ZmZm1ycmYxeW1oMm5zMXV2b2FxbzRkIn0.GoeUfW-BSSY0K2xBpp_xdg").then(
 function(u){ return u.json();}
 ).then(
 function(json){

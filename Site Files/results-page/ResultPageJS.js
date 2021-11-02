@@ -1,4 +1,4 @@
-const bucketPrefix = "https://ortana-test.s3.us-east-2.amazonaws.com/v2/"
+const bucketPrefix = "https://earthstripes.s3.us-east-2.amazonaws.com/v3/"
 
 //data acquired from query params that doesn't require json file
 const canonicalUrl = document.querySelector("link[rel='canonical']").getAttribute("href");
@@ -22,7 +22,7 @@ else {var imageID = country}
 else {var imageID = country}
 console.log(county)
 console.log(imageID)
-document.getElementById('image1').src = bucketPrefix + "labeled-stripes/" + imageID+'.png';
+document.getElementById('image1').src = bucketPrefix + "stripes/" + imageID+'.png';
 
 const script = document.createElement('script');
 script.setAttribute('type', 'application/ld+json');
@@ -155,9 +155,9 @@ function setMerchBox(){
 var encodedLabeledStripesImageURL = encodeURI(bucketPrefix + "labeled-stripes/" + imageID + ".png");
 var encodedStripesImageURL = encodeURI(bucketPrefix + "stripes/" + imageID + ".png");
 
-merchLabel = "&t_location_txt=" + locationName + " " + startYear + "-" + endYear;
+merchLabel = "&t_location_txt=" + encodeURIComponent(locationName + " " + startYear + "-" + endYear);
 customMerchLink = "https://www.zazzle.com/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&tc=&ic=&t_labeledstripes_iid="
-+ encodedLabeledStripesImageURL + "&t_stripes_iid=" + encodedStripesImageURL + merchLabel;
++ encodedLabeledStripesImageURL + "&tc=results-merch-box&ic=" + imageID.replace("/","_") + "&t_stripes_iid=" + encodedStripesImageURL + merchLabel;
 testmerchlink.href = customMerchLink;
 MerchButton.href = customMerchLink;
 
@@ -194,14 +194,14 @@ function getSenatorInfo(senatorData) {
       senator1json = senatorData[json.officials[0].name]
       SenatorName1.innerText = json.officials[0].name;
       SenatorSubHeading1.innerText = "Senator, " + senator1json["stateName"] + ", " + senator1json["current term readable"] + " term";
-      SenatorScore1.innerText = "Overall Score: " + senator1json["overallScore"];
+      SenatorScore1.innerText = "Overall Score: " + senator1json["overallScore"]+"/100";
       SenatorSite1txt.innerText = json.officials[0]["urls"][0].replace('https://www.','').replace('/','');
       SenatorSite1.href = json.officials[0]["urls"][0];
 
       senator2json = senatorData[json.officials[1].name]
       SenatorName2.innerText = json.officials[1].name;
       SenatorSubHeading2.innerText = "Senator, " + senator2json["stateName"] + ", " + senator2json["current term readable"] + " term";
-      SenatorScore2.innerText = "Overall Score: " + senator2json["overallScore"];
+      SenatorScore2.innerText = "Overall Score: " + senator2json["overallScore"]+"/100";
       SenatorSite2txt.innerText = json.officials[1]["urls"][0].replace('https://www.','').replace('/','');
       SenatorSite2.href = json.officials[1]["urls"][0];
       
@@ -380,7 +380,7 @@ myHeader9.innerText = locationName;
 
 startYear = data.resources.stripes["startYear"];
 endYear = data.resources.stripes["endYear"];
-description1 = "These warming stripes show how climate change has affected " + locationName + " from " + startYear + "-" + endYear + ", red and blue stripes represent warmer and cooler temperatures respectively";
+description1 = "These warming stripes show the annual temperature change in " + locationName + " from " + startYear + "-" + endYear + ", red and blue stripes represent warmer and cooler temperatures respectively";
 img1description.innerText = description1;
 image1.alt = "Warming Stripes for " + locationName + " from " + startYear + "-" + endYear;
 

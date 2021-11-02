@@ -269,6 +269,14 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
             textLength = img1.textlength(text,font=fnt) #gets the width in px of the text so we know where to end background
             img1.rectangle([(50,height-200),(textLength+50+30,height-50)], fill ="#ffffff")
             img1.text((50+10,height-200),text,(0,0,0),font=fnt)
+        if "label" in infoType:
+            #font = ImageFont.truetype('E:/PythonPillow/Fonts/FreeMono.ttf', 40)
+            # draw.text((x, y),"Sample Text",(r,g,b))
+            height=150
+            text = "earthstripes.org"
+            textLength = img1.textlength(text,font=fnt) #gets the width in px of the text so we know where to end background
+            img1.rectangle([(0,0),(textLength+20,height)], fill ="#ffffff")
+            img1.text((10,0),text,(0,0,0),font=fnt)
         elif "bars" in infoType:
             img1.text((100+10,120),text + " Temperature %i-%i" %(firstYear,lastYear),(255,255,255),font=fnt)
     
@@ -280,6 +288,8 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
         img = Image.new("RGBA", (4000, 4000))
     elif chartType == "twitter-card":
         img = Image.new("RGBA", (600*2, 314*2))
+    elif chartType == "label":
+        img = Image.new("RGBA", (2126, 150))
     else:
         img = Image.new("RGB", (width, height))
     
@@ -302,7 +312,7 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
 
     drawBars(chartType)
     #only draws info on the thing if the file name says labeled in it
-    if "labeled" in chartType or "twitter-card" in chartType:
+    if "labeled" in chartType or "twitter-card" in chartType or chartType == "label":
         drawInfo(location,chartType)
     #TODO figure out how to add the info
     #TODO test the algorithim
@@ -327,8 +337,8 @@ statesList = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","ID","IL","IN","
 #for state in statesList:
 #    createChart(state)
 #createChart("data/us-state-data-NOAA/AL.csv","results/labeled-stripes/US/AL",chartType="labeled-stripes")
+#createChart("World Data Stuff/global-land - AnnTemp 1901-2020.csv","results/label/US",chartType="labeled-bars")
 createChart("data/USA.csv","results/twitter-card/US",chartType="twitter-card")
-#createChart("G:/.shortcut-targets-by-id/1-78WtuBsUrKVKWF1NKxPcsrf1nvacux2/AP CSP VS Code Workspace/USA.csv","test12.jpg")
 #createChart("state-data\AK.csv","test7.png")
 #createChart("state-province data stuff/Acre - AnnTemp 1901-2020.csv","results/stripes/EG",chartType="stripes",save=False)
 #createChart("data/us-state-data-NOAA/CA.csv","results/stripes/US/CA",chartType="stripes",save=False)

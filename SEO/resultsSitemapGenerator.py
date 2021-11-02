@@ -2,8 +2,6 @@ import os
 import json
 import xml.dom.minidom
 
-
-
 #returns a list of all files in a directory
 def getAllFilesInDir(root):
     fileList = []
@@ -12,7 +10,7 @@ def getAllFilesInDir(root):
             fileList.append(os.path.join(path, name))    
     return fileList
 
-files = getAllFilesInDir("results/json")
+files = getAllFilesInDir("results/json/US")
 
 xmlFileList = ['<?xml version="1.0" encoding="UTF-8"?>','<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">']
 
@@ -59,7 +57,7 @@ for filePath in files:
 
     xmlFileList.append('<url>')
     xmlFileList.append('<loc>' + getPageURL() + '</loc>')
-    xmlFileList = xmlFileList + addImage()
+    #xmlFileList = xmlFileList + addImage()
     xmlFileList.append('</url>')
 
 xmlFileList.append('</urlset>')
@@ -76,5 +74,5 @@ pretty_xml_as_string = dom.toprettyxml()
 with open('SEO/result-sitemap.xml', 'w') as f:
     f.write(pretty_xml_as_string)
 
-
+sshupload.upload("/public_html/result-sitemap.xml","SEO/result-sitemap.xml")
 
