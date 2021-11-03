@@ -53,9 +53,15 @@
 	};
 
 	info.update = function (props) {
-	    link = (props ? "https://www.earthstripes.org/result/?country=" + props.countryCode:"");
+	    countryCode = (props ? props.countryCode:"");
+	    NAME = (props ? props.NAME:"");
+	    link = ("https://www.earthstripes.org/result/?country=" + countryCode);
+	    console.log(NAME);
+	    if (NAME == "United States of America"){
+	        countryCode == "US";
+	    }
 		this._div.innerHTML = '<h4>Earth Stripes Map</h4>' +  (props ?
-			'<b>' + props.NAME + '<br><a target="_blank" href=' + link + '>View Page</a><br><img width="200px" src="https://ortana-test.s3.us-east-2.amazonaws.com/v2/stripes/'+props.countryCode+'.png" alt="Warming Stripes">'
+			'<b>' + props.NAME + '<br><a target="_blank" href=' + link + '>View Page</a><br><img width="200px" src="https://ortana-test.s3.us-east-2.amazonaws.com/v2/stripes/'+countryCode+'.png" alt="Warming Stripes">'
 			: 'Hover over a state');
 	};
 
@@ -115,7 +121,11 @@
 		if ("ontouchstart" in document.documentElement){
 
         } else {
-		window.open('https://www.earthstripes.org/result/?country='+layer.feature.properties.countryCode, '_blank');
+        countryCode = layer.feature.properties.countryCode;
+        if (layer.feature.properties.NAME == "United States of America"){
+	        countryCode = "US";
+	    }
+		window.open('https://www.earthstripes.org/result/?country='+countryCode, '_blank');
         }
 		
 	}
