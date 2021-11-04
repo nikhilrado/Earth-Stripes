@@ -152,15 +152,15 @@ function setYaleBars() {
 const productNames = ["Cloth Mask","Mug","Tie","Stickers"]
 const productIDs = ['256670743725195335','168540946485519042','151119561160107608','217917661479101292']
 function setMerchBox(){
-var encodedLabeledStripesImageURL = encodeURI(bucketPrefix + "labeled-stripes/" + imageID + ".png");
-var encodedStripesImageURL = encodeURI(bucketPrefix + "stripes/" + imageID + ".png");
+var encodedLabeledStripesImageURL = encodeURI(bucketPrefix + "labeled-stripes/" + imageID + ".png?request=zazzle");
+var encodedStripesImageURL = encodeURI(bucketPrefix + "stripes/" + imageID + ".png?request=zazzle");
 
 merchLabel = "&t_location_txt=" + encodeURIComponent(locationName + " " + startYear + "-" + endYear);
-customMerchLink = "https://www.zazzle.com/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&tc=&ic=&t_labeledstripes_iid="
-+ encodedLabeledStripesImageURL + "&tc=results-merch-box&ic=" + imageID.replace("/","_") + "&t_stripes_iid=" + encodedStripesImageURL + merchLabel;
+customMerchLink = "https://www.zazzle.com/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&t_labeledstripes_iid="
++ encodedLabeledStripesImageURL + "&tc=results-merch-box&ic=" + imageID.replace(/\//g,'_').replace(/ /g,'_').replace(/\+/g,'_') + "&t_stripes_iid=" + encodedStripesImageURL + merchLabel;
 testmerchlink.href = customMerchLink;
 MerchButton.href = customMerchLink;
-
+console.log(imageID.replace(/\//g,'_').replace(/ /g,'_').replace(/\+/g,'_'))
 
 for (i=1; i<=productNames.length; i++){
 element = document.getElementById('ProductImage' + i);
@@ -415,7 +415,7 @@ gtag('event', "Share Intent", {
   'event_label': canonicalUrl,
   'value': "5"
 });
-window.open("https://twitter.com/intent/tweet?text="+encodeURIComponent(tweetContent)+"&related=earthstripes,nikhilrado&hashtags=showyourstripes", "pop", "width=600, height=400, scrollbars=no");
+window.open("https://twitter.com/intent/tweet?text="+encodeURIComponent(tweetContent)+"&related=earthstripes,nikhilrado&hashtags=showyourstripes,COP26", "pop", "width=600, height=400, scrollbars=no");
 
 }
 document.getElementById('facebook-share-button1').onclick = function() {
