@@ -32,7 +32,7 @@ script.textContent = `
       "@type": "ImageObject",
       "contentUrl": "`+bucketPrefix + "stripes/" + imageID+'.png'+`",
       "license": "https://creativecommons.org/licenses/by/4.0/",
-      "acquireLicensePage": "https://www.earthstripes.org/content-license"
+      "acquireLicensePage": "https://dev.earthstripes.org/content-license"
     }
 `;
 document.head.appendChild(script);
@@ -157,10 +157,10 @@ var encodedStripesImageURL = encodeURI(bucketPrefix + "stripes/" + imageID + ".p
 
 merchLabel = "&t_location_txt=" + encodeURIComponent(locationName + " " + startYear + "-" + endYear);
 customMerchLink = "https://www.zazzle.com/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&t_labeledstripes_iid="
-+ encodedLabeledStripesImageURL + "&tc=results-merch-box&ic=" + imageID.replace(/\//g,'_').replace(/ /g,'_').replace(/\+/g,'_') + "&t_stripes_iid=" + encodedStripesImageURL + merchLabel;
++ encodedLabeledStripesImageURL + "&tc=results-merch-box&ic=" + imageID.replace(/[^a-zA-z]/g,'_') + "&t_stripes_iid=" + encodedStripesImageURL + merchLabel;
 testmerchlink.href = customMerchLink;
 MerchButton.href = customMerchLink;
-console.log(imageID.replace(/\//g,'_').replace(/ /g,'_').replace(/\+/g,'_'))
+console.log(imageID.replace(/[^a-zA-z]/g,'_'))
 
 for (i=1; i<=productNames.length; i++){
 element = document.getElementById('ProductImage' + i);
@@ -351,6 +351,33 @@ if (country == "US" && typeof state == "string"){
     legislativeBox.style.display = "none";
 }
 
+//function to set related locations
+function setRelatedLocations(relLocationsJSON){
+    var dataLen = relLocationsJSON['locations'].length;
+    //loops through first 5 locations
+    for (let i = 1; i <= 5; i++){
+        btn = document.getElementById("b"+i)
+        btn.innerText = relLocationsJSON['locations'][i-1]
+        link = document.getElementById("l"+i)
+        link.href = relLocationsJSON['links'][i-1]
+        console.log(relLocationsJSON['links'][i-1])
+    }
+    //hides the remaining locations if less than 5 provided
+    for (let i = 5; i > (dataLen-2); i--){
+        btn = document.getElementById("b"+i);
+        btn.style.display = "none";
+        console.log("b"+i)
+        
+    }
+    //sets the state and country
+    for (let i = 0; i <= 2; i++){
+        b6.innerText = relLocationsJSON['locations'][dataLen-2]
+        l6.href = relLocationsJSON['links'][dataLen-2]
+        b7.innerText = relLocationsJSON['locations'][dataLen-1]
+        l7.href = relLocationsJSON['links'][dataLen-1]
+    }
+}
+
 //main function that loads JSON data
 function data_function(jsonData) {
 console.log(jsonData)
@@ -375,8 +402,12 @@ data = jsonData;
 locationName = data.metadata.name;
 document.getElementById('image1').alt = "Warming stripes for " + locationName;
 
-myHeader9.innerText = locationName;
-//document.title = locationName + " - Earth Stripes"; //changed the title but now we use php
+if (jsonData["custom properties"] && jsonData["custom properties"]["common name"]){
+    myHeader9.innerText = jsonData["custom properties"]["common name"];
+} else {
+    myHeader9.innerText = locationName;
+}
+document.title = locationName + " - Earth Stripes"; //changed the title but now we use php
 
 startYear = data.resources.stripes["startYear"];
 endYear = data.resources.stripes["endYear"];
@@ -399,6 +430,14 @@ if (data["energy consumption"] == null){
     energyBox.style.display = "none";
 } else {
     setEnergyGraph(data["energy consumption"]);
+    energyData = data["energy consumption"];
+}
+
+//if recommended/related locations exists in JSON, set them, else hide box
+if (data['metadata']['recommended locations']){
+    setRelatedLocations(data['metadata']['recommended locations']);
+}else {
+    relatedLocationsBox.style.display = "none";
 }
 
 //this needs to be here cause it needs to get locationName from JSON
@@ -421,7 +460,7 @@ window.open("https://twitter.com/intent/tweet?text="+encodeURIComponent(tweetCon
 document.getElementById('facebook-share-button1').onclick = function() {
 window.open("https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(canonicalUrl)+"&hashtag=#showyourstripes", "pop", "width=600, height=400, scrollbars=no");
 
-window.open("https://www.facebook.com/dialog/share?app_id=604427890576897&display=popup&href="+encodeURIComponent(canonicalUrl)+"&redirect_uri=https%3A%2F%2Fwww.earthstripes.org"+"&hashtag="+encodeURIComponent("#showyourstripes")+"&quote=" + encodeURIComponent(facebookShareContent), "pop", "width=600, height=400, scrollbars=no");
+window.open("https://www.facebook.com/dialog/share?app_id=604427890576897&display=popup&href="+encodeURIComponent(canonicalUrl)+"&redirect_uri=https%3A%2F%2Fdev.earthstripes.org"+"&hashtag="+encodeURIComponent("#showyourstripes")+"&quote=" + encodeURIComponent(facebookShareContent), "pop", "width=600, height=400, scrollbars=no");
 
 }
 
@@ -472,4 +511,5 @@ function zazzleClicked(element) {
   'event_label': element,
   'value': "5"
 });
+
 };
