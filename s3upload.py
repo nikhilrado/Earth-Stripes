@@ -132,11 +132,19 @@ def uploadNewChanges(directory=resultsDirectory,smartUpload=True):
         print(uploadLogData)
 
 
-#uploadNewChanges()
-#uploadFile("results/labeled-stripes/US/MT/Gallatin County MT.png")
-#uploadNewChanges(directory="results/json/US/",smartUpload=False)
-#uploadNewChanges(directory="results/",smartUpload=False)
-#uploadNewChanges(directory="photos/local-impact-photos/",smartUpload=False)
-uploadNewChanges(directory="results/",smartUpload=False)
-#uploadFile("Site Files/map-page/countries2.js", uploadFilePath="map-stuff.js")
-#uploadFile("Map Stuff/mapData.csv",uploadFilePath="mapData2.csv")
+def test():
+    #uploadNewChanges()
+    uploadFile("results/sunny.png")
+    #uploadNewChanges(directory="results/json/US/",smartUpload=False)
+    #uploadNewChanges(directory="results/",smartUpload=False)
+    #uploadNewChanges(directory="photos/local-impact-photos/",smartUpload=False)
+    uploadNewChanges(directory="results/json/US/",smartUpload=False)
+    #uploadFile("Site Files/map-page/countries2.js", uploadFilePath="map-stuff.js")
+    #uploadFile("Map Stuff/mapData.csv",uploadFilePath="mapData2.csv")
+    pass
+
+#this is the main function that will be called when the script is run
+#if the file is imported, it will not run the test function
+#test method is created to remove global scope of any variables in test()
+if __name__ == "__main__":
+    test()
