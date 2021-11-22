@@ -80,8 +80,8 @@ function generate_custom_meta_tags() {
 
 	$es_resource_id = get_resource_id();
 	$es_image_url = $es_resource_id;
-	$es_snap_sticker_url = str_replace("stripes", "snap-sticker", $es_resource_id);
-	$es_twitter_card_url = str_replace("stripes", "twitter-card", $es_resource_id);
+	$es_snap_sticker_url = str_replace("/stripes", "/snap-sticker", $es_resource_id);
+	$es_twitter_card_url = str_replace("/stripes", "/twitter-card", $es_resource_id);
 	$es_canonical_url = get_results_canonical_URL();
 	$es_location_name = get_location_name();
 	$es_title_name = $es_location_name . ' - Climate Change - Earth Stripes';
