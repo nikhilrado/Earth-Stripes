@@ -2,13 +2,15 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <title>Add a geocoder</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no"/>
 
-    <script src="https://code.jquery.com/jquery-3.4.1.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/@mapbox/mapbox-sdk/umd/mapbox-sdk.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        #main-header {
+            color: #2d4739;
+        }
         * {
             box-sizing: border-box;
         }
@@ -147,7 +149,12 @@ document.getElementById("autocomplete-mapbox").focus(); //focuses on search bar 
             a = document.createElement("DIV");
             a.setAttribute("id", this.id + "autocomplete-list");
             a.setAttribute("class", "autocomplete-items");
-            a.style.marginTop = "-45px";
+            var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+            if (width <= 550){
+                a.style.marginTop = "-90px";
+            } else{
+                a.style.marginTop = "-45px";
+            }
             this.parentNode.appendChild(a);
 
             // suggestion list MapBox api called with callback
@@ -192,10 +199,12 @@ document.getElementById("autocomplete-mapbox").focus(); //focuses on search bar 
                 addActive(x);
             } else if (e.keyCode == 13) {
                 /*If the ENTER key is pressed, prevent the form from being submitted,*/
-                e.preventDefault();
+                //e.preventDefault();
                 if (currentFocus > -1) {
                     /*and simulate a click on the "active" item:*/
                     if (x) x[currentFocus].click();
+                } else{
+                    x[0].click();
                 }
             }
         });
@@ -231,7 +240,7 @@ document.getElementById("autocomplete-mapbox").focus(); //focuses on search bar 
 
         /*execute a function when someone clicks in the document:*/
         document.addEventListener("click", function (e) {
-            closeAllLists(e.target);
+            closeAllLists(e.target); 
         });
     }
 
