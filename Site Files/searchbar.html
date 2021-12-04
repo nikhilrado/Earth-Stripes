@@ -154,12 +154,11 @@ function getRedirectURLMapbox(jsonPlaceData,redirectNow=false) {
     //    lowestLocationName = countyName
     generateURL(countryCode,stateCode,countyName);
     if (redirectNow){
-        window.location.href = locationAutomaticURL
+        window.location.href = locationAutomaticURL;
+    } else {
+        x.innerHTML = lowestLocationName;
     }
     
-    console.log("Hello Bob")
-
-    x.innerHTML = lowestLocationName
     return locationAutomaticURL; 
 }
 
@@ -190,6 +189,7 @@ function handlePermission() {
     }
     else if (result.state == 'denied') {
         locationGranted = false;
+        getLocation();
     }
     
   });
