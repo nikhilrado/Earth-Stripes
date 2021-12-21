@@ -1,49 +1,57 @@
-document.getElementById("autocomplete").focus();
+//document.getElementById("autocomplete").focus();
 
-function generateURL (countryCode=null, stateCode=null, countyName=null){
-    locationAutomaticURL = "/result/?country="+countryCode
-    if (stateCode != false && stateCode != null){locationAutomaticURL=locationAutomaticURL+"&state="+stateCode}
-    if (countryCode == "US" && countyName != null && countyName != false) {locationAutomaticURL=locationAutomaticURL+"&county="+countyName}
-    return locationAutomaticURL
+function generateURL(countryCode = null, stateCode = null, countyName = null) {
+    locationAutomaticURL = "/result/?country=" + countryCode;
+    if (stateCode != false && stateCode != null) {
+        locationAutomaticURL = locationAutomaticURL + "&state=" + stateCode;
+    }
+    if (countryCode == "US" && countyName != null && countyName != false) {
+        locationAutomaticURL = locationAutomaticURL + "&county=" + countyName;
+    }
+    return locationAutomaticURL;
 }
 
 const countriesWithStates = ['AU','BR','CA','CN','IN','RU','US']
 function generateImageID (countryCode=null, stateCode=null, countyName=null){
     var ImageID = countryCode
 
-    if (countriesWithStates.includes(countryCode)){
-        if (stateCode != false && stateCode != null){ImageID=ImageID+"/"+stateCode}
-        if (countryCode == "US" && countyName != null && countyName != false) {ImageID=ImageID+"/"+countyName.replaceAll(" ","+").replace("St","St.")+"+"+stateCode}
+    if (countriesWithStates.includes(countryCode)) {
+      if (stateCode != false && stateCode != null) {
+        ImageID = ImageID + "/" + stateCode;
+      }
+      if (countryCode == "US" && countyName != null && countyName != false) {
+        ImageID = ImageID + "/" + countyName.replaceAll(" ", "+").replace("St", "St.") + "+" + stateCode;
+      }
     }
-    return ImageID
+    return ImageID;
 }
 
-bucketPrefix = "https://earthstripes.s3.us-east-2.amazonaws.com/v3/"
+bucketPrefix = "https://earthstripes.s3.us-east-2.amazonaws.com/v3/";
 const productNames = ["Cloth Mask","Mug","Tie","Stickers", "Magnet","Badge (Pin)", "T-Shirt", "Socks"];
 const productIDs = ['256670743725195335','168540946485519042','151119561160107608','217917661479101292','147753984968275362', '145354997245092652', '235484093576644423','256547457460896288'];
-function setMerchBox(imageID, locationName){
+function setMerchBox(imageID, locationName, locationURL){
 var encodedLabeledStripesImageURL = encodeURI(bucketPrefix + "labeled-stripes/" + imageID + ".png?request=zazzle");
-console.log(bucketPrefix + "labeled-stripes/" + imageID + ".png?request=zazzle")
+console.log(bucketPrefix + "labeled-stripes/" + imageID + ".png?request=zazzle");
 var encodedStripesImageURL = encodeURI(bucketPrefix + "stripes/" + imageID + ".png?request=zazzle");
 
-merchLabel = "&t_location_txt=" + encodeURIComponent(locationName)// + " " + startYear + "-" + endYear);
+merchLabel = "&t_location_txt=" + encodeURIComponent(locationName);// + " " + startYear + "-" + endYear);
 customMerchLink = "https://www.zazzle.com/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&t_labeledstripes_iid="
 + encodedLabeledStripesImageURL + "&tc=results-merch-box&ic=" + imageID.replace(/[^a-zA-z]/g,'_') + "&t_stripes_iid=" + encodedStripesImageURL + merchLabel;
 //testmerchlink.href = customMerchLink;
 MerchButton.href = customMerchLink;
-console.log(imageID.replace(/[^a-zA-z]/g,'_'))
+console.log(imageID.replace(/[^a-zA-z]/g,'_'));
 
 for (i=1; i<=productNames.length; i++){
-element = document.getElementById('ProductImage' + i);
-var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+productIDs[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedStripesImageURL + '&t_labeledstripes_url='+encodedLabeledStripesImageURL;
-element.src = imageID2;
-element.alt = "Warming Stripes " + productNames[i-1]
-element = document.getElementById('ProductName' + i);
-element.innerText = productNames[i-1];
-element = document.getElementById('Product'+i+"Link");
-element.href = customMerchLink;
-element = document.getElementById('Product'+i+'Link2');
-element.href = customMerchLink;
+    element = document.getElementById('ProductImage' + i);
+    var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+productIDs[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedStripesImageURL + '&t_labeledstripes_url='+encodedLabeledStripesImageURL;
+    element.src = imageID2;
+    element.alt = "Warming Stripes " + productNames[i-1];
+    element = document.getElementById('ProductName' + i);
+    element.innerText = productNames[i-1];
+    element = document.getElementById('Product'+i+"Link");
+    element.href = customMerchLink;
+    element = document.getElementById('Product'+i+'Link2');
+    element.href = customMerchLink;
 }
 
 element = document.getElementById('locationName');
@@ -93,7 +101,7 @@ function getRedirectURLMapbox(jsonPlaceData,redirectNow=false) {
     }
     else{
         try{
-        countyName = jsonPlaceData.context[jsonPlaceData.context.length-3].text
+            countyName = jsonPlaceData.context[jsonPlaceData.context.length-3].text
         }
         catch(err) {
             countyName = false
@@ -139,52 +147,49 @@ function getLocationForButton(){
 }
 
 function handlePermission() {
-  navigator.permissions.query({name:'geolocation'}).then(function(result) {
-    console.log("yehaw")
-    console.log(result.state)
-    if (result.state == 'granted') {
-      console.log("yehaw")
-      locationGranted = true;
-      getLocation();
-    }
-    else if (result.state == 'denied') {
-        locationGranted = false;
-    }
-    
-  });
+    navigator.permissions.query({name:'geolocation'}).then(function(result) {
+        console.log("yehaw")
+        console.log(result.state)
+        if (result.state == 'granted') {
+            console.log("yehaw")
+            locationGranted = true;
+            getLocation();
+        }
+        else if (result.state == 'denied') {
+            locationGranted = false;
+        }
+    });
 }
 handlePermission()
       
 var x = document.getElementById("b5");
 function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
-  } else {
-    x.innerHTML = "Geolocation is not supported by this browser.";
-  }
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
 }
 
 function showPosition(position) {
-  //x.innerHTML = lowestLocationName//"Latitude: " + position.coords.latitude +
-  "<br>Longitude: " + position.coords.longitude;
-console.log("API called")
-fetch("https://api.mapbox.com/geocoding/v5/mapbox.places/"+position.coords.longitude+","+position.coords.latitude+".json?access_token=pk.eyJ1Ijoib3J0YW5hdGVjaCIsImEiOiJja3ZmZm1ycmYxeW1oMm5zMXV2b2FxbzRkIn0.GoeUfW-BSSY0K2xBpp_xdg").then(
-function(u){ return u.json();}
-).then(
-function(json){
-process_mapbox_geocode(json); //calling and passing json to another function process_mapbox_geocode
-}
-)
+    //x.innerHTML = lowestLocationName//"Latitude: " + position.coords.latitude +
+    "<br>Longitude: " + position.coords.longitude;
+    console.log("API called");
+    fetch("https://api.mapbox.com/geocoding/v5/mapbox.places/"+position.coords.longitude+","+position.coords.latitude+".json?access_token=pk.eyJ1Ijoib3J0YW5hdGVjaCIsImEiOiJja3ZmZm1ycmYxeW1oMm5zMXV2b2FxbzRkIn0.GoeUfW-BSSY0K2xBpp_xdg").then(
+        function(u){ return u.json();}).then(function(json){
+            process_mapbox_geocode(json); //calling and passing json to another function process_mapbox_geocode
+        }
+    );
 
-//another functions
-function process_mapbox_geocode(data){
-    document.cookie = "locationAutomaticURL=" + getRedirectURLMapbox(data.features[0]);
-    locationGranted = true
-    if (locationGranted){
-        console.log("changed click function")
-        document.getElementById("b5").onclick = getRedirectURLMapbox(data.features[0]);
+    //another functions
+    function process_mapbox_geocode(data){
+        document.cookie = "locationAutomaticURL=" + getRedirectURLMapbox(data.features[0]);
+        locationGranted = true;
+        if (locationGranted){
+            console.log("changed click function");
+            document.getElementById("b5").onclick = getRedirectURLMapbox(data.features[0]);
+        }
     }
-}
 }
 
 var input = document.getElementById('autocomplete');
@@ -216,10 +221,10 @@ google.maps.event.addListener(autocomplete, 'place_changed', function(){
     console.log(getCountry(place.address_components,"administrative_area_level_2"));//gets county
     console.log(getCountry(place.address_components,"locality"));//gets locality
 
-
-
     //window.location.href = generateURL(countryCode,stateCode,countyName);
     imageID = generateImageID(countryCode,stateCode,countyName);
     console.log(imageID);
-    setMerchBox(imageID, "United States");
-    }) 
+    setMerchBox(imageID, countryCode, generateURL(countryCode,stateCode,countyName));
+}) 
+
+setMerchBox("US", "United States"); 
