@@ -2,29 +2,28 @@
 <html>
 
 <body>
-<input type="text" class="autocomplete-input" id="autocomplete"/>
-
-<div class="flex-parent jc-center">
-<a href="/result/?country=US&state=NY&county=New%20York%20County"><button class="button button1">New York</button></a>
-<a href="/result/?country=US&state=CA&county=Los%20Angeles%20County"><button class="button button2">Los Angeles</button></a>
-<a href="/result/?country=US&state=FL&county=Miami-Dade%20County"><button class="button button3">Miami</button></a>
-<a href="/result/?country=US&state=IL&county=Cook%20County"><button class="button button4">Chicago</button></a>
-<a onclick="getLocationForButton()"><button id="b5" class="button button5">Your Location</button></a>
-</div>
-     
-<! –– loads font-awesome and other scripts ––>
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhsd3GE-OA66vjOIE_8yGIap1E6L-WVqk&libraries=places"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/> 
-
+    <span class="dev-gradient-textt"><b></b></span>
+    
+    <div class="flex-parent">
+    <input type="text" class="autocomplete-input" id="autocomplete"/>
+    <a onclick="getLocationForButton()"><button id="b5" class="button button5">Your Location</button></a>
+    </div>
+            
+    <!–– loads font-awesome and other scripts ––>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhsd3GE-OA66vjOIE_8yGIap1E6L-WVqk&libraries=places"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/> 
 </body>
 
 <--! MerchBox description box Code ––>
 <h2 id=MerchHeader>Merch</h2>
 
 <p>Showing Products for:</p>
-<a id="locationNameLink" target="_blank"><p id=locationName>location</p></a>
+<a id="locationNameLink" target="_blank"><p id=locationName>US</p></a>
+<div id=cbox>
 <a id=MerchButton target="_blank" onclick="zazzleClicked('Shop All')"><button class=big-button>Shop All</button></a>
+<img class=hidden-mobile src="https://asset.zcache.com/assets/graphics/z4/uniquePages/zLogoDownload/logos/zazzleLetterform_black.svg" width="25%">
+</div>
     
 <--! MerchBox box Code -->
 <div id=ProductBox1>
@@ -32,3 +31,8 @@
 
 <a id=Product1Link2 class=product-name target="_blank"nonclick="zazzleClicked('Product 1')"><h4 id=ProductName1>Product 1</h4></a>
 </div>
+
+<--! Heading Code -->
+showing merch for <span id=underline-text>warming stripes</span>.
+
+<span class=flex-parent><button class="button" id=changeLocBtn onclick="toggleChangeLocation()">Change Location</button></span>
