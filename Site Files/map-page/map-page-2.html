@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	
-
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
-
 
 	<style>
 		html, body {
@@ -27,7 +24,7 @@
 <p id=loadingText>Map is loading...<p>
 <div id='map'></div>
 
-<script type="text/javascript" src="https://ortana-test.s3.us-east-2.amazonaws.com/map-stuff.js"></script>
+<script type="text/javascript" src="https://earthstripes.s3.us-east-2.amazonaws.com/map-stuff.js"></script>
 
 <script type="text/javascript">
 
@@ -55,7 +52,7 @@
 	info.update = function (props) {
 	    countryCode = (props ? props.countryCode:"");
 	    NAME = (props ? props.NAME:"");
-	    link = ("https://www.earthstripes.org/result/?country=" + countryCode);
+	    link = ("https://dev.earthstripes.org/result/?country=" + countryCode);
 	    console.log(NAME);
 	    if (NAME == "United States of America"){
 	        countryCode == "US";
@@ -122,10 +119,7 @@
 
         } else {
         countryCode = layer.feature.properties.countryCode;
-        if (layer.feature.properties.NAME == "United States of America"){
-	        countryCode = "US";
-	    }
-		window.open('https://www.earthstripes.org/result/?country='+countryCode, '_blank');
+		window.open('https://dev.earthstripes.org/result/?country='+countryCode, '_blank');
         }
 		
 	}
@@ -143,7 +137,7 @@
 		onEachFeature: onEachFeature
 	}).addTo(map);
 
-	map.attributionControl.addAttribution('Map &copy; <a href="https://www.earthstripes.org">Earth Stripes</a>');
+	map.attributionControl.addAttribution('Map &copy; <a href="https://dev.earthstripes.org">Earth Stripes</a>');
 
     /*
 	var legend = L.control({position: 'bottomright'});

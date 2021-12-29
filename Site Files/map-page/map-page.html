@@ -118,8 +118,6 @@
         success: function (csvData) { makeGeoJSON(csvData); }
       });
 
-
-
       function makeGeoJSON(csvData) {
         csv2geojson.csv2geojson(csvData, {
           latfield: 'Latitude',
@@ -151,9 +149,6 @@
               //You can adjust the values of the popup to match the headers of your CSV.
               // For example: e.features[0].properties.Name is retrieving information from the field Name in the original CSV.
               var description = '<h3><a class=place-header href="' + e.features[0].properties.Link + '" target="_blank">' + e.features[0].properties.Name + '</a></h3>' + `<h4>` + `<b>` + `Phone: ` + `</b>` + e.features[0].properties.Phone + `</h4>` + '<img src="'+e.features[0].properties.Address+'" alt="Girl in a jacket">';
-
-
-
 
               // Ensure that if the map is zoomed out such that multiple
               // copies of the feature are visible, the popup appears
@@ -188,9 +183,6 @@
         });
       };
     });
-
-
-
 
   </script>
 
