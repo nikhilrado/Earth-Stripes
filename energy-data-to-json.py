@@ -18,7 +18,11 @@ for row in csv_f:
 #sets the header of the data which is the same for all days (then converts all to int)
 years = list(map(int, allEnergyData[1][2:-1])) 
 
+count = 0
+failed = 0
+listOfFailed = []
 def countryToJSON(list):
+    global count
 
     country = list[0][1]
     totalConsumption = list[8][2:-1]
@@ -39,22 +43,28 @@ def countryToJSON(list):
 
     #this is the template for the json
     z = {
-    "years": years,
-    "total consumption": totalConsumption,
-    "coal": getPercent(list[9][2:-1]),
-    "natural gas": getPercent(list[10][2:-1]),
-    "petroleum and other liquids": getPercent(list[11][2:-1]),
-    "nuclear": getPercent(list[13][2:-1]),
-    "renewables and others": getPercent(list[14][2:-1]),
+        "years": years,
+        "total consumption": totalConsumption,
+        "coal": getPercent(list[9][2:-1]),
+        "natural gas": getPercent(list[10][2:-1]),
+        "petroleum and other liquids": getPercent(list[11][2:-1]),
+        "nuclear": getPercent(list[13][2:-1]),
+        "renewables and others": getPercent(list[14][2:-1]),
     }
     
     #adds the data to its container then prints it, along with the country
     container["energy consumption"].append(z)
-    print(country)
-    print(json.dumps(container, indent=2))
+    count += 1
+    print(country + " " + str(count))
+    #print(json.dumps(container, indent=2))
     
     #gets the country's country code from the globals file, then adds the data to the country's json file
-    countryCode = globals.getCountryCode(country)
+    try:
+        countryCode = globals.getCountryCode(country)
+    except:
+        threeLetterCountryCode = list[1][0].split("-")[2]
+        print(threeLetterCountryCode)
+        countryCode = globals.getISOconverted(threeLetterCountryCode)
     manageJSON.updateDataObjet("results/json/"+countryCode+".json","energy consumption",z)
     #manageJSON.updateDataObjet("JSON stuff/AZtest.json","energy consumption",z) #use for testing
 
@@ -71,5 +81,11 @@ for k in range(len(rowsListData)):
         try:
             countryToJSON(dataForOneCountryList)
         except:
+            failed += 1
+            listOfFailed.append(dataForOneCountryList[0][1])
             pass
+
+print("success: " + str(count-failed)+"/"+str(count))
+print("failed: " + str(failed)+"/"+str(count))
+print(listOfFailed)
         

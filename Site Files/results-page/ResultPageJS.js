@@ -11,7 +11,7 @@ var country = urlParams.get('country');
 const countriesWithStates = ['AU','BR','CA','CN','IN','RU','US']
 if (countriesWithStates.includes(country)){
 if (!(county == null || county == "false")) {
-    county = county.replace(/ /g, "+")
+    county = county.replaceAll(" ", "+")
     var imageID = country+"/"+state+"/"+county+"+"+state
 }
 else if (!(state == null || state == "false")){
@@ -32,7 +32,7 @@ script.textContent = `
       "@type": "ImageObject",
       "contentUrl": "`+bucketPrefix + "stripes/" + imageID+'.png'+`",
       "license": "https://creativecommons.org/licenses/by/4.0/",
-      "acquireLicensePage": "https://dev.earthstripes.org/content-license"
+      "acquireLicensePage": "https://www.earthstripes.org/content-license"
     }
 `;
 document.head.appendChild(script);
@@ -221,122 +221,122 @@ function getSenatorInfo(senatorData) {
 }
 
 function setEnergyGraph(energyData){
-var ctx = document.getElementById("myChart").getContext("2d");
+  var ctx = document.getElementById("myChart").getContext("2d");
 
-//console.log(energyData['years']);
+  //console.log(energyData['years']);
 
-const colors = {
-  green: {
-    fill: '#5eb84d',
-    stroke: '#5eb84d',
-  },
-  lightBlue: {
-    stroke: '#bbbbbb',
-    fill: '#bbbbbb',
-  },
-  yellow: {
-    fill: '#FFD000',
-    stroke: '#FFD000',
-  },
-  purple: {
-    fill: 'purple',
-    stroke: 'purple',
-  },
-  charcoal: {
-    fill: '#323232',
-    stroke: '#323232',
-  },
-};
-
-const coal = energyData['coal'];
-const naturalGas = energyData['natural gas'];
-const petroleum = energyData['petroleum and other liquids'];
-const nuclear = energyData['nuclear'];
-const renewables = energyData['renewables and others'];
-const xData = energyData['years'];
-
-const myChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: xData,
-    datasets: [{
-      label: "Coal",
-      fill: true,
-      backgroundColor: colors.charcoal.fill,
-      pointBackgroundColor: colors.charcoal.stroke,
-      borderColor: colors.charcoal.stroke,
-      pointHighlightStroke: colors.charcoal.stroke,
-      borderCapStyle: 'butt',
-      data: coal,
-
-    }, {
-      label: "Natural Gas",
-      fill: true,
-      backgroundColor: colors.purple.fill,
-      pointBackgroundColor: colors.purple.stroke,
-      borderColor: colors.purple.stroke,
-      pointHighlightStroke: colors.purple.stroke,
-      borderCapStyle: 'butt',
-      data: naturalGas,
-    }, {
-      label: "Petroleum",
-      fill: true,
-      backgroundColor: colors.lightBlue.fill,
-      pointBackgroundColor: colors.lightBlue.stroke,
-      borderColor: colors.lightBlue.stroke,
-      pointHighlightStroke: colors.lightBlue.stroke,
-      borderCapStyle: 'butt',
-      data: petroleum,
-    }, {
-      label: "Nuclear",
-      fill: true,
-      backgroundColor: colors.yellow.fill,
-      pointBackgroundColor: colors.yellow.stroke,
-      borderColor: colors.yellow.stroke,
-      pointHighlightStroke: colors.yellow.stroke,
-      data: nuclear,
-    }, {
-      label: "Renewables & Other",
-      fill: true,
-      backgroundColor: colors.green.fill,
-      pointBackgroundColor: colors.green.stroke,
-      borderColor: colors.green.stroke,
-      pointHighlightStroke: colors.green.stroke,
-      data: renewables,
-    }]
-  },
-  options: {
-  responsive: true,
-  // Can't just just `stacked: true` like the docs say
-  scales: {
-    yAxes: {
-      stacked: true,
-      max: 100,
-      min: 0,
+  const colors = {
+    green: {
+      fill: '#5eb84d',
+      stroke: '#5eb84d',
     },
-  },
-  animation: {
-    duration: 750,
-  },
-  tooltips: {
-    mode: "index",
-    intersect: false,
-  },
-  hover: {
-    mode: "nearest",
-    intersect: false,
-  },
-  elements: {
-    point: {
-      radius: 0,
+    lightBlue: {
+      stroke: '#bbbbbb',
+      fill: '#bbbbbb',
     },
-    line: {
-      tension: 0.3,
+    yellow: {
+      fill: '#FFD000',
+      stroke: '#FFD000',
     },
-  },
+    purple: {
+      fill: 'purple',
+      stroke: 'purple',
+    },
+    charcoal: {
+      fill: '#323232',
+      stroke: '#323232',
+    },
+  };
 
-  }
-});
+  const coal = energyData['coal'];
+  const naturalGas = energyData['natural gas'];
+  const petroleum = energyData['petroleum and other liquids'];
+  const nuclear = energyData['nuclear'];
+  const renewables = energyData['renewables and others'];
+  const xData = energyData['years'];
+
+  const myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: xData,
+      datasets: [{
+        label: "Coal",
+        fill: true,
+        backgroundColor: colors.charcoal.fill,
+        pointBackgroundColor: colors.charcoal.stroke,
+        borderColor: colors.charcoal.stroke,
+        pointHighlightStroke: colors.charcoal.stroke,
+        borderCapStyle: 'butt',
+        data: coal,
+
+      }, {
+        label: "Natural Gas",
+        fill: true,
+        backgroundColor: colors.purple.fill,
+        pointBackgroundColor: colors.purple.stroke,
+        borderColor: colors.purple.stroke,
+        pointHighlightStroke: colors.purple.stroke,
+        borderCapStyle: 'butt',
+        data: naturalGas,
+      }, {
+        label: "Petroleum",
+        fill: true,
+        backgroundColor: colors.lightBlue.fill,
+        pointBackgroundColor: colors.lightBlue.stroke,
+        borderColor: colors.lightBlue.stroke,
+        pointHighlightStroke: colors.lightBlue.stroke,
+        borderCapStyle: 'butt',
+        data: petroleum,
+      }, {
+        label: "Nuclear",
+        fill: true,
+        backgroundColor: colors.yellow.fill,
+        pointBackgroundColor: colors.yellow.stroke,
+        borderColor: colors.yellow.stroke,
+        pointHighlightStroke: colors.yellow.stroke,
+        data: nuclear,
+      }, {
+        label: "Renewables & Other",
+        fill: true,
+        backgroundColor: colors.green.fill,
+        pointBackgroundColor: colors.green.stroke,
+        borderColor: colors.green.stroke,
+        pointHighlightStroke: colors.green.stroke,
+        data: renewables,
+      }]
+    },
+    options: {
+    responsive: true,
+    // Can't just just `stacked: true` like the docs say
+    scales: {
+      yAxes: {
+        stacked: true,
+        max: 100,
+        min: 0,
+      },
+    },
+    animation: {
+      duration: 750,
+    },
+    tooltips: {
+      mode: "index",
+      intersect: false,
+    },
+    hover: {
+      mode: "nearest",
+      intersect: false,
+    },
+    elements: {
+      point: {
+        radius: 0,
+      },
+      line: {
+        tension: 0.3,
+      },
+    },
+
+    }
+  });
 }
 
 
@@ -454,13 +454,13 @@ gtag('event', "Share Intent", {
   'event_label': canonicalUrl,
   'value': "5"
 });
-window.open("https://twitter.com/intent/tweet?text="+encodeURIComponent(tweetContent)+"&related=earthstripes,nikhilrado&hashtags=showyourstripes,COP26", "pop", "width=600, height=400, scrollbars=no");
+window.open("https://twitter.com/intent/tweet?text="+encodeURIComponent(tweetContent)+"&related=earthstripes,nikhilrado&hashtags=showyourstripes,climate", "pop", "width=600, height=400, scrollbars=no");
 
 }
 document.getElementById('facebook-share-button1').onclick = function() {
 window.open("https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(canonicalUrl)+"&hashtag=#showyourstripes", "pop", "width=600, height=400, scrollbars=no");
 
-window.open("https://www.facebook.com/dialog/share?app_id=604427890576897&display=popup&href="+encodeURIComponent(canonicalUrl)+"&redirect_uri=https%3A%2F%2Fdev.earthstripes.org"+"&hashtag="+encodeURIComponent("#showyourstripes")+"&quote=" + encodeURIComponent(facebookShareContent), "pop", "width=600, height=400, scrollbars=no");
+window.open("https://www.facebook.com/dialog/share?app_id=604427890576897&display=popup&href="+encodeURIComponent(canonicalUrl)+"&redirect_uri=https%3A%2F%2Fwww.earthstripes.org"+"&hashtag="+encodeURIComponent("#showyourstripes")+"&quote=" + encodeURIComponent(facebookShareContent), "pop", "width=600, height=400, scrollbars=no");
 
 }
 
