@@ -1,8 +1,24 @@
+/*CSS for the Breadcrumb Box*/
+a{
+    color: black;
+}
+.seperatorIcon{
+    vertical-align: middle;
+    font-size: 16px;
+    padding: 5px;
+}
+#breadcrumbSpan{
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  margin-bottom: -4px;
+}
+
 #bbbox{
     line-height: 0px;
 }
-img{
-    border-radius: 5px;
+.ImpactPhoto{
+    border-radius: 5px !important;
 }
 .inline-stuff {
     vertical-align: middle;

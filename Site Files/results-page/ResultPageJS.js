@@ -42,14 +42,108 @@ label.href = "?country=" + country;
 label2.innerText = state;
 label2.href = "?country=" + country + "&state=" + state;
 
+function generateURL(countryCode = null, stateCode = null, countyName = null) {
+    locationAutomaticURL = "/result/?country=" + countryCode;
+    if (stateCode != false && stateCode != null) {
+        locationAutomaticURL = locationAutomaticURL + "&state=" + stateCode;
+    }
+    if (countryCode == "US" && countyName != null && countyName != false) {
+        locationAutomaticURL = locationAutomaticURL + "&county=" + countyName;
+    }
+    return locationAutomaticURL;
+}
+
+function getCountryFromCountryCode(countryCode){
+    const regionNamesInEnglish = new Intl.DisplayNames(['en'], {type:'region'});
+    return regionNamesInEnglish.of(countryCode);
+}
+
+function breadcrumbs(){
+    breadcrumbHTML = ""
+    breadcrumbSeperator = '<i class="seperatorIcon fa fa-chevron-right"></i>'
+    breadcrumbs = [];
+    breadcrumbsURLs = [];
+    breadcrumbsSchema = ""
+    countryName = getCountryFromCountryCode(country);
+    if (country && state){
+        breadcrumbs.push(country)
+        breadcrumbHTML += "<a href=https://www.earthstripes.org"+generateURL(country)+">" + countryName + "</a>"+ breadcrumbSeperator;
+    }
+    if(country){
+      breadcrumbsSchema += `    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "`+countryName+`",
+        "item": "https://www.earthstripes.org`+generateURL(country)+`"
+      }`
+    }
+    if (state && county){
+      breadcrumbs.push(state)
+      breadcrumbHTML += "<a href=https://www.earthstripes.org"+generateURL(country,state)+">" + state + "</a>" + breadcrumbSeperator;
+    }
+    if (state){
+      breadcrumbsSchema += `,{
+      "@type": "ListItem",
+      "position": 2,
+      "name": "`+breadcrumbs[1]+`",
+      "item": "https://www.earthstripes.org`+generateURL(country,state)+`"
+      }`;
+    }
+    if (false){
+        breadcrumbs.push(county)
+        breadcrumbHTML += "<a href=https://www.earthstripes.org"+generateURL(country,state,county)+">" + county.replaceAll("+"," ") + "</a>" + breadcrumbSeperator;
+    }
+    if (county){
+      breadcrumbsSchema += `,{
+      "@type": "ListItem",
+      "position": 3,
+      "name": "`+breadcrumbs[2]+`",
+      "item": "https://www.earthstripes.org`+generateURL(country,state,county)+`"
+      }`
+    }
+    breadcrumbSpan.innerHTML = breadcrumbHTML;
+    console.log(breadcrumbs)
+    
+    
+    const breadcrumbsScript = document.createElement('script');
+    breadcrumbsScript.setAttribute('type', 'application/ld+json');
+    breadcrumbsScript.textContent = breadcrumbsSchema + "]}";
+    test44 = `
+    {"@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "`+breadcrumbs[0]+`",
+        "item": "https://www.earthstripes.org`+generateURL(country)+`"
+      },{
+        "@type": "ListItem",
+        "position": 2,
+        "name": "`+breadcrumbs[1]+`",
+        "item": "https://www.earthstripes.org`+generateURL(country,state)+`"
+      },{
+        "@type": "ListItem",
+        "position": 3,
+        "name": "`+breadcrumbs[2]+`",
+        "item": "https://www.earthstripes.org`+generateURL(country,state,county)+`"
+      }]
+    }
+    `
+    document.head.appendChild(breadcrumbsScript);
+}
+breadcrumbs();
+
 //this operates the buttons that switch from Stripes to Bars
 function switchStripes(switchTo) {
-    if (switchTo == 'stripes'){
+  if (switchTo == 'stripes'){
     document.getElementById('image1').src = bucketPrefix + "stripes/" + imageID + '.png';
-    }
-    if (switchTo == 'bars'){
+  }
+  if (switchTo == 'bars'){
     document.getElementById('image1').src = bucketPrefix + "labeled-bars/"+imageID+'.png';
-    }
+  }
 }
 
 //fetches the smallest location json file
@@ -152,29 +246,28 @@ function setYaleBars() {
 const productNames = ["Cloth Mask","Mug","Tie","Stickers"]
 const productIDs = ['256670743725195335','168540946485519042','151119561160107608','217917661479101292']
 function setMerchBox(){
-var encodedLabeledStripesImageURL = encodeURI(bucketPrefix + "labeled-stripes/" + imageID + ".png?request=zazzle");
-var encodedStripesImageURL = encodeURI(bucketPrefix + "stripes/" + imageID + ".png?request=zazzle");
+  var encodedLabeledStripesImageURL = encodeURI(bucketPrefix + "labeled-stripes/" + imageID + ".png?request=zazzle");
+  var encodedStripesImageURL = encodeURI(bucketPrefix + "stripes/" + imageID + ".png?request=zazzle");
 
-merchLabel = "&t_location_txt=" + encodeURIComponent(locationName + " " + startYear + "-" + endYear);
-customMerchLink = "https://www.zazzle.com/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&t_labeledstripes_iid="
-+ encodedLabeledStripesImageURL + "&tc=results-merch-box&ic=" + imageID.replace(/[^a-zA-z]/g,'_') + "&t_stripes_iid=" + encodedStripesImageURL + merchLabel;
-testmerchlink.href = customMerchLink;
-MerchButton.href = customMerchLink;
-console.log(imageID.replace(/[^a-zA-z]/g,'_'))
+  merchLabel = "&t_location_txt=" + encodeURIComponent(locationName + " " + startYear + "-" + endYear);
+  customMerchLink = "https://www.zazzle.com/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&t_labeledstripes_iid="
+  + encodedLabeledStripesImageURL + "&tc=results-merch-box&ic=" + imageID.replace(/[^a-zA-z]/g,'_') + "&t_stripes_iid=" + encodedStripesImageURL + merchLabel;
+  testmerchlink.href = customMerchLink;
+  MerchButton.href = customMerchLink;
+  console.log(imageID.replace(/[^a-zA-z]/g,'_'))
 
-for (i=1; i<=productNames.length; i++){
-element = document.getElementById('ProductImage' + i);
-var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+productIDs[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedStripesImageURL + '&t_labeledstripes_url='+encodedLabeledStripesImageURL;
-element.src = imageID2;
-element.alt = "Warming Stripes " + productNames[i-1]
-element = document.getElementById('ProductName' + i);
-element.innerText = productNames[i-1];
-element = document.getElementById('Product'+i+"Link");
-element.href = customMerchLink;
-element = document.getElementById('Product'+i+'Link2');
-element.href = customMerchLink;
-
-}
+  for (i=1; i<=productNames.length; i++){
+    element = document.getElementById('ProductImage' + i);
+    var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+productIDs[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedStripesImageURL + '&t_labeledstripes_url='+encodedLabeledStripesImageURL;
+    element.src = imageID2;
+    element.alt = "Warming Stripes " + productNames[i-1]
+    element = document.getElementById('ProductName' + i);
+    element.innerText = productNames[i-1];
+    element = document.getElementById('Product'+i+"Link");
+    element.href = customMerchLink;
+    element = document.getElementById('Product'+i+'Link2');
+    element.href = customMerchLink;
+  }
 }
 
 function getSenatorInfo(senatorData) { 
