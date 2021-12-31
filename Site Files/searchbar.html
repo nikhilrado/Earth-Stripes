@@ -125,7 +125,12 @@ function getRedirectURLMapbox(jsonPlaceData,redirectNow=false) {
     }
     else{
     try{
-    countyName = jsonPlaceData.context[jsonPlaceData.context.length-3].text
+        countyName = jsonPlaceData.context[jsonPlaceData.context.length-3].text
+        console.log("yrrrrrrr")
+        //designed to catch a bug with San Francisco not working, may need to alter
+        if (countyName.indexOf("County")==-1 || countyName.indexOf("Parish") == -1){
+            countyName += " County"
+        }
     }
     catch(err) {
         countyName = false
