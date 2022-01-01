@@ -70,6 +70,8 @@ button.button5::before {
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/> 
 
 <script>
+const COUNTRIES_WITH_STATES = ['AU','BR','CA','CN','IN','RU','US'];
+
 function generateURL (countryCode=null, stateCode=null, countyName=null){
     locationAutomaticURL = "/result/?country="+countryCode
     if (stateCode != false && stateCode != null){locationAutomaticURL=locationAutomaticURL+"&state="+stateCode}
@@ -100,41 +102,49 @@ function getRedirectURLMapbox(jsonPlaceData,redirectNow=false) {
     //}
     countryCode = countryCode.toUpperCase()
     
-    //get stateCode
-    if (jsonPlaceData.place_type[0]=="region"){
-        stateCode = jsonPlaceData.properties.short_code
-        stateName = jsonPlaceData.text
-        stateCode = stateCode.slice(3)
-        console.log("ranstate")
-    }
-    else{
-    try{
-    stateCode = jsonPlaceData.context[jsonPlaceData.context.length-2].short_code
-    stateName = jsonPlaceData.context[jsonPlaceData.context.length-2].text
-    stateCode = stateCode.slice(3)
-    }
-    catch(err) {
-        stateCode = false
-        stateName = false
-    }}
-    
-    //get county
-    if (jsonPlaceData.place_type[0]=="district"){
-        countyName = jsonPlaceData.text
-        console.log("rancty")
-    }
-    else{
-    try{
-        countyName = jsonPlaceData.context[jsonPlaceData.context.length-3].text
-        console.log("yrrrrrrr "+ countyName)
-        //designed to catch a bug with San Francisco not working, may need to alter
-        if (countyName == "San Francisco"){
-            countyName += " County"
+    //prevents adding state query params if we don't have state data for country
+    if (COUNTRIES_WITH_STATES.includes(countryCode)){
+        //get stateCode
+        if (jsonPlaceData.place_type[0]=="region"){
+            stateCode = jsonPlaceData.properties.short_code;
+            stateName = jsonPlaceData.text;
+            stateCode = stateCode.slice(3);
+            console.log("ranstate");
         }
+        else{
+            try{
+                stateCode = jsonPlaceData.context[jsonPlaceData.context.length-2].short_code;
+                stateName = jsonPlaceData.context[jsonPlaceData.context.length-2].text;
+                stateCode = stateCode.slice(3);
+            }
+            catch(err) {
+                stateCode = false;
+                stateName = false;
+            }
+        }
+        
+        //get county
+        if (jsonPlaceData.place_type[0]=="district"){
+            countyName = jsonPlaceData.text;
+            console.log("rancty");
+        }
+        else{
+        try{
+            countyName = jsonPlaceData.context[jsonPlaceData.context.length-3].text;
+            console.log("yrrrrrrr "+ countyName);
+            //designed to catch a bug with San Francisco not working, may need to alter
+            if (countyName == "San Francisco"){
+                countyName += " County";
+            }
+        }
+        catch(err) {
+            countyName = false;
+        }}
+    } else {
+        stateCode = false;
+        state = false;
+        county = false;
     }
-    catch(err) {
-        countyName = false
-    }}
 
     //console.log(placeName)
     //console.log(countryCode)
