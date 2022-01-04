@@ -93,10 +93,11 @@ function breadcrumbs(){
       }`;
     }
     if (false){
-        breadcrumbs.push(county)
+        //breadcrumbs.push(county)
         breadcrumbHTML += "<a href=https://www.earthstripes.org"+generateURL(country,state,county)+">" + county.replaceAll("+"," ") + "</a>" + breadcrumbSeperator;
     }
     if (county){
+      breadcrumbs.push(county.replaceAll("+"," "))
       breadcrumbsSchema += `,{
       "@type": "ListItem",
       "position": 3,
