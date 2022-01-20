@@ -75,6 +75,7 @@ def updateMetadata(resourceID,resourceType,width=None,height=None,startYear=None
         f = open(jsonFile)
         f = f.read()
         f = json.loads(f)
+        print("created new json file: " +jsonFile)
 
     y = {
         resourceType:{
