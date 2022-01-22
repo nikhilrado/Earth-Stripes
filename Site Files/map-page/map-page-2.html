@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<!-- Adapted from: https://leafletjs.com/examples/choropleth/ -->
+
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+
 
 	<style>
 		html, body {
@@ -52,29 +55,17 @@
 	info.update = function (props) {
 	    countryCode = (props ? props.countryCode:"");
 	    NAME = (props ? props.NAME:"");
-	    link = ("https://dev.earthstripes.org/result/?country=" + countryCode);
+	    link = ("https://www.earthstripes.org/result/?country=" + countryCode);
 	    console.log(NAME);
 	    if (NAME == "United States of America"){
 	        countryCode == "US";
 	    }
 		this._div.innerHTML = '<h4>Earth Stripes Map</h4>' +  (props ?
-			'<b>' + props.NAME + '<br><a target="_blank" href=' + link + '>View Page</a><br><img width="200px" src="https://ortana-test.s3.us-east-2.amazonaws.com/v2/stripes/'+countryCode+'.png" alt="Warming Stripes">'
+			'<b>' + props.NAME + '<br><a target="_blank" href=' + link + '>View Page</a><br><img width="200px" src="https://ortana-test.s3.us-east-2.amazonaws.com/v3/stripes/'+countryCode+'.png" alt="Warming Stripes">'
 			: 'Hover over a state');
 	};
 
 	info.addTo(map);
-
-	// get color depending on population density value
-	function getColor(d) {
-		return d > 1000 ? '#800026' :
-				d > 500  ? '#BD0026' :
-				d > 200  ? '#E31A1C' :
-				d > 100  ? '#FC4E2A' :
-				d > 50   ? '#FD8D3C' :
-				d > 20   ? '#FEB24C' :
-				d > 10   ? '#FED976' :
-							'#FFEDA0';
-	}
 
 	function style(feature) {
 		return {
@@ -82,7 +73,7 @@
 			opacity: 1,
 			color: 'white',
 			fillOpacity: 0.8,
-			fillColor: feature.properties.color//getColor(feature.properties.density)
+			fillColor: feature.properties.color
 		};
 	}
 
@@ -119,7 +110,7 @@
 
         } else {
         countryCode = layer.feature.properties.countryCode;
-		window.open('https://dev.earthstripes.org/result/?country='+countryCode, '_blank');
+		window.open('https://www.earthstripes.org/result/?country='+countryCode, '_blank');
         }
 		
 	}
@@ -137,7 +128,7 @@
 		onEachFeature: onEachFeature
 	}).addTo(map);
 
-	map.attributionControl.addAttribution('Map &copy; <a href="https://dev.earthstripes.org">Earth Stripes</a>');
+	map.attributionControl.addAttribution('Map &copy; <a href="https://www.earthstripes.org">Earth Stripes</a>');
 
     /*
 	var legend = L.control({position: 'bottomright'});
