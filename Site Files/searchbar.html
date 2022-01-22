@@ -143,7 +143,7 @@ function getRedirectURLMapbox(jsonPlaceData,redirectNow=false) {
     } else {
         stateCode = false;
         state = false;
-        county = false;
+        countyName = false;
     }
 
     //console.log(placeName)
@@ -155,10 +155,7 @@ function getRedirectURLMapbox(jsonPlaceData,redirectNow=false) {
     //get lowest location name which will be used as the label for the location btn
     lowestLocationName = countryName
     //tried to insert this stuff next to if statement to run when country is just US
-    if (countryCode != "US"){
-        lowestLocationName = countyName //sets it to country name if not US
-    }
-    else{
+    if (countryCode == "US"){
         if (stateCode != false){lowestLocationName=stateName}
         if (countyName != false){lowestLocationName=countyName}
     }
