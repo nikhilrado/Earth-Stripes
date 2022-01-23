@@ -36,29 +36,52 @@ def saveResource(resourceURL):
     endYear = my_list[-1][0][:4]
 
     #https://stackoverflow.com/questions/1274405/how-to-create-new-folder #https://stackoverflow.com/a/1274465
-    newpath = 'G:\.shortcut-targets-by-id/1-78WtuBsUrKVKWF1NKxPcsrf1nvacux2/AP CSP VS Code Workspace/County Data Stuff/data/'+state 
+    newpath = 'data2/us-county-data-NOAA/'+state 
     if not os.path.exists(newpath):
         os.makedirs(newpath)
 
+    import datetime
+
+    metaDataList = [["County:", county],
+                    ["State:", state],
+                    ["Base Period:", basePeriod],
+                    ["Start Year:", startYear],
+                    ["End Year:", endYear],
+                    [],
+                    ["Data Source:", "NOAA"],
+                    ["Data Source URL:", "https://www.noaa.gov/"],
+                    ["Data File URL:", resourceURL],
+                    ["Access Date (UTC):",  datetime.datetime.now()]]
+    my_list = metaDataList + my_list
+    # for row in my_list:
+    #    print(row)
     #saves file with county name
-    with open('data/us-county-data-NOAA/%s/%s %s - AnnTemp %s-%s.csv' % (state,county,getStateAbrev(state),startYear,endYear), "w") as myfile:
-        myfile.write(decoded_content)
+    with open('data/us-county-data-NOAA/2021/%s/%s %s - AnnTemp %s-%s.csv' % (state,county,getStateAbrev(state),startYear,endYear), 'w', newline='') as f:
+        write = csv.writer(f)
+        write.writerows(my_list)
+    #with open('data2/us-county-data-NOAA/%s/%s %s - AnnTemp %s-%s.csv' % (state,county,getStateAbrev(state),startYear,endYear), "w") as myfile:
+    #    myfile.write(str(my_list))
 
 with open('County Data Stuff/test11.txt', "r") as myfile:
     data = myfile.read()
 
 newData = ""
 counter = 0
-for state in stateShortName2:
-    for i in range(400):
+for state in stateShortName:
+    for i in range(250):
         counter += 1
-        resourceURL = "https://www.ncdc.noaa.gov/cag/county/time-series/%s-%s-tavg-12-12-1895-2021.csv" % (state,f"{i*2+1:03d}")
+        #resourceURL = "https://www.ncdc.noaa.gov/cag/county/time-series/FL-086-tavg-12-12-1895-2021.csv?base_prd=true&begbaseyear=1901&endbaseyear=2000"
+        resourceURL = "https://www.ncdc.noaa.gov/cag/county/time-series/%s-%s-tavg-12-12-1895-2021.csv?base_prd=true&begbaseyear=1901&endbaseyear=2000" % (state,f"{i*2+1:03d}")
         #use for custom URL request
         #resourceURL = "https://www.ncdc.noaa.gov/cag/county/time-series/FL-086-tavg-12-12-1895-2021.csv"
+        #"/cag/statewide/time-series/1-tavg-12-12-1895-2021.json?base_prd=true&begbaseyear=1901&endbaseyear=2000"
         print("County: " + str(counter)  +  ' ' + resourceURL)
 
         newData = newData + resourceURL + "\n"
-        if saveResource(resourceURL) == "done":
+        try:
+            if saveResource(resourceURL) == "done":
+                continue
+        except:
             continue
     #print(newData)
 
