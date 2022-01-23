@@ -5,16 +5,16 @@ import json
 from datetime import datetime
 import csv
 
-#This file handles uploading of all files to s3
+# This file handles uploading of all files to s3
 
-#declaration of basic variables
-resultsDirectory = "results/"
-logFile = "s3upload-log.csv"
-s3putCost = 0.005/1000
-upload_bucket = "earthstripes"
+# declaration of basic variables
+RESULTS_DIRECTORY = "results/"
+LOG_FILE = "s3upload-log.csv"
+S3_PUT_COST = 0.005/1000
+S3_UPLOAD_BUCKET = "earthstripes"
 client = boto3.client('s3', aws_access_key_id=s3.access_key, aws_secret_access_key=s3.secret_access_key)
 
-#returns a list of all files in a directory
+# returns a list of all files in a directory
 def getAllFilesInDir(root):
     fileList = []
     for path, subdirs, files in os.walk(root):
@@ -22,11 +22,11 @@ def getAllFilesInDir(root):
             fileList.append(os.path.join(path, name))
     return fileList
 
-#will upload a file to s3 and print a statement stating which file was uploaded
+# will upload a file to s3 and print a statement stating which file was uploaded
 def uploadFile(file,uploadFilePath=False):
-    #lets the user specify if they want to add a custom file path
+    # lets the user specify if they want to add a custom file path
     if uploadFilePath == False:
-        upload_file_path = "v3/" + file.replace(resultsDirectory,"")
+        upload_file_path = "v3/" + file.replace(RESULTS_DIRECTORY,"")
     else:
         upload_file_path = uploadFilePath
     
@@ -47,23 +47,23 @@ def uploadFile(file,uploadFilePath=False):
         contentType = 'application/javascript'
     if '.css' in file:
         contentType = 'text/css'
-    client.upload_file(file, upload_bucket, upload_file_path,ExtraArgs={'ACL':'public-read', "ContentType":contentType})
-    print("Uploaded: "+ file +" --to-- "+upload_bucket+"/"+upload_file_path)
+    client.upload_file(file, S3_UPLOAD_BUCKET, upload_file_path,ExtraArgs={'ACL':'public-read', "ContentType":contentType})
+    print("Uploaded: "+ file +" --to-- "+S3_UPLOAD_BUCKET+"/"+upload_file_path)
 
 
-#allowed us to add a object to all the json files-----------------
+# allowed us to add a object to all the json files-----------------
 '''import createJSON
 for file in getAllFilesInDir("results/json"):
     createJSON.updateMetadata(file,"")'''
 
-#find the type of file from the directory (ex. bars, json, stripes)
-#sorts list by length, so it will recognize labeled versions
-#https://www.geeksforgeeks.org/python-sort-list-according-length-elements/
+# find the type of file from the directory (ex. bars, json, stripes)
+# sorts list by length, so it will recognize labeled versions
+# https://www.geeksforgeeks.org/python-sort-list-according-length-elements/
 def sorting(lst):
     lst2 = sorted(lst, key=len)
     return lst2
 
-resourceTypes = sorting(os.listdir(resultsDirectory))
+resourceTypes = sorting(os.listdir(RESULTS_DIRECTORY))
 resourceTypes.reverse()
 #print(resourceTypes)
 def getFileType(filePath):
@@ -71,26 +71,26 @@ def getFileType(filePath):
         if resourceType in filePath:
             return resourceType
 
-#when run it will upload all files in a directory to s3, if smartUpload is "True", it will only upload files that have been changed since last upload
-def uploadNewChanges(directory=resultsDirectory,smartUpload=True, exclude=[]):
-    #opens the log file
-    f = open(logFile,"r")
+# when run it will upload all files in a directory to s3, if smartUpload is "True", it will only upload files that have been changed since last upload
+def uploadNewChanges(directory=RESULTS_DIRECTORY,smartUpload=True, exclude=[]):
+    # opens the log file
+    f = open(LOG_FILE,"r")
     csv_f = csv.reader(f)
     rowsList = []
     for row in csv_f:
         rowsList.append(row)
-    #sets variables from log file
+    # sets variables from log file
     lastUpload = rowsList[1][0]
     costToDate = float(rowsList[1][-1])
     savingsToDate = float(rowsList[1][-3])
     lastUpload = datetime.strptime(lastUpload, '%Y-%m-%d %H:%M:%S.%f')
     dateTimeStart = str(datetime.now())
 
-    #counters, metrics and analytics
+    # counters, metrics and analytics
     itemsProcessed = 0
     numUploaded = 0
 
-    #will loop through all of the files
+    # will loop through all of the files
     for file in getAllFilesInDir(directory):
         #if the file is not in the exclude list
         exclude.append("desktop.ini")
@@ -102,10 +102,10 @@ def uploadNewChanges(directory=resultsDirectory,smartUpload=True, exclude=[]):
                 break
         if not uploadFlag:
             continue
-        file = file.replace("\\","/") #fixes annoying formating issue that messes up s3
+        file = file.replace("\\","/")  # fixes annoying formating issue that messes up s3
         itemsProcessed += 1
 
-        #if this is a smart upload then, read the json file, and determine if it needs to be uploaded
+        # if this is a smart upload then, read the json file, and determine if it needs to be uploaded
         if smartUpload:
             fileType = getFileType(file)
             jsonFile = file.replace(fileType,"json").replace(".png",".json").replace(".jpeg",".json")
@@ -114,8 +114,7 @@ def uploadNewChanges(directory=resultsDirectory,smartUpload=True, exclude=[]):
             f = json.loads(f)
             #print(f)
 
-            #todo make it upload everything if no last updated object present
-            #find the date in the json file, if no date is present, skip file 
+            # find the date in the json file, if no date is present, skip file 
             try:
                 lastUpdated = f["resources"][fileType]["last updated"]
                 lastUpdated = datetime.strptime(lastUpdated, '%Y-%m-%d %H:%M:%S.%f')
@@ -124,19 +123,19 @@ def uploadNewChanges(directory=resultsDirectory,smartUpload=True, exclude=[]):
                     numUploaded += 1
             except:
                 continue
-        #when smartUpload isn't true, just upload everything
+        # when smartUpload isn't true, just upload everything
         else:
             uploadFile(file)
             numUploaded += 1
         
 
-    #open up the log file, and record data from the day's upload
-    with open(logFile, 'w', newline="") as f:
+    # open up the log file, and record data from the day's upload
+    with open(LOG_FILE, 'w', newline="") as f:
         # using csv.writer method from CSV package
-        #['dateTimeStart', 'dateTimeFinish', 'numUploaded', 'numFailed', 'cost', '', 'smartUpload', 'itemsProcessed', 'itemsSaved', 'initialCost', 'smartCost', 'savings', 'savingsToDate' ,'costToDate']
-        cost = s3putCost*numUploaded
-        savings = s3putCost*itemsProcessed-s3putCost*numUploaded
-        uploadLogData = [dateTimeStart, str(datetime.now()), numUploaded,"?",cost,"-",smartUpload,itemsProcessed,itemsProcessed-numUploaded,s3putCost*itemsProcessed,s3putCost*numUploaded,savings,savingsToDate+savings,costToDate+cost]
+        # ['dateTimeStart', 'dateTimeFinish', 'numUploaded', 'numFailed', 'cost', '', 'smartUpload', 'itemsProcessed', 'itemsSaved', 'initialCost', 'smartCost', 'savings', 'savingsToDate' ,'costToDate']
+        cost = S3_PUT_COST*numUploaded
+        savings = S3_PUT_COST*itemsProcessed-S3_PUT_COST*numUploaded
+        uploadLogData = [dateTimeStart, str(datetime.now()), numUploaded,"?",cost,"-",smartUpload,itemsProcessed,itemsProcessed-numUploaded,S3_PUT_COST*itemsProcessed,S3_PUT_COST*numUploaded,savings,savingsToDate+savings,costToDate+cost]
         rowsList.insert(1,uploadLogData)
 
         write = csv.writer(f)
@@ -150,20 +149,14 @@ def test():
     #uploadNewChanges(directory="results/json/US/",smartUpload=False)
     #uploadNewChanges(directory="results/",smartUpload=False)
     #uploadNewChanges(directory="photos/local-impact-photos/",smartUpload=False)
-    # uploadNewChanges(directory="results/labeled-bars/AU",smartUpload=False)
-    # uploadNewChanges(directory="results/labeled-bars/BR",smartUpload=False)
-    # uploadNewChanges(directory="results/labeled-bars/CA",smartUpload=False)
-    # uploadNewChanges(directory="results/labeled-bars/CN",smartUpload=False)
-    # uploadNewChanges(directory="results/labeled-bars/IN",smartUpload=False)
-    # uploadNewChanges(directory="results/labeled-bars/RU",smartUpload=False)
     # uploadNewChanges(directory="results/stripes/",smartUpload=False)
     uploadFile("Site Files/map-page/countries2.js", uploadFilePath="map-stuff.js")
     #uploadFile("Map Stuff/mapData.csv",uploadFilePath="mapData2.csv")
     #uploadFile("test5.svg",uploadFilePath="test5.svg")
     pass
 
-#this is the main function that will be called when the script is run
-#if the file is imported, it will not run the test function
-#test method is created to remove global scope of any variables in test()
+# this is the main function that will be called when the script is run
+# if the file is imported, it will not run the test function
+# test method is created to remove global scope of any variables in test()
 if __name__ == "__main__":
     test()
