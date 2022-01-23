@@ -5,6 +5,8 @@ import json
 from datetime import datetime
 import csv
 
+#This file handles uploading of all files to s3
+
 #declaration of basic variables
 resultsDirectory = "results/"
 logFile = "s3upload-log.csv"
@@ -70,7 +72,7 @@ def getFileType(filePath):
             return resourceType
 
 #when run it will upload all files in a directory to s3, if smartUpload is "True", it will only upload files that have been changed since last upload
-def uploadNewChanges(directory=resultsDirectory,smartUpload=True):
+def uploadNewChanges(directory=resultsDirectory,smartUpload=True, exclude=[]):
     #opens the log file
     f = open(logFile,"r")
     csv_f = csv.reader(f)
@@ -90,6 +92,16 @@ def uploadNewChanges(directory=resultsDirectory,smartUpload=True):
 
     #will loop through all of the files
     for file in getAllFilesInDir(directory):
+        #if the file is not in the exclude list
+        exclude.append("desktop.ini")
+        uploadFlag = True
+        for ex in exclude:
+            if ex in file:
+                print("skipping: "+file)
+                uploadFlag = False
+                break
+        if not uploadFlag:
+            continue
         file = file.replace("\\","/") #fixes annoying formating issue that messes up s3
         itemsProcessed += 1
 
@@ -134,13 +146,20 @@ def uploadNewChanges(directory=resultsDirectory,smartUpload=True):
 
 def test():
     #uploadNewChanges()
-    uploadFile("results/sunny.png")
+    #uploadFile("results/sunny.png")
     #uploadNewChanges(directory="results/json/US/",smartUpload=False)
     #uploadNewChanges(directory="results/",smartUpload=False)
     #uploadNewChanges(directory="photos/local-impact-photos/",smartUpload=False)
-    uploadNewChanges(directory="results/json/US/",smartUpload=False)
-    #uploadFile("Site Files/map-page/countries2.js", uploadFilePath="map-stuff.js")
+    # uploadNewChanges(directory="results/labeled-bars/AU",smartUpload=False)
+    # uploadNewChanges(directory="results/labeled-bars/BR",smartUpload=False)
+    # uploadNewChanges(directory="results/labeled-bars/CA",smartUpload=False)
+    # uploadNewChanges(directory="results/labeled-bars/CN",smartUpload=False)
+    # uploadNewChanges(directory="results/labeled-bars/IN",smartUpload=False)
+    # uploadNewChanges(directory="results/labeled-bars/RU",smartUpload=False)
+    # uploadNewChanges(directory="results/stripes/",smartUpload=False)
+    uploadFile("Site Files/map-page/countries2.js", uploadFilePath="map-stuff.js")
     #uploadFile("Map Stuff/mapData.csv",uploadFilePath="mapData2.csv")
+    #uploadFile("test5.svg",uploadFilePath="test5.svg")
     pass
 
 #this is the main function that will be called when the script is run
