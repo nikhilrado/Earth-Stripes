@@ -1,5 +1,48 @@
 //document.getElementById("autocomplete").focus();
 
+const urlParams = new URLSearchParams(window.location.search);
+var twclid = urlParams.get('twclid');
+if (!twclid){
+    twclid = getCookie("twclid");
+}
+console.log("twclid: " + twclid);
+
+var fbc = urlParams.get('fbc');
+if (!fbc){
+    fbc = getCookie("_fbc");
+}
+console.log("fbc: " + fbc);
+
+var fbp = urlParams.get('fbp');
+if (!fbp){
+    fbp = getCookie("_fbp");
+}
+console.log("fbp: " + fbp);
+
+var gid = urlParams.get('gid');
+if (!gid){
+    gid = getCookie("_gid");
+}
+console.log("gid: " + gid);
+
+
+//taken from https://www.w3schools.com/js/js_cookies.asp
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
 var changeLocationBoxIsHidden = true;
 function toggleChangeLocation(action=null){
     var element = document.getElementById("changeLocationBox");
@@ -48,15 +91,45 @@ function getCountryFromCountryCode(countryCode){
 bucketPrefix = "https://earthstripes.s3.us-east-2.amazonaws.com/v3/";
 const productNames = ["Cloth Mask","Mug","Tie","Stickers", "Magnet","Badge (Pin)", "T-Shirt", "Socks"];
 const productIDs = ['256670743725195335','168540946485519042','151119561160107608','217917661479101292','147753984968275362', '145354997245092652', '235484093576644423','256547457460896288'];
+
+const zazzleInternationalCountries = ["us","ca","gb","de","es","fr","pt","se","nl","at","ch","be","br","au","nz","jp"];
+const zazzleInternationalDomains = [".com",".ca",".co.uk",".de",".es",".fr",".pt",".se",".nl",".at",".ch",".be",".com.br",".com.au",".co.nz",".co.jp"];
+function getZazzleDomain(countryCode){
+    countryCode = countryCode.toLowerCase();
+    zazzleDomain = zazzleInternationalDomains[zazzleInternationalCountries.indexOf(countryCode)];
+    if (zazzleDomain == undefined){
+        zazzleDomain = ".com";
+    }
+    return zazzleDomain;
+}
+
 function setMerchBox(imageID, locationName, locationURL){
-    var encodedLabeledStripesImageURL = encodeURI(bucketPrefix + "labeled-stripes/" + imageID + ".png?request=zazzle");
+    var encodedLabeledStripesImageURL = encodeURI(bucketPrefix + "labeled-stripes/" + imageID + ".png?request=22012022");
     console.log(bucketPrefix + "labeled-stripes/" + imageID + ".png?request=zazzle");
-    var encodedStripesImageURL = encodeURI(bucketPrefix + "stripes/" + imageID + ".png?request=zazzle");
+    var encodedStripesImageURL = encodeURI(bucketPrefix + "stripes/" + imageID + ".png?request=22012022");
     
+    
+    imageTrackingCode = "mp";
+    if (twclid){
+        imageTrackingCode += "_twclid" + twclid;
+    }
+    if (fbp){
+        imageTrackingCode += "_fbp"+fbp;
+    }
+    if (fbc){
+        imageTrackingCode += "_fbp"+fbp;
+    }
+    if(gid){
+        imageTrackingCode += "_gid"+gid;
+    }
+    if (imageTrackingCode.length > 99){
+        imageTrackingCode = imageTrackingCode.substr(0,98)
+    }
+
     merchLabel = "&t_location_txt=" + encodeURIComponent(locationName);// + " " + startYear + "-" + endYear);
-    customMerchLink = "https://www.zazzle.com/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&t_labeledstripes_iid="
-    + encodedLabeledStripesImageURL + "&tc=merch-page&ic=" + imageID.replace(/[^a-zA-z]/g,'_') + "&t_stripes_iid=" + encodedStripesImageURL + merchLabel;
+    customMerchLink = "https://www.zazzle" + getZazzleDomain(countryLang) + "/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&t_labeledstripes_iid=" + encodedLabeledStripesImageURL + "&tc=" + imageTrackingCode + "&ic=" + imageID.replace(/[^a-zA-z]/g,'_') + "&t_stripes_iid=" + encodedStripesImageURL + merchLabel;
     //testmerchlink.href = customMerchLink;
+    console.log(customMerchLink);
     MerchButton.href = customMerchLink;
     console.log(imageID.replace(/[^a-zA-z]/g,'_'));
     
@@ -71,6 +144,7 @@ function setMerchBox(imageID, locationName, locationURL){
         element.href = customMerchLink;
         element = document.getElementById('Product'+i+'Link2');
         element.href = customMerchLink;
+        console.log("pp "+i)
     }
     
     element = document.getElementById('locationName');
@@ -88,7 +162,10 @@ function setMerchBox(imageID, locationName, locationURL){
         locationName = getCountryFromCountryCode(locationName);
     }
     yeet.textContent = locationName;
+    locationNameLink.href = locationURL;
     toggleChangeLocation(action="hide");
+    
+    window.scrollTo(0,0); //scrolls to top of page to avoid layout shifts
 } 
 
 //custom function to get Redirect URL
@@ -163,7 +240,7 @@ function getLowestLocationName(countryCode,stateCode,countyName){
     }
     return lowestLocationName;
 }
-
+console.log("yeeettr")
 //geolocation test stuff
 var locationGranted; //declares global variable
 var locationAutomaticURL; //declares the automatic 
@@ -195,7 +272,7 @@ function handlePermission() {
         }
     });
 }
-handlePermission()
+//handlePermission()
       
 var x = document.getElementById("b5");
 function getLocation() {
@@ -262,8 +339,26 @@ google.maps.event.addListener(autocomplete, 'place_changed', function(){
     setMerchBox(imageID, countryCode, generateURL(countryCode,stateCode,countyName));
 }) 
 
-setMerchBox("US", "United States");  
+function zazzleClicked(element) {
+    console.log("bbbbbbbbbbbbbbbb");
+    if (element.includes("Product")) {
+        let listId = element.charAt(element.length-1)-1
+        element = productNames[listId] + " " + productIDs[listId];
+    }
+    console.log(element)
+    gtag('event', "Zazzle Link Clicked", {
+  'event_category': "commerce",
+  'event_label': element,
+  'value': "5"});
+  
+    twttr.conversion.trackPid('o7aq1', { tw_sale_amount: 0, tw_order_quantity: 0 });
+    fbq('track', 'Purchase', {currency: "USD", value: 30.00});
+    
+};
+
+console.log("yeer");
 const lang = navigator.language;
 countryLang = lang.substr(lang.length-2).toUpperCase();
 console.log(countryLang);
+setMerchBox("US", "United States","https://www.earthstripes.org/result/?country=US");  
 setMerchBox(countryLang,countryLang,generateURL(countryLang,null,null));
