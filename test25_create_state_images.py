@@ -9,7 +9,7 @@ states = ["DC","AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL",
 
 def main(chartType="bars"):
     for state in states:
-        dataFileName = "data/us-state-data-NOAA/" + state + ".csv"
+        dataFileName = "data/us-state-data-NOAA/2021/" + state + " - AnnTemp 1895-2021.csv"
         
         #https://stackoverflow.com/questions/1274405/how-to-create-new-folder #https://stackoverflow.com/a/1274465
         #newpath = 'G:\.shortcut-targets-by-id/1-78WtuBsUrKVKWF1NKxPcsrf1nvacux2/AP CSP VS Code Workspace/World Data Stuff/images/'+country

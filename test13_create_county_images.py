@@ -22,7 +22,7 @@ def main(chartType="bars"):
     for row in rowsList:
         #if row[0] == "County" or row[1]!="complete2":
         #    continue
-        dataFileName = "data/us-county-data-NOAA/" + getStateAbrev(row[0][-2:]) + "/"+row[0]+" - AnnTemp 1895-2020.csv"
+        dataFileName = "data/us-county-data-NOAA/2021/" + getStateAbrev(row[0][-2:]) + "/"+row[0]+" - AnnTemp 1895-2021.csv"
         
         #https://stackoverflow.com/questions/1274405/how-to-create-new-folder #https://stackoverflow.com/a/1274465
         newpath = 'results/'+chartType+'/US/'+row[0][-2:] 
@@ -31,7 +31,7 @@ def main(chartType="bars"):
 
         imagePath = 'results/'+chartType+'/US/'+row[0][-2:]+"/"+row[0]
         try:
-            print(chartType)
+            #print(chartType)
             test6.createChart(dataFileName,imagePath,chartType)
         except:
             print("----------error: "+dataFileName)
