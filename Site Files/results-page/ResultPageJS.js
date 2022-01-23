@@ -60,7 +60,7 @@ function getCountryFromCountryCode(countryCode){
 
 function breadcrumbs(){
     breadcrumbHTML = ""
-    breadcrumbSeparator = '<i class="seperatorIcon fa fa-chevron-right"></i>'
+    breadcrumbSeparator = '<i class="separatorIcon fa fa-chevron-right"></i>'
     breadcrumbs = [];
     breadcrumbsURLs = [];
     breadcrumbsSchema = ""
@@ -82,7 +82,7 @@ function breadcrumbs(){
     }
     if (state && county){
       breadcrumbs.push(state)
-      breadcrumbHTML += "<a href=https://www.earthstripes.org"+generateURL(country,state)+">" + state + "</a>" + breadcrumbSeperator;
+      breadcrumbHTML += "<a href=https://www.earthstripes.org"+generateURL(country,state)+">" + state + "</a>" + breadcrumbSeparator;
     }
     if (state){
       breadcrumbsSchema += `,{
@@ -94,7 +94,7 @@ function breadcrumbs(){
     }
     if (false){
         //breadcrumbs.push(county)
-        breadcrumbHTML += "<a href=https://www.earthstripes.org"+generateURL(country,state,county)+">" + county.replaceAll("+"," ") + "</a>" + breadcrumbSeperator;
+        breadcrumbHTML += "<a href=https://www.earthstripes.org"+generateURL(country,state,county)+">" + county.replaceAll("+"," ") + "</a>" + breadcrumbSeparator;
     }
     if (county){
       breadcrumbs.push(county.replaceAll("+"," "))
