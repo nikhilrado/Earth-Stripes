@@ -60,14 +60,14 @@ function getCountryFromCountryCode(countryCode){
 
 function breadcrumbs(){
     breadcrumbHTML = ""
-    breadcrumbSeperator = '<i class="seperatorIcon fa fa-chevron-right"></i>'
+    breadcrumbSeparator = '<i class="seperatorIcon fa fa-chevron-right"></i>'
     breadcrumbs = [];
     breadcrumbsURLs = [];
     breadcrumbsSchema = ""
     countryName = getCountryFromCountryCode(country);
     if (country && state){
         breadcrumbs.push(country)
-        breadcrumbHTML += "<a href=https://www.earthstripes.org"+generateURL(country)+">" + countryName + "</a>"+ breadcrumbSeperator;
+        breadcrumbHTML += "<a href=https://www.earthstripes.org"+generateURL(country)+">" + countryName + "</a>"+ breadcrumbSeparator;
     }
     if(country){
       breadcrumbsSchema += `    {
@@ -289,6 +289,10 @@ function getSenatorInfo(senatorData) {
       SenatorName1.innerText = json.officials[0].name;
       SenatorSubHeading1.innerText = "Senator, " + senator1json["stateName"] + ", " + senator1json["current term readable"] + " term";
       SenatorScore1.innerText = "Overall Score: " + senator1json["overallScore"]+"/100";
+      s1positionScore.textContent = senator1json["positionScore"];
+      s1voteScore.textContent = senator1json["voteScore"];
+      s1leadershipScore.textContent = senator1json["leadershipScore"];
+      s1carbonFreeScore.textContent = senator1json["carbonFreeScore"];
       SenatorSite1txt.innerText = json.officials[0]["urls"][0].replace('https://www.','').replace('/','');
       SenatorSite1.href = json.officials[0]["urls"][0];
 
@@ -296,6 +300,10 @@ function getSenatorInfo(senatorData) {
       SenatorName2.innerText = json.officials[1].name;
       SenatorSubHeading2.innerText = "Senator, " + senator2json["stateName"] + ", " + senator2json["current term readable"] + " term";
       SenatorScore2.innerText = "Overall Score: " + senator2json["overallScore"]+"/100";
+      s2positionScore.textContent = senator2json["positionScore"];
+      s2voteScore.textContent = senator2json["voteScore"];
+      s2leadershipScore.textContent = senator2json["leadershipScore"];
+      s2carbonFreeScore.textContent = senator2json["carbonFreeScore"];
       SenatorSite2txt.innerText = json.officials[1]["urls"][0].replace('https://www.','').replace('/','');
       SenatorSite2.href = json.officials[1]["urls"][0];
       
@@ -304,7 +312,7 @@ function getSenatorInfo(senatorData) {
       //SenatorImage2.src = json.officials[1].photoUrl  //photo from database
       SenatorImage2.src = bucketPrefix + "photos/compressed/senators/" + senatorData[json.officials[1].name]["image"];
       SenatorImage2.alt =  senator2json["stateName"] + " Senator " + json.officials[1].name
-
+      
       //SenatorImage1.src = json.officials[0].photoUrl //photo from database
       SenatorImage1.src = bucketPrefix + "photos/compressed/senators/" + senatorData[json.officials[0].name]["image"];
       SenatorImage1.alt =  senator1json["stateName"] + " Senator " + json.officials[0].name
