@@ -4,6 +4,8 @@
 #
 
 import csv
+import datetime
+import re
 import requests
 import os
 
@@ -26,7 +28,7 @@ def getTerritoryAbrev(state):
     return berklyTerritoriesAbbreviations[berklyTerritories.index(state)]
 
 def saveResource(resourceURL):
-    #use this to indivicually download a certain URL to fix error or test program
+    #use this to individually download a certain URL to fix error or test program
     #resourceURL = 'http://berkeleyearth.lbl.gov/auto/Regional/TAVG/Text/japan-TAVG-Trend.txt'
 
     with requests.Session() as s:
@@ -66,7 +68,12 @@ def saveResource(resourceURL):
 
     #extracts information about the base period of anomaly data
     basePeriod = " "
-    basePeriod = basePeriod.join(my_list[15])
+    try:
+        basePeriod = basePeriod.join(my_list[2])
+        x = re.search("[A-Za-z ]*(\d*)-[A-Za-z ]*(\d*)", basePeriod)
+        basePeriod = x.group(1) + "-" + x.group(2)
+    except:
+        basePeriod = ""
 
     #searches the raw file for the first and last year that data is provided
     startYear = "0000"
@@ -95,8 +102,19 @@ def saveResource(resourceURL):
     processedDataEndYear = processedData[-1][0] #gets the last year in the processed data list
     
     #formats the processed data just like the US NOAA data so we can create a chart (this is mostly filler data)
-    firstFewLines = [[getTerritoryAbrev(country), country, "Average Temperature", "Annual Average of Months"],["Units: Degrees C"],["Base Period: "+ basePeriod[2:]],["Data: "+str(processedDataStartYear)+"-"+str(processedDataEndYear)],["Date","Value","Anomaly"]]
-    processedData = firstFewLines + processedData
+    metaDataList = [["Location Type:", "country"],
+                    ["Location:", country],
+                    ["Base Period:", basePeriod],
+                    ["Start Year:", processedDataStartYear],
+                    ["End Year:", processedDataEndYear],
+                    [],
+                    ["Data Source:", "Berkeley Earth"],
+                    ["Data Source URL:", "http://berkeleyearth.org"],
+                    ["Data File URL:", resourceURL],
+                    ["Access Date (UTC):",  datetime.datetime.now()]]
+    my_list = metaDataList + my_list
+    firstFewLines = [["global-land", country, "Average Temperature", "Annual Average of Months"],["Units: Degrees C"],["Base Period: "+ basePeriod[2:]],["Data: "+str(processedDataStartYear)+"-"+str(processedDataEndYear)],["Date","Value","Anomaly"]]
+    processedData = metaDataList + processedData
 
     #Creates a new OS path if we ever want to change file path structure
     #https://stackoverflow.com/questions/1274405/how-to-create-new-folder #https://stackoverflow.com/a/1274465
@@ -105,16 +123,17 @@ def saveResource(resourceURL):
     #    os.makedirs(newpath)
 
     #saves raw file with country name
-    with open('World Data Stuff/data/raw/%s %s RAW - AnnTemp %s-%s.txt' % (getTerritoryAbrev(country),country,startYear,endYear), "w") as myfile:
+    with open('World Data Stuff/%s %s RAW - AnnTemp %s-%s.txt' % ("global-land",country,startYear,endYear), "w") as myfile:
         myfile.write(decoded_content)
 
     #saves processed file with country name
-    with open('World Data Stuff/data/processed/%s - AnnTemp %s-%s.csv' % (getTerritoryAbrev(country),processedDataStartYear,processedDataEndYear), 'w', newline="") as f:
+    with open('World Data Stuff/%s - AnnTemp %s-%s.csv' % ("global-land",processedDataStartYear,processedDataEndYear), 'w', newline="") as f:
         # using csv.writer method from CSV package
         write = csv.writer(f)
 
         write.writerows(processedData)
 
+saveResource("http://berkeleyearth.lbl.gov/auto/Regional/TAVG/Text/global-land-TAVG-Trend.txt")
 
 #creates the URLS needed to access the berkley data
 newData = ""
@@ -122,9 +141,10 @@ counter = 0
 for territory in berklyTerritories:
     
         counter += 1
-        resourceURL = "http://berkeleyearth.lbl.gov/auto/Regional/TAVG/Text/%s-TAVG-Trend.txt" % (territory.lower().replace(" ","-"))
+        #resourceURL = "http://berkeleyearth.lbl.gov/auto/Regional/TAVG/Text/%s-TAVG-Trend.txt" % (territory.lower().replace(" ","-"))
         #use for custom URL request
         #resourceURL = """http://berkeleyearth.lbl.gov/auto/Regional/TAVG/Text/c%F4te-d%27ivoire-TAVG-Trend.txt"""
+        resourceURL = "http://berkeleyearth.lbl.gov/auto/Global/Complete_TAVG_complete.txt"
         print("County: " + str(counter)  +  ' ' + resourceURL)
 
         newData = newData + resourceURL + "\n"
