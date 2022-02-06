@@ -7,16 +7,16 @@ from datetime import datetime
 
 now = datetime.now()
 #test25_create_state_images.main("labeled-stripes")
-#test25_create_state_images.main("labeled-bars")
+#test25_create_state_images.main("stripes-svg")
 #test13_create_county_images.main("stripes")
 #test13_create_county_images.main("labeled-stripes")
-#test13_create_county_images.main("labeled-bars-debug")
-test18_create_country_images.main("labeled-bars")
+#test13_create_county_images.main("stripes-svg")
+#test18_create_country_images.main("labeled-bars")
 # test18_create_country_images.main("stripes")
-# test18_create_country_images.main("labeled-stripes")
+#test18_create_country_images.main("stripes-svg")
 # test42_create_province_state_images.main("labeled-bars")
 # test42_create_province_state_images.main("stripes")
-# test42_create_province_state_images.main("labeled-stripes")
+#test42_create_province_state_images.main("stripes-svg")
 """
 test25_create_state_images.main("stripes")
 test18_create_country_images.main("stripes")
@@ -59,10 +59,10 @@ test42_create_province_state_images.main("label")
 #     for chartType in chartTypes:
 #         test6.createChart(dataFile,"results/"+chartType+"/US",chartType=chartType)
 
-def createChartsFromData(dataFile,locationID,chartTypes=["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card"]):
+def createChartsFromData(dataFile,locationID,chartTypes=["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","stripes-svg"]):
     for chartType in chartTypes:
-        test6.createChart(dataFile,"results/2020/"+chartType+"/"+locationID,chartType=chartType)
+        test6.createChart(dataFile,"results/"+chartType+"/"+locationID,chartType=chartType,save=True)
 
-createChartsFromData("data/USA.csv","US",['labeled-bars'])
+createChartsFromData("data/USA2021.csv","US")
 current_time = now.strftime("%H:%M:%S")
 print("Time Finished =", current_time)
