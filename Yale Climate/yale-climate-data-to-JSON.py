@@ -12,7 +12,7 @@ def getStateAbrev(state):
         return stateFullName[stateShortName.index(state)]
     return stateShortName[stateFullName.index(state)]
 
-f = open('Yale Climate\YCOM_2020_Data.csv', "r")
+f = open('data/yale-climate/YCOM_2020_Data.csv', "r")
 csv_f = csv.reader(f)
 
 rowsList = []
