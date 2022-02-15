@@ -1,3 +1,4 @@
+from venv import create
 import test13_create_county_images
 import test25_create_state_images
 import test18_create_country_images
@@ -16,7 +17,7 @@ now = datetime.now()
 #test18_create_country_images.main("stripes-svg")
 # test42_create_province_state_images.main("labeled-bars")
 # test42_create_province_state_images.main("stripes")
-#test42_create_province_state_images.main("stripes-svg")
+# test42_create_province_state_images.main("stripes-svg")
 """
 test25_create_state_images.main("stripes")
 test18_create_country_images.main("stripes")
@@ -62,6 +63,14 @@ test42_create_province_state_images.main("label")
 def createChartsFromData(dataFile,locationID,chartTypes=["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","stripes-svg"]):
     for chartType in chartTypes:
         test6.createChart(dataFile,"results/"+chartType+"/"+locationID,chartType=chartType,save=True)
+
+def create_charts_for_image_type(image_type: str):
+    test13_create_county_images.main(image_type)
+    test25_create_state_images.main(image_type)
+    test18_create_country_images.main(image_type)
+    test42_create_province_state_images.main(image_type)
+
+create_charts_for_image_type("light-labeled-bars")
 
 createChartsFromData("data/USA2021.csv","US")
 current_time = now.strftime("%H:%M:%S")
