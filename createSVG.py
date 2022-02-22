@@ -1,4 +1,8 @@
+# creates svg file from a list of colors and years
 def createSVG(colors, years, fileName, width=3780, height=2126):
+    if len(colors) != len(years):
+        print("Error: colors and years must be the same length " + fileName)
+        return
     svgHead = """<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<svg  viewBox="0 0 {} {}" xmlns="http://www.w3.org/2000/svg">\n""".format(width,height)
 
     barWidth = width/len(colors)
