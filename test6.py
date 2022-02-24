@@ -323,7 +323,7 @@ statesList = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","ID","IL","IN","
 #createChart("C:/Users/radon/Downloads/world2021.csv","test7.png",chartType="labeled-bars-debug",save=False,globe=True)
 #createChart("state-province data stuff/Acre - AnnTemp 1901-2020.csv","results/stripes/EG",chartType="stripes",save=False)
 #createChart("data/us-state-data-NOAA/CA.csv","results/stripes/US/CA",chartType="stripes",save=False)
-createChart("data/us-county-data-NOAA/2021/Florida/Miami-Dade County FL - AnnTemp 1895-2021.csv","results/stripes-svg/US/FL/Miami-Dade County FL",chartType="stripes-svg",save=True)
+#createChart("data/us-county-data-NOAA/2021/Florida/Miami-Dade County FL - AnnTemp 1895-2021.csv","results/stripes-svg/US/FL/Miami-Dade County FL",chartType="stripes-svg",save=True)
 #createChart("C:/Users/radon/Downloads/azt2.csv","test7.png",chartType="stripes-svg",save=True,globe=False)
 #createChart("data/country-data-berkley-earth/processed/AO - AnnTemp 1901-2020.csv","test7.png",chartType="labeled-bars-debug",save=False,globe=False)
 
