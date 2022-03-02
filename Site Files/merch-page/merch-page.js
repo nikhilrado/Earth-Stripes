@@ -48,6 +48,7 @@ function toggleChangeLocation(action=null){
     var element = document.getElementById("changeLocationBox");
     if(changeLocationBoxIsHidden && action!="hide"){
         element.style.display = "block";
+        document.getElementById('autocomplete').focus();
         changeLocationBoxIsHidden = false;
     }
     else{
