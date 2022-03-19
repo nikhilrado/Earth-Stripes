@@ -1,3 +1,19 @@
+//gets product data and inserts into page
+fetch("https://ortana-test.s3.us-east-2.amazonaws.com/price-info.json")
+.then(function (u) {return u.json();})
+.then(function (json) {
+  data_function(json); //calling and passing json to another function data_function
+});
+
+//inserts coupon banner info into banner and makes it visible
+function data_function(merchData){
+    if (merchData['coupon_code'] && merchData['coupon_code'] != ""){
+        var x = document.getElementById('sale-banner');
+        x.innerText = merchData['discount'];
+        x.style.visibility = "visible";
+        
+    }
+}
 //document.getElementById("autocomplete").focus();
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -105,9 +121,9 @@ function getZazzleDomain(countryCode){
 }
 
 function setMerchBox(imageID, locationName, locationURL){
-    var encodedLabeledStripesImageURL = encodeURI(bucketPrefix + "labeled-stripes/" + imageID + ".png?request=22012022");
+    var encodedLabeledStripesImageURL = encodeURI(bucketPrefix + "labeled-stripes/" + imageID + ".png?request=24012022");
     console.log(bucketPrefix + "labeled-stripes/" + imageID + ".png?request=zazzle");
-    var encodedStripesImageURL = encodeURI(bucketPrefix + "stripes/" + imageID + ".png?request=22012022");
+    var encodedStripesImageURL = encodeURI(bucketPrefix + "stripes/" + imageID + ".png?request=24012022");
     
     
     imageTrackingCode = "mp";

@@ -11,6 +11,10 @@
       display: none;
     }
 }
+#pp::after {
+  font-family: "fontAwesome";
+  content: " \f178""\00a0";
+}
 #changeLocationBox{
     display: none;
 }
@@ -18,13 +22,31 @@
     text-decoration: underline;
     text-decoration-color: #E5C687;
 }
+h1, #header, #header a {
+    font-family: Roboto, sans-serif;
+    font-weight: 600;
+    font-size: 28px;
+    color: #333333;
+    text-align: center;
+}
+#sale-banner {
+    visibility: hidden;
+    font-family: Roboto, sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: #b40000;
+    text-align: center;
+}
 input {
     height: 30px;
     padding-left: 10px;
     border-radius: 4px;
     border: 1px solid rgb(186, 178, 178);
-    box-shadow: 0px 0px 12px #E5C687;
-    background-color: #f1f1f1;
+    /*box-shadow: 0px 0px 12px #E5C687;
+    background-color: #f1f1f1;*/
+}
+.ProductImage{
+    border-radius: 5px !important;
 }
 .button {
 background-color: #FFFFFF;
