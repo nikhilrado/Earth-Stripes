@@ -1,10 +1,37 @@
 from venv import create
 import test13_create_county_images
-import test25_create_state_images
+#import test25_create_state_images
 import test18_create_country_images
 import test42_create_province_state_images
 import test6
 from datetime import datetime
+import os.path
+import csv
+
+class test25_create_state_images:
+
+    def main(chartType="bars"):
+        #TODO get Alaska and Hawaii to work
+        states = ["DC","AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"]
+        
+        for state in states:
+            dataFileName = "data/us-state-data-NOAA/2021/" + state + " - AnnTemp 1895-2021.csv"
+            
+            #https://stackoverflow.com/questions/1274405/how-to-create-new-folder #https://stackoverflow.com/a/1274465
+            #newpath = 'G:\.shortcut-targets-by-id/1-78WtuBsUrKVKWF1NKxPcsrf1nvacux2/AP CSP VS Code Workspace/World Data Stuff/images/'+country
+            #if not os.path.exists(newpath):
+            #    os.makedirs(newpath)
+
+            
+
+            imagePath = 'results/'+chartType+'/US/'+state
+            try:
+                test6.createChart(dataFileName,imagePath,chartType)
+            except:
+                print("----------error: "+dataFileName)
+                continue
+
+    #main("stripes")
 
 now = datetime.now()
 #test25_create_state_images.main("labeled-stripes")
@@ -18,8 +45,9 @@ now = datetime.now()
 # test42_create_province_state_images.main("labeled-bars")
 # test42_create_province_state_images.main("stripes")
 # test42_create_province_state_images.main("stripes-svg")
-"""
+
 test25_create_state_images.main("stripes")
+"""
 test18_create_country_images.main("stripes")
 test42_create_province_state_images.main("stripes")
 
@@ -70,8 +98,8 @@ def create_charts_for_image_type(image_type: str):
     test18_create_country_images.main(image_type)
     test42_create_province_state_images.main(image_type)
 
-create_charts_for_image_type("light-labeled-bars")
+#create_charts_for_image_type("stripes-svg")
 
-createChartsFromData("data/USA2021.csv","US")
+#createChartsFromData("data/USA2021.csv","US")
 current_time = now.strftime("%H:%M:%S")
 print("Time Finished =", current_time)
