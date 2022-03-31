@@ -1,12 +1,12 @@
-//gets product data and inserts into page
+// gets product data and inserts into page
 fetch("https://ortana-test.s3.us-east-2.amazonaws.com/price-info.json")
 .then(function (u) {return u.json();})
 .then(function (json) {
-  data_function(json); //calling and passing json to another function data_function
+  processPriceInfo(json); // calling and passing json to another function processPriceInfo
 });
 
-//inserts coupon banner info into banner and makes it visible
-function data_function(merchData){
+// inserts coupon banner info into banner and makes it visible
+function processPriceInfo(merchData){
     if (merchData['coupon_code'] && merchData['coupon_code'] != ""){
         var x = document.getElementById('sale-banner');
         x.innerText = merchData['discount'];
@@ -14,35 +14,35 @@ function data_function(merchData){
         
     }
 }
-//document.getElementById("autocomplete").focus();
+// document.getElementById("autocomplete").focus();
 
-const urlParams = new URLSearchParams(window.location.search);
-var twclid = urlParams.get('twclid');
+const URL_PARAMS = new URLSearchParams(window.location.search);
+var twclid = URL_PARAMS.get('twclid');
 if (!twclid){
     twclid = getCookie("twclid");
 }
 console.log("twclid: " + twclid);
 
-var fbc = urlParams.get('fbc');
+var fbc = URL_PARAMS.get('fbc');
 if (!fbc){
     fbc = getCookie("_fbc");
 }
 console.log("fbc: " + fbc);
 
-var fbp = urlParams.get('fbp');
+var fbp = URL_PARAMS.get('fbp');
 if (!fbp){
     fbp = getCookie("_fbp");
 }
 console.log("fbp: " + fbp);
 
-var gid = urlParams.get('gid');
+var gid = URL_PARAMS.get('gid');
 if (!gid){
     gid = getCookie("_gid");
 }
 console.log("gid: " + gid);
 
 
-//taken from https://www.w3schools.com/js/js_cookies.asp
+// taken from https://www.w3schools.com/js/js_cookies.asp
 function getCookie(cname) {
   let name = cname + "=";
   let decodedCookie = decodeURIComponent(document.cookie);
@@ -85,11 +85,11 @@ function generateURL(countryCode = null, stateCode = null, countyName = null) {
     return locationAutomaticURL;
 }
 
-const countriesWithStates = ['AU','BR','CA','CN','IN','RU','US']
+const COUNTRIES_WITH_STATES = ['AU','BR','CA','CN','IN','RU','US']
 function generateImageID (countryCode=null, stateCode=null, countyName=null){
     var ImageID = countryCode
 
-    if (countriesWithStates.includes(countryCode)) {
+    if (COUNTRIES_WITH_STATES.includes(countryCode)) {
       if (stateCode != false && stateCode != null) {
         ImageID = ImageID + "/" + stateCode;
       }
@@ -106,14 +106,14 @@ function getCountryFromCountryCode(countryCode){
 }
 
 bucketPrefix = "https://earthstripes.s3.us-east-2.amazonaws.com/v3/";
-const productNames = ["Cloth Mask","Mug","Tie","Stickers", "Magnet","Badge (Pin)", "T-Shirt", "Socks"];
-const productIDs = ['256670743725195335','168540946485519042','151119561160107608','217917661479101292','147753984968275362', '145354997245092652', '235484093576644423','256547457460896288'];
+const PRODUCT_NAMES = ["Cloth Mask","Mug","Tie","Stickers", "Magnet","Badge (Pin)", "T-Shirt", "Socks"];
+const PRODUCT_IDS = ['256670743725195335','168540946485519042','151119561160107608','217917661479101292','147753984968275362', '145354997245092652', '235484093576644423','256547457460896288'];
 
-const zazzleInternationalCountries = ["us","ca","gb","de","es","fr","pt","se","nl","at","ch","be","br","au","nz","jp"];
-const zazzleInternationalDomains = [".com",".ca",".co.uk",".de",".es",".fr",".pt",".se",".nl",".at",".ch",".be",".com.br",".com.au",".co.nz",".co.jp"];
+const ZAZZLE_INT_COUNTRIES = ["us","ca","gb","de","es","fr","pt","se","nl","at","ch","be","br","au","nz","jp"];
+const ZAZZLE_INT_DOMAINS = [".com",".ca",".co.uk",".de",".es",".fr",".pt",".se",".nl",".at",".ch",".be",".com.br",".com.au",".co.nz",".co.jp"];
 function getZazzleDomain(countryCode){
     countryCode = countryCode.toLowerCase();
-    zazzleDomain = zazzleInternationalDomains[zazzleInternationalCountries.indexOf(countryCode)];
+    zazzleDomain = ZAZZLE_INT_DOMAINS[ZAZZLE_INT_COUNTRIES.indexOf(countryCode)];
     if (zazzleDomain == undefined){
         zazzleDomain = ".com";
     }
@@ -144,20 +144,20 @@ function setMerchBox(imageID, locationName, locationURL){
     }
     imageTrackingCode.replaceAll('.','_');
 
-    merchLabel = "&t_location_txt=" + encodeURIComponent(locationName);// + " " + startYear + "-" + endYear);
+    merchLabel = "&t_location_txt=" + encodeURIComponent(locationName);//  + " " + startYear + "-" + endYear);
     customMerchLink = "https://www.zazzle" + getZazzleDomain(countryLang) + "/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&t_labeledstripes_iid=" + encodedLabeledStripesImageURL + "&tc=" + imageTrackingCode + "&ic=" + imageID.replace(/[^a-zA-z]/g,'_') + "&t_stripes_iid=" + encodedStripesImageURL + merchLabel;
-    //testmerchlink.href = customMerchLink;
+    // testmerchlink.href = customMerchLink;
     console.log(customMerchLink);
     MerchButton.href = customMerchLink;
     console.log(imageID.replace(/[^a-zA-z]/g,'_'));
     
-    for (i=1; i<=productNames.length; i++){
+    for (i=1; i<=PRODUCT_NAMES.length; i++){
         element = document.getElementById('ProductImage' + i);
-        var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+productIDs[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedStripesImageURL + '&t_labeledstripes_url='+encodedLabeledStripesImageURL;
+        var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+PRODUCT_IDS[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedStripesImageURL + '&t_labeledstripes_url='+encodedLabeledStripesImageURL;
         element.src = imageID2;
-        element.alt = "Warming Stripes " + productNames[i-1];
+        element.alt = "Warming Stripes " + PRODUCT_NAMES[i-1];
         element = document.getElementById('ProductName' + i);
-        element.innerText = productNames[i-1];
+        element.innerText = PRODUCT_NAMES[i-1];
         element = document.getElementById('Product'+i+"Link");
         element.href = customMerchLink;
         element = document.getElementById('Product'+i+'Link2');
@@ -176,21 +176,21 @@ function setMerchBox(imageID, locationName, locationURL){
     myArray= imageID.split("/");
     locationName = myArray[myArray.length - 1].replaceAll("+"," ")
     countryCode = myArray[0]
-    if (countryCode == locationName && locationName.length == 2){ //if it is just a country code, replace with name
+    if (countryCode == locationName && locationName.length == 2){ // if it is just a country code, replace with name
         locationName = getCountryFromCountryCode(locationName);
     }
     yeet.textContent = locationName;
     locationNameLink.href = locationURL;
     toggleChangeLocation(action="hide");
     
-    window.scrollTo(0,0); //scrolls to top of page to avoid layout shifts
+    window.scrollTo(0,0); // scrolls to top of page to avoid layout shifts
 } 
 
-//custom function to get Redirect URL
+// custom function to get Redirect URL
 function getRedirectURLMapbox(jsonPlaceData,redirectNow=false) {
     placeName = jsonPlaceData.place_name
     
-    //gets the country code of location
+    // gets the country code of location
     if (jsonPlaceData.place_type[0]=="country"){
         countryCode = jsonPlaceData.properties.short_code
         countryName = jsonPlaceData.text
@@ -201,7 +201,7 @@ function getRedirectURLMapbox(jsonPlaceData,redirectNow=false) {
     }
     countryCode = countryCode.toUpperCase()
     
-    //get stateCode
+    // get stateCode
     if (jsonPlaceData.place_type[0]=="region"){
         stateCode = jsonPlaceData.properties.short_code
         stateName = jsonPlaceData.text
@@ -219,10 +219,9 @@ function getRedirectURLMapbox(jsonPlaceData,redirectNow=false) {
         }
     }
     
-    //get county
+    // get county
     if (jsonPlaceData.place_type[0]=="district"){
         countyName = jsonPlaceData.text
-        console.log("rancty")
     }
     else{
         try{
@@ -238,7 +237,7 @@ function getRedirectURLMapbox(jsonPlaceData,redirectNow=false) {
     generateURL(countryCode,stateCode,countyName);
     setMerchBox(generateImageID(countryCode,stateCode,countyName));
     if (redirectNow){
-        //window.location.href = locationAutomaticURL
+        // window.location.href = locationAutomaticURL
     }
 
     x.innerHTML = lowestLocationName
@@ -246,11 +245,11 @@ function getRedirectURLMapbox(jsonPlaceData,redirectNow=false) {
 }
 
 function getLowestLocationName(countryCode,stateCode,countyName){
-    //get lowest location name which will be used as the label for the location btn
+    // get lowest location name which will be used as the label for the location btn
     lowestLocationName = countryName
-    //tried to insert this stuff next to if statement to run when country is just US
+    // tried to insert this stuff next to if statement to run when country is just US
     if (countryCode != "US"){
-        lowestLocationName = countryName //sets it to country name if not US
+        lowestLocationName = countryName // sets it to country name if not US
     }
     else{
         if (stateCode != false){lowestLocationName=stateName}
@@ -259,14 +258,14 @@ function getLowestLocationName(countryCode,stateCode,countyName){
     return lowestLocationName;
 }
 console.log("yeeettr")
-//geolocation test stuff
-var locationGranted; //declares global variable
-var locationAutomaticURL; //declares the automatic 
-var lowestLocationName; //
+// geolocation test stuff
+var locationGranted; // declares global variable
+var locationAutomaticURL; // declares the automatic 
+var lowestLocationName; // 
 function getLocationForButton(){
     getLocation();
     if (locationGranted){
-        //window.location.href = locationAutomaticURL
+        // window.location.href = locationAutomaticURL
         setMerchBox(generateImageID(countryCode,stateCode,countyName));
         console.log(locationAutomaticURL)
         console.log("yo")
@@ -278,10 +277,8 @@ function getLocationForButton(){
 
 function handlePermission() {
     navigator.permissions.query({name:'geolocation'}).then(function(result) {
-        console.log("yehaw")
         console.log(result.state)
         if (result.state == 'granted') {
-            console.log("yehaw")
             locationGranted = true;
             getLocation();
         }
@@ -290,7 +287,7 @@ function handlePermission() {
         }
     });
 }
-//handlePermission()
+// handlePermission()
       
 var x = document.getElementById("b5");
 function getLocation() {
@@ -302,16 +299,16 @@ function getLocation() {
 }
 
 function showPosition(position) {
-    //x.innerHTML = lowestLocationName//"Latitude: " + position.coords.latitude +
+    // x.innerHTML = lowestLocationName// "Latitude: " + position.coords.latitude +
     "<br>Longitude: " + position.coords.longitude;
     console.log("API called");
     fetch("https://api.mapbox.com/geocoding/v5/mapbox.places/"+position.coords.longitude+","+position.coords.latitude+".json?access_token=pk.eyJ1Ijoib3J0YW5hdGVjaCIsImEiOiJja3ZmZm1ycmYxeW1oMm5zMXV2b2FxbzRkIn0.GoeUfW-BSSY0K2xBpp_xdg").then(
         function(u){ return u.json();}).then(function(json){
-            process_mapbox_geocode(json); //calling and passing json to another function process_mapbox_geocode
+            process_mapbox_geocode(json); // calling and passing json to another function process_mapbox_geocode
         }
     );
 
-    //another functions
+    // another functions
     function process_mapbox_geocode(data){
         document.cookie = "locationAutomaticURL=" + getRedirectURLMapbox(data.features[0]);
         locationGranted = true;
@@ -331,7 +328,7 @@ google.maps.event.addListener(autocomplete, 'place_changed', function(){
     var stateCode = getCountry(place.address_components,"administrative_area_level_1");
     var countryCode = getCountry(place.address_components,"country");
 
-    // extract country short name (e.g. GB for Great Britain) from google geocode API result
+    //  extract country short name (e.g. GB for Great Britain) from google geocode API result
     function getCountry(addrComponents,locality) {
         for (var i = 0; i < addrComponents.length; i++) {
             if (addrComponents[i].types[0] == locality) {
@@ -346,22 +343,21 @@ google.maps.event.addListener(autocomplete, 'place_changed', function(){
         return false;
     }
 
-    console.log(getCountry(place.address_components,"country"));//gets country
-    console.log(getCountry(place.address_components,"administrative_area_level_1"));//gets state
-    console.log(getCountry(place.address_components,"administrative_area_level_2"));//gets county
-    console.log(getCountry(place.address_components,"locality"));//gets locality
+    console.log(getCountry(place.address_components,"country"));// gets country
+    console.log(getCountry(place.address_components,"administrative_area_level_1"));// gets state
+    console.log(getCountry(place.address_components,"administrative_area_level_2"));// gets county
+    console.log(getCountry(place.address_components,"locality"));// gets locality
 
-    //window.location.href = generateURL(countryCode,stateCode,countyName);
+    // window.location.href = generateURL(countryCode,stateCode,countyName);
     imageID = generateImageID(countryCode,stateCode,countyName);
     console.log(imageID);
     setMerchBox(imageID, countryCode, generateURL(countryCode,stateCode,countyName));
 }) 
 
 function zazzleClicked(element) {
-    console.log("bbbbbbbbbbbbbbbb");
     if (element.includes("Product")) {
         let listId = element.charAt(element.length-1)-1
-        element = productNames[listId] + " " + productIDs[listId];
+        element = PRODUCT_NAMES[listId] + " " + PRODUCT_IDS[listId];
     }
     console.log(element)
     gtag('event', "Zazzle Link Clicked", {
@@ -374,9 +370,8 @@ function zazzleClicked(element) {
     
 };
 
-console.log("yeer");
 const lang = navigator.language;
-countryLang = lang.substr(lang.length-2).toUpperCase();
+countryLang = lang.slice(lang.length-2).toUpperCase();
 console.log(countryLang);
 setMerchBox("US", "United States","https://www.earthstripes.org/result/?country=US");  
 setMerchBox(countryLang,countryLang,generateURL(countryLang,null,null));
