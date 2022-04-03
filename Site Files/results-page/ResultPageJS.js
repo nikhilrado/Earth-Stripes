@@ -1,12 +1,12 @@
 const bucketPrefix = "https://earthstripes.s3.us-east-2.amazonaws.com/v3/"
 
-//data acquired from query params that doesn't require json file
+// data acquired from query params that doesn't require json file
 const canonicalUrl = document.querySelector("link[rel='canonical']").getAttribute("href");
 
 const urlParams = new URLSearchParams(window.location.search);
-var state = urlParams.get('state');
-var county = urlParams.get('county');
-var country = urlParams.get('country');
+var state = URL_PARAMS.get('state');
+var county = URL_PARAMS.get('county');
+var country = URL_PARAMS.get('country');
 
 const countriesWithStates = ['AU','BR','CA','CN','IN','RU','US']
 if (countriesWithStates.includes(country)){
@@ -137,7 +137,7 @@ function breadcrumbs(){
 }
 breadcrumbs();
 
-//this operates the buttons that switch from Stripes to Bars
+// this operates the buttons that switch from Stripes to Bars
 function switchStripes(switchTo) {
   if (switchTo == 'stripes'){
     document.getElementById('image1').src = bucketPrefix + "stripes/" + imageID + '.png';
@@ -147,15 +147,15 @@ function switchStripes(switchTo) {
   }
 }
 
-//fetches the smallest location json file
+// fetches the smallest location json file
 var data = "";
 fetch(bucketPrefix + "json/" + imageID + ".json")
 .then(function (u) {return u.json();})
 .then(function (json) {
-  data_function(json); //calling and passing json to another function data_function
+  data_function(json); // calling and passing json to another function data_function
 });
 
-//deals with local impacts
+// deals with local impacts
 function setLocalImpacts(data){
     if (country == "US" && typeof state == "string") {
         function combineParagraphs(index) {
@@ -167,7 +167,7 @@ function setLocalImpacts(data){
             return text;
         }
         
-        //set the names of all of the stuff
+        // set the names of all of the stuff
         for (k = 0; k < data.length; k++) {
             element = document.getElementById("ImpactText" + (k + 1));
             element.innerText = combineParagraphs(k);
@@ -176,7 +176,7 @@ function setLocalImpacts(data){
             element = document.getElementById("ImpactPhoto" + (k + 1));
         }
         
-        //loop through each impact, if there isn't a photo, hide it, if there is, retrieve it and insert alt text
+        // loop through each impact, if there isn't a photo, hide it, if there is, retrieve it and insert alt text
         for (k = 0; k < data.length; k++) {
         element = document.getElementById("ImpactPhoto" + (k + 1));
                 console.log(data[k]["img"]["file"])
@@ -201,7 +201,7 @@ function setLocalImpacts(data){
             column.style.width = "100%";
         }
         
-        //if there isn't a caption hide it, if there is fill in the data and credit
+        // if there isn't a caption hide it, if there is fill in the data and credit
         element = document.getElementById("ImpactPhotoCaption" + (k + 1));
         if (data[k]["img"]["caption"] == null ){
                 element.style.display = "none";
@@ -212,7 +212,7 @@ function setLocalImpacts(data){
         
         }
         
-        //hide empty local impact data boxes
+        // hide empty local impact data boxes
         console.log(8 - data.length);
         for (k = 0; k < 8 - data.length; k++) {
             var box = document.getElementById("LocalImpactBox" + (8 - k));
@@ -224,7 +224,7 @@ function setLocalImpacts(data){
     }
 }
 
-//sets the bars for yale data_function
+// sets the bars for yale data_function
 function setYaleBars() {
     YaleSubHeader.innerText = "How people in " + data["YaleClimateOpinionData2020"]["data"]["GeoName"] + " view climate change";
     datas = ["happening", "personal","harmUS", "congress","fundrenewables","teachGW"];
@@ -272,7 +272,7 @@ function setMerchBox(){
 }
 
 function getSenatorInfo(senatorData) { 
-  //fetch function
+  // fetch civic info function
   fetch(
     "https://www.googleapis.com/civicinfo/v2/representatives?key=AIzaSyB6RdsMva-gOY7FNxgrrHsBgskpF_a8njc&levels=country&roles=legislatorUpperBody&address=" +
       state +
@@ -282,7 +282,7 @@ function getSenatorInfo(senatorData) {
       return u.json();
     })
     .then(function (json) {
-      //data_function(json); //calling and passing json to another function data_function
+      //data_function(json); // calling and passing json to another function data_function
       console.log(json);
       
       senator1json = senatorData[json.officials[0].name]
@@ -307,8 +307,8 @@ function getSenatorInfo(senatorData) {
       SenatorSite2txt.innerText = json.officials[1]["urls"][0].replace('https://www.','').replace('/','');
       SenatorSite2.href = json.officials[1]["urls"][0];
       
-    console.log(JSON.stringify(json));
-      //runs the images after in case there are any issues
+      console.log(JSON.stringify(json));
+      // runs the images after in case there are any issues
       //SenatorImage2.src = json.officials[1].photoUrl  //photo from database
       SenatorImage2.src = bucketPrefix + "photos/compressed/senators/" + senatorData[json.officials[1].name]["image"];
       SenatorImage2.alt =  senator2json["stateName"] + " Senator " + json.officials[1].name
@@ -480,10 +480,10 @@ function setRelatedLocations(relLocationsJSON){
     }
 }
 
-//main function that loads JSON data
+// main function that loads JSON data
 function data_function(jsonData) {
 console.log(jsonData)
-//if there is a county (hence in US) and there are no local impacts data for the county, fetch the state data
+// if there is a county (hence in US) and there are no local impacts data for the county, fetch the state data
 if (typeof county == "string" && jsonData["local impacts"] == null){
     fetch(bucketPrefix + "json/" + country + "/" + state + ".json")
     .then(function (u) {return u.json();})
@@ -517,9 +517,9 @@ description1 = "These warming stripes show the annual temperature change in " + 
 img1description.innerText = description1;
 image1.alt = "Warming Stripes for " + locationName + " from " + startYear + "-" + endYear;
 
-//yale information
+// sets yale information
 try{
-setYaleBars();
+    setYaleBars();
 }catch (error) {
     console.warn("No Yale Climate Opinion Data Found");
     YaleOpinion.style.display = "none";
@@ -535,21 +535,21 @@ if (data["energy consumption"] == null){
     energyData = data["energy consumption"];
 }
 
-//if recommended/related locations exists in JSON, set them, else hide box
+// if recommended/related locations exists in JSON, set them, else hide box
 if (data['metadata']['recommended locations']){
     setRelatedLocations(data['metadata']['recommended locations']);
 }else {
     relatedLocationsBox.style.display = "none";
 }
 
-//this needs to be here cause it needs to get locationName from JSON
+// this needs to be here cause it needs to get locationName from JSON
 tweetContent = "Warming Stripes from @earthstripes show how " + locationName + " is warming. Take a look at your region: " + encodeURI(canonicalUrl);
 facebookShareContent = "Warming Stripes from @earthstripes show how " + locationName + " is warming. Take a look at your region: "
 
 }
 
-//social media stuff
-//call functions when buttons clicked
+// social media stuff
+// call functions when buttons clicked
 document.getElementById('twitter-share-button1').onclick = function() {
 gtag('event', "Share Intent", {
   'event_category': "Social",
@@ -566,7 +566,7 @@ window.open("https://www.facebook.com/dialog/share?app_id=604427890576897&displa
 
 }
 
-//load twitter SDK
+// load twitter SDK
 window.twttr = (function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0],
       t = window.twttr || {};
@@ -609,9 +609,9 @@ function zazzleClicked(element) {
     }
     console.log(element)
     gtag('event', "Zazzle Link Clicked", {
-  'event_category': "commerce",
-  'event_label': element,
-  'value': "5"
-});
+    'event_category': "commerce",
+    'event_label': element,
+    'value': "5"
+    });
 
 };
