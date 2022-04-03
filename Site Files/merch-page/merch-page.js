@@ -370,8 +370,20 @@ function zazzleClicked(element) {
     
 };
 
-const lang = navigator.language;
-countryLang = lang.slice(lang.length-2).toUpperCase();
+const LANG = navigator.language;
+countryLang = LANG.slice(LANG.length-2).toUpperCase();
 console.log(countryLang);
-setMerchBox("US", "United States","https://www.earthstripes.org/result/?country=US");  
-setMerchBox(countryLang,countryLang,generateURL(countryLang,null,null));
+
+// gets url parameters from url
+var state = URL_PARAMS.get('state');
+var county = URL_PARAMS.get('county');
+var country = URL_PARAMS.get('country');
+
+// if url parameters are present, set merch box to those values
+if (country || (state && country) || (county && state && country)) {
+    setMerchBox(generateImageID(country,state,county), county ? county : state ? state : country, generateURL(country,state,county));
+} else if (countryLang) {
+    setMerchBox(countryLang,countryLang,generateURL(countryLang,null,null));
+} else {
+    setMerchBox("US", "United States","https://www.earthstripes.org/result/?country=US");
+}
