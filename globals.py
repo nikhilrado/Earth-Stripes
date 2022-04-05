@@ -32,3 +32,16 @@ def getAllFilesInDir(root):
         for name in files:
             fileList.append(os.path.join(path, name))
     return fileList
+
+# returns url path of result page from location id
+def get_result_page(location_id):
+    location_id = location_id.split("/")
+    print(location_id)
+
+    url = "/result/"
+
+    url += "?country=" + location_id[0] if location_id[0] else ""
+    url += "&state=" + location_id[1] if location_id[1] else ""
+    url += "&county=" + location_id[2] if location_id[2] else ""
+
+    return url
