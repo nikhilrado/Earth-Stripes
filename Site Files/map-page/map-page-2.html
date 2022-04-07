@@ -17,6 +17,9 @@
 			width: 100%;
 			height: 100%;
 		}
+		#loadingText {
+		    z-index: 10000;
+		}
 	</style>
 
 	<style>#map { width: 100%; height: 700px; background-color: #C9D2D3;}
@@ -32,9 +35,9 @@
 <script src="../Leaflet.Graticule.js"></script>
 
 <script type="text/javascript">
-    const PREDICTED_TOUCHSCREEN = false;
-    if ("ontouchstart" in document.documentElement){
-        const PREDICTED_TOUCHSCREEN = true;
+    var PREDICTED_TOUCHSCREEN = false;
+    if ("ontouchstart" in window){
+        PREDICTED_TOUCHSCREEN = true;
     } //true if we think is touchscreen for some reason assigning to boolean makes us lose live changes in editor
  
     //condition ? exprIfTrue : exprIfFalse
@@ -74,7 +77,7 @@
 	        countryCode == "US";
 	    }
 		this._div.innerHTML = '<h4>Earth Stripes Map</h4>' +  (props ?
-			'<b>' + props.NAME + '<br><a target="_blank" href=' + link + '>View Page</a><br><img width="200px" src="https://earthstripes.s3.us-east-2.amazonaws.com/v3/stripes/'+countryCode+'.png" alt="Warming Stripes">'
+			'<b>' + props.NAME + '<br><a target="_blank" href=' + link + '>View Page<br><img width="200px" src="https://earthstripes.s3.us-east-2.amazonaws.com/v3/stripes/'+countryCode+'.png" alt="Warming Stripes"></a>'
 			: onLoadText);
 	};
 
