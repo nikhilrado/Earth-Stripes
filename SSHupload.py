@@ -1,5 +1,5 @@
 import paramiko, sys
-from secrets import SSH as SSHkeys
+from es_secrets import SSH as SSHkeys
 
 host = SSHkeys.host
 port = SSHkeys.port
