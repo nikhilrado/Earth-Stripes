@@ -16,6 +16,7 @@ function processPriceInfo(merchData){
 }
 // document.getElementById("autocomplete").focus();
 
+const ES_ID = Math.round(Math.random()*10000000)
 const URL_PARAMS = new URLSearchParams(window.location.search);
 var twclid = URL_PARAMS.get('twclid');
 if (!twclid){
@@ -139,6 +140,7 @@ function setMerchBox(imageID, locationName, locationURL){
     if(gid){
         imageTrackingCode += "_gid"+gid;
     }
+    imageTrackingCode = ES_ID + "_" + imageTrackingCode;
     if (imageTrackingCode.length > 99){
         imageTrackingCode = imageTrackingCode.substr(0,98)
     }
@@ -369,6 +371,36 @@ function zazzleClicked(element) {
     fbq('track', 'Purchase', {currency: "USD", value: 30.00});
     
 };
+
+$.get('https://www.cloudflare.com/cdn-cgi/trace', function(data) {
+  // Convert key-value pairs to JSON
+  // https://stackoverflow.com/a/39284735/452587
+  data = data.trim().split('\n').reduce(function(obj, pair) {
+    pair = pair.split('=');
+    return obj[pair[0]] = pair[1], obj;
+  }, {});
+  sendESAnalytics(data.ip);
+});
+
+function sendESAnalytics(ip){
+    var URL = 'https://u4ymsuodri7ngwgi5n4tjprgcq0qoeic.lambda-url.us-east-2.on.aws/'
+    if (getCookie('_ga') != ""){
+        URL += '?ga_id=' + getCookie('_ga') + '_' + ES_ID
+    } else {
+        URL += '?ga_id=' + encodeURIComponent('_' + ES_ID)
+    }
+    URL += '&user_agent=' + encodeURIComponent(navigator.userAgent)
+    URL += '&ip=' + ip
+    console.log("ip: " + ip)
+    URL += '&fbp' + fbp
+    URL += '&twclid=' + twclid
+
+    fetch(URL)
+    .then(function (u) {return u.json();})
+    .then(function (json) {
+    console.log(json); // calling and passing json to another function processPriceInfo
+    });
+}
 
 const LANG = navigator.language;
 countryLang = LANG.slice(LANG.length-2).toUpperCase();
