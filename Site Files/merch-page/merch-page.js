@@ -16,7 +16,8 @@ function processPriceInfo(merchData){
 }
 // document.getElementById("autocomplete").focus();
 
-const ES_ID = Math.round(Math.random()*10000000)
+// generates random 8 digit padded number as String
+const ES_ID = String(Math.round(Math.random()*10**8)).padStart(8, '0')
 const URL_PARAMS = new URLSearchParams(window.location.search);
 var twclid = URL_PARAMS.get('twclid');
 if (!twclid){
@@ -394,6 +395,7 @@ function sendESAnalytics(ip){
     console.log("ip: " + ip)
     URL += '&fbp' + fbp
     URL += '&twclid=' + twclid
+    URL += '&timestamp_unix=' + new Date().getTime()
 
     fetch(URL)
     .then(function (u) {return u.json();})
