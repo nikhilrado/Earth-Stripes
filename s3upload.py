@@ -150,21 +150,25 @@ def test():
     #uploadNewChanges(directory="results/json/US/",smartUpload=False)
     #uploadNewChanges(directory="results/",smartUpload=False)
     #uploadNewChanges(directory="photos/local-impact-photos/",smartUpload=False)
-    uploadNewChanges(directory="results/stripes-svg/",smartUpload=False)
+    #uploadNewChanges(directory="../Earth Stripes Codebase/results/light-labeled-bars",smartUpload=False)
     #uploadFile("Site Files/map-page/countries2.js", uploadFilePath="map-stuff.js")
     #uploadFile("Map Stuff/mapData.csv",uploadFilePath="mapData2.csv")
     #uploadFile("test5.svg",uploadFilePath="test5.svg")
     #uploadFile("results/json/US.json",uploadFilePath="v3/json/US.json")
-    uploadAll("../Earth Stripes Codebase/results/stripes/US.png")
+    #uploadAll("../Earth Stripes Codebase/results/stripes/US.png")
+    uploadAll("results/stripes/location/earth.png")
+
     pass
 
 # method to upload all of the image/file types to s3 by inputting the stripes file
-def uploadAll(file,chartTypes=["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","stripes-svg"]):
+def uploadAll(file,chartTypes=["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","light-labeled-bars","stripes-svg","json"]):
     for chartType in chartTypes:
-        if not "svg" in chartType:
-            uploadFile(file.replace("/stripes/","/"+chartType+"/"),uploadFilePath="v3/"+file.replace("/stripes/","/"+chartType+"/").replace("results/",""))
+        if "svg" in chartType:
+            uploadFile(file.replace("/stripes/","/"+chartType+"/").replace(".png",".svg"),uploadFilePath="v3/"+file.replace("/stripes/","/"+chartType+"/").replace("results/","").replace(".png",".svg"))
+        elif "json" in chartType:
+            uploadFile(file.replace("/stripes/","/"+chartType+"/").replace(".png",".json"),uploadFilePath="v3/"+file.replace("/stripes/","/"+chartType+"/").replace("results/","").replace(".png",".json"))
         else:
-            uploadFile("results/"+chartType+".svg",uploadFilePath=chartType+".svg")
+            uploadFile(file.replace("/stripes/","/"+chartType+"/"),uploadFilePath="v3/"+file.replace("/stripes/","/"+chartType+"/").replace("results/",""))
 
 # this is the main function that will be called when the script is run
 # if the file is imported, it will not run the test function

@@ -79,6 +79,15 @@ class create_province_state_images:
 
             #TODO: figure out what to do with countries that have data only to 2015
 
+class create_earth_images:
+
+    def main(chartType="light-labeled-bars"):
+        try:
+            test6.createChart("data/hadcrut_dataset.csv","results/" + chartType + "/location/earth",chartType,globe=True)
+        except:
+            print("----------error: data/hadcrut_dataset.csv")
+
+create_earth_images.main()
 now = datetime.now()
 #test25_create_state_images.main("labeled-stripes")
 #test25_create_state_images.main("stripes-svg")
@@ -139,13 +148,14 @@ def createChartsFromData(dataFile,locationID,chartTypes=["label","labeled-bars",
         test6.createChart(dataFile,"results/"+chartType+"/"+locationID,chartType=chartType,save=True)
 
 def create_charts_for_image_type(image_type: str):
-    create_county_images.main(image_type)
     create_state_images.main(image_type)
     create_country_images.main(image_type)
     create_province_state_images.main(image_type)
+    create_county_images.main(image_type)
+    create_earth_images.main(image_type)
 
-create_charts_for_image_type("stripes-svg")
-
+#create_charts_for_image_type("light-labeled-bars")
+#createChartsFromData("data/hadcrut_dataset.csv","location/earth")
 #createChartsFromData("data/USA2021.csv","US")
 current_time = now.strftime("%H:%M:%S")
 print("Time Finished =", current_time)

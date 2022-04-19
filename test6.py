@@ -16,7 +16,12 @@ temp2021 = []
 
 # main function that takes in a data file and creates a chart.
 # parameter globe sets the color scale to the +0.75C to -0.75C scale when true
-def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2126,globe=False): 
+def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2126,globe=False):
+    # allows us to make all white labeled bars larger without altering other code
+    if chartType=='light-labeled-bars' and width == 3780:
+        createChart(csvPath,imagePath,chartType,save=save,width=int(width*1.5),globe=globe)
+        return
+
     global counter, color2020, color2021, temp2020, temp2021
     colors = []
 
@@ -185,6 +190,8 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
             
             elif "bars" in chartType:
                 STRETCH = 900  # how tall/short the bars should be
+                if globe:
+                    STRETCH = 1400
                 if anomaly < 0:
                     unboundedGradientPercent = (unboundedGradientPercent - .5) + .5
                 barHeight = height/2-(unboundedGradientPercent-.5)*STRETCH
@@ -325,5 +332,5 @@ statesList = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","ID","IL","IN","
 #createChart("data/us-state-data-NOAA/CA.csv","results/stripes/US/CA",chartType="stripes",save=False)
 #createChart("data/us-county-data-NOAA/2021/Florida/Miami-Dade County FL - AnnTemp 1895-2021.csv","results/stripes-svg/US/FL/Miami-Dade County FL",chartType="stripes-svg",save=True)
 #createChart("C:/Users/radon/Downloads/azt2.csv","test7.png",chartType="stripes-svg",save=True,globe=False)
-#createChart("data/country-data-berkley-earth/processed/AO - AnnTemp 1901-2020.csv","test7.png",chartType="labeled-bars-debug",save=False,globe=False)
+#createChart("data/hadcrut_dataset.csv","./results/stripes/location/earth",chartType="stripes",save=True,globe=True)
 
