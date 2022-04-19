@@ -3,7 +3,7 @@ const bucketPrefix = "https://earthstripes.s3.us-east-2.amazonaws.com/v3/"
 // data acquired from query params that doesn't require json file
 const canonicalUrl = document.querySelector("link[rel='canonical']").getAttribute("href");
 
-const urlParams = new URLSearchParams(window.location.search);
+const URL_PARAMS = new URLSearchParams(window.location.search);
 var state = URL_PARAMS.get('state');
 var county = URL_PARAMS.get('county');
 var country = URL_PARAMS.get('country');
@@ -244,26 +244,37 @@ function setYaleBars() {
     }
 }
 
-const productNames = ["Cloth Mask","Mug","Tie","Stickers"]
-const productIDs = ['256670743725195335','168540946485519042','151119561160107608','217917661479101292']
+const ZAZZLE_INT_COUNTRIES = ["us","ca","gb","de","es","fr","pt","se","nl","at","ch","be","br","au","nz","jp"];
+const ZAZZLE_INT_DOMAINS = [".com",".ca",".co.uk",".de",".es",".fr",".pt",".se",".nl",".at",".ch",".be",".com.br",".com.au",".co.nz",".co.jp"];
+function getZazzleDomain(countryCode){
+    countryCode = countryCode.toLowerCase();
+    zazzleDomain = ZAZZLE_INT_DOMAINS[ZAZZLE_INT_COUNTRIES.indexOf(countryCode)];
+    if (zazzleDomain == undefined){
+        zazzleDomain = ".com";
+    }
+    return zazzleDomain;
+}
+
+const PRODUCT_NAMES = ["Cloth Mask","Mug","Tie","Stickers"]
+const PRODUCT_IDS = ['256670743725195335','168540946485519042','151119561160107608','217917661479101292']
 function setMerchBox(){
   var encodedLabeledStripesImageURL = encodeURI(bucketPrefix + "labeled-stripes/" + imageID + ".png?request=zazzle");
   var encodedStripesImageURL = encodeURI(bucketPrefix + "stripes/" + imageID + ".png?request=zazzle");
+  var encodedLightLabeledBarsImageURL = encodeURI(bucketPrefix + "light-labeled-bars/" + imageID + ".png?request=24012022");
 
   merchLabel = "&t_location_txt=" + encodeURIComponent(locationName + " " + startYear + "-" + endYear);
-  customMerchLink = "https://www.zazzle.com/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&t_labeledstripes_iid="
+  customMerchLink = "https://www.zazzle.com" + "/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&t_labeledstripes_iid=" + encodedLabeledStripesImageURL + "&t_stripes_iid=" + encodedStripesImageURL + "&t_lightlabeledbars_iid=" + encodedLightLabeledBarsImageURL + merchLabel;
   + encodedLabeledStripesImageURL + "&tc=results-merch-box&ic=" + imageID.replace(/[^a-zA-z]/g,'_') + "&t_stripes_iid=" + encodedStripesImageURL + merchLabel;
-  testmerchlink.href = customMerchLink;
   MerchButton.href = customMerchLink;
   console.log(imageID.replace(/[^a-zA-z]/g,'_'))
 
-  for (i=1; i<=productNames.length; i++){
+  for (i=1; i<=PRODUCT_NAMES.length; i++){
     element = document.getElementById('ProductImage' + i);
-    var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+productIDs[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedStripesImageURL + '&t_labeledstripes_url='+encodedLabeledStripesImageURL;
+    var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+PRODUCT_IDS[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedStripesImageURL + '&t_labeledstripes_url='+encodedLabeledStripesImageURL;
     element.src = imageID2;
-    element.alt = "Warming Stripes " + productNames[i-1]
+    element.alt = "Warming Stripes " + PRODUCT_NAMES[i-1]
     element = document.getElementById('ProductName' + i);
-    element.innerText = productNames[i-1];
+    element.innerText = PRODUCT_NAMES[i-1];
     element = document.getElementById('Product'+i+"Link");
     element.href = customMerchLink;
     element = document.getElementById('Product'+i+'Link2');
@@ -605,7 +616,7 @@ function zazzleClicked(element) {
     console.log("bbbbbbbbbbbbbbbb");
     if (element.includes("Product")) {
         let listId = element.charAt(element.length-1)-1
-        element = productNames[listId] + " " + productIDs[listId];
+        element = PRODUCT_NAMES[listId] + " " + PRODUCT_IDS[listId];
     }
     console.log(element)
     gtag('event', "Zazzle Link Clicked", {

@@ -108,8 +108,6 @@ function getCountryFromCountryCode(countryCode){
 }
 
 bucketPrefix = "https://earthstripes.s3.us-east-2.amazonaws.com/v3/";
-const PRODUCT_NAMES = ["Cloth Mask","Mug","Tie","Stickers", "Magnet","Badge (Pin)", "T-Shirt", "Socks"];
-const PRODUCT_IDS = ['256670743725195335','168540946485519042','151119561160107608','217917661479101292','147753984968275362', '145354997245092652', '235484093576644423','256547457460896288'];
 
 const ZAZZLE_INT_COUNTRIES = ["us","ca","gb","de","es","fr","pt","se","nl","at","ch","be","br","au","nz","jp"];
 const ZAZZLE_INT_DOMAINS = [".com",".ca",".co.uk",".de",".es",".fr",".pt",".se",".nl",".at",".ch",".be",".com.br",".com.au",".co.nz",".co.jp"];
@@ -122,10 +120,12 @@ function getZazzleDomain(countryCode){
     return zazzleDomain;
 }
 
+const PRODUCT_NAMES = ["Cloth Mask","Mug","Tie","Stickers", "Magnet","Badge (Pin)", "T-Shirt", "Socks"];
+const PRODUCT_IDS = ['256670743725195335','168540946485519042','151119561160107608','217917661479101292','147753984968275362', '145354997245092652', '235484093576644423','256547457460896288'];
 function setMerchBox(imageID, locationName, locationURL){
     var encodedLabeledStripesImageURL = encodeURI(bucketPrefix + "labeled-stripes/" + imageID + ".png?request=24012022");
-    console.log(bucketPrefix + "labeled-stripes/" + imageID + ".png?request=zazzle");
     var encodedStripesImageURL = encodeURI(bucketPrefix + "stripes/" + imageID + ".png?request=24012022");
+    var encodedLightLabeledBarsImageURL = encodeURI(bucketPrefix + "light-labeled-bars/" + imageID + ".png?request=24012022");
     
     
     imageTrackingCode = "mp";
@@ -148,8 +148,7 @@ function setMerchBox(imageID, locationName, locationURL){
     imageTrackingCode.replaceAll('.','_');
 
     merchLabel = "&t_location_txt=" + encodeURIComponent(locationName);//  + " " + startYear + "-" + endYear);
-    customMerchLink = "https://www.zazzle" + getZazzleDomain(countryLang) + "/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&t_labeledstripes_iid=" + encodedLabeledStripesImageURL + "&tc=" + imageTrackingCode + "&ic=" + imageID.replace(/[^a-zA-z]/g,'_') + "&t_stripes_iid=" + encodedStripesImageURL + merchLabel;
-    // testmerchlink.href = customMerchLink;
+    customMerchLink = "https://www.zazzle" + getZazzleDomain(countryLang) + "/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&t_labeledstripes_iid=" + encodedLabeledStripesImageURL + "&tc=" + imageTrackingCode + "&ic=" + imageID.replace(/[^a-zA-z]/g,'_') + "&t_stripes_iid=" + encodedStripesImageURL + "&t_lightlabeledbars_iid=" + encodedLightLabeledBarsImageURL + merchLabel;
     console.log(customMerchLink);
     MerchButton.href = customMerchLink;
     console.log(imageID.replace(/[^a-zA-z]/g,'_'));
@@ -165,7 +164,6 @@ function setMerchBox(imageID, locationName, locationURL){
         element.href = customMerchLink;
         element = document.getElementById('Product'+i+'Link2');
         element.href = customMerchLink;
-        console.log("pp "+i)
     }
     
     element = document.getElementById('locationName');
