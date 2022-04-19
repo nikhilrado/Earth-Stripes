@@ -15,7 +15,7 @@ def main(fileLocation,name):
 
     #creates directory is not present, need to use stripes cause I'm lazy
     if not os.path.exists(fileLocation.replace("stripes","json").replace(name,"")):
-        os.makedirs(fileLocation.replace("stripes","json").replace(name,""))
+        os.makedirs(fileLocation.replace("stripes","json").replace(name,"").rpartition("/")[0])
 
     #sets name
     with open(fileLocation.replace("stripes","json")+'.json', "w") as myFile:
