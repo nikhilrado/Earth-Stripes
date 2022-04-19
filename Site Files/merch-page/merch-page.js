@@ -76,7 +76,8 @@ function toggleChangeLocation(action=null){
     console.log(changeLocationBoxIsHidden)
 }
 
-function generateURL(countryCode = null, stateCode = null, countyName = null) {
+function generateURL(countryCode = null, stateCode = null, countyName = null, loc = null) {
+    if (loc){return "/result/?location=" + loc;}
     locationAutomaticURL = "/result/?country=" + countryCode;
     if (stateCode != false && stateCode != null) {
         locationAutomaticURL = locationAutomaticURL + "&state=" + stateCode;
@@ -88,7 +89,8 @@ function generateURL(countryCode = null, stateCode = null, countyName = null) {
 }
 
 const COUNTRIES_WITH_STATES = ['AU','BR','CA','CN','IN','RU','US']
-function generateImageID (countryCode=null, stateCode=null, countyName=null){
+function generateImageID (countryCode=null, stateCode=null, countyName=null, loc=null){
+    if(loc){return "location/"+loc;}
     var ImageID = countryCode
 
     if (COUNTRIES_WITH_STATES.includes(countryCode)) {
@@ -155,7 +157,7 @@ function setMerchBox(imageID, locationName, locationURL){
     
     for (i=1; i<=PRODUCT_NAMES.length; i++){
         element = document.getElementById('ProductImage' + i);
-        var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+PRODUCT_IDS[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedStripesImageURL + '&t_labeledstripes_url='+encodedLabeledStripesImageURL;
+        var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+PRODUCT_IDS[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedStripesImageURL + '&t_labeledstripes_url='+ encodedLabeledStripesImageURL + '&t_lightlabeledbars_url=' + encodedLightLabeledBarsImageURL;
         element.src = imageID2;
         element.alt = "Warming Stripes " + PRODUCT_NAMES[i-1];
         element = document.getElementById('ProductName' + i);
@@ -169,8 +171,8 @@ function setMerchBox(imageID, locationName, locationURL){
     element = document.getElementById('locationName');
     element.innerText = imageID.replaceAll("+"," ");
     element = document.getElementById('locationNameLink');
-    console.log(locationAutomaticURL);
-    element.href = locationAutomaticURL;
+    console.log(locationURL);
+    element.href = locationURL;
     
 
     var yeet = document.getElementById("underline-text");
@@ -181,7 +183,6 @@ function setMerchBox(imageID, locationName, locationURL){
         locationName = getCountryFromCountryCode(locationName);
     }
     yeet.textContent = locationName;
-    locationNameLink.href = locationURL;
     toggleChangeLocation(action="hide");
     
     window.scrollTo(0,0); // scrolls to top of page to avoid layout shifts
@@ -258,7 +259,7 @@ function getLowestLocationName(countryCode,stateCode,countyName){
     }
     return lowestLocationName;
 }
-console.log("yeeettr")
+
 // geolocation test stuff
 var locationGranted; // declares global variable
 var locationAutomaticURL; // declares the automatic 
@@ -266,7 +267,6 @@ var lowestLocationName; //
 function getLocationForButton(){
     getLocation();
     if (locationGranted){
-        // window.location.href = locationAutomaticURL
         setMerchBox(generateImageID(countryCode,stateCode,countyName));
         console.log(locationAutomaticURL)
         console.log("yo")
@@ -410,9 +410,12 @@ console.log(countryLang);
 var state = URL_PARAMS.get('state');
 var county = URL_PARAMS.get('county');
 var country = URL_PARAMS.get('country');
+var loc = URL_PARAMS.get('location');
 
 // if url parameters are present, set merch box to those values
-if (country || (state && country) || (county && state && country)) {
+if (loc){
+    setMerchBox("location/"+loc, loc, generateURL(null,null,null,loc));
+} else if (country || (state && country) || (county && state && country)) {
     setMerchBox(generateImageID(country,state,county), county ? county : state ? state : country, generateURL(country,state,county));
 } else if (countryLang) {
     setMerchBox(countryLang,countryLang,generateURL(countryLang,null,null));

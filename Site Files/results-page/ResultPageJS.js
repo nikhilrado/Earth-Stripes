@@ -7,21 +7,25 @@ const URL_PARAMS = new URLSearchParams(window.location.search);
 var state = URL_PARAMS.get('state');
 var county = URL_PARAMS.get('county');
 var country = URL_PARAMS.get('country');
+var loc = URL_PARAMS.get('location');
 
-const countriesWithStates = ['AU','BR','CA','CN','IN','RU','US']
-if (countriesWithStates.includes(country)){
-if (!(county == null || county == "false")) {
-    county = county.replaceAll(" ", "+")
-    var imageID = country+"/"+state+"/"+county+"+"+state
+const countriesWithStates = ["AU", "BR", "CA", "CN", "IN", "RU", "US"];
+if (countriesWithStates.includes(country)) {
+  if (!(county == null || county == "false")) {
+    county = county.replaceAll(" ", "+");
+    var imageID = country + "/" + state + "/" + county + "+" + state;
+  } else if (!(state == null || state == "false")) {
+    var imageID = country + "/" + state;
+  } else {
+    var imageID = country;
+  }
+} else if (loc) {
+  var imageID = "location/"+loc;
+} else {
+  var imageID = country;
 }
-else if (!(state == null || state == "false")){
-var imageID = country+'/'+state
-}
-else {var imageID = country}
-}
-else {var imageID = country}
-console.log(county)
-console.log(imageID)
+console.log(imageID);
+
 document.getElementById('image1').src = bucketPrefix + "stripes/" + imageID+'.png';
 
 const script = document.createElement('script');
@@ -54,6 +58,7 @@ function generateURL(countryCode = null, stateCode = null, countyName = null) {
 }
 
 function getCountryFromCountryCode(countryCode){
+    if (!countryCode){return loc;}
     const regionNamesInEnglish = new Intl.DisplayNames(['en'], {type:'region'});
     return regionNamesInEnglish.of(countryCode);
 }
@@ -270,7 +275,7 @@ function setMerchBox(){
 
   for (i=1; i<=PRODUCT_NAMES.length; i++){
     element = document.getElementById('ProductImage' + i);
-    var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+PRODUCT_IDS[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedStripesImageURL + '&t_labeledstripes_url='+encodedLabeledStripesImageURL;
+    var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+PRODUCT_IDS[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedStripesImageURL + '&t_labeledstripes_url='+ encodedLabeledStripesImageURL + '&t_lightlabeledbars_url=' + encodedLightLabeledBarsImageURL;
     element.src = imageID2;
     element.alt = "Warming Stripes " + PRODUCT_NAMES[i-1]
     element = document.getElementById('ProductName' + i);
