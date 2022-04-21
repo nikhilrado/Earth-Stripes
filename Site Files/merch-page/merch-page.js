@@ -123,7 +123,7 @@ function getZazzleDomain(countryCode){
 }
 
 const PRODUCT_NAMES = ["Cloth Mask","Mug","Tie","Stickers", "Magnet","Badge (Pin)", "T-Shirt", "Socks"];
-const PRODUCT_IDS = ['256670743725195335','168540946485519042','151119561160107608','217917661479101292','147753984968275362', '145354997245092652', '235484093576644423','256547457460896288'];
+const PRODUCT_IDS = ['256670743725195335','168735114625411268','151119561160107608','217917661479101292','147753984968275362', '145354997245092652', '235484093576644423','256547457460896288'];
 function setMerchBox(imageID, locationName, locationURL){
     var encodedLabeledStripesImageURL = encodeURI(bucketPrefix + "labeled-stripes/" + imageID + ".png?request=24012022");
     var encodedStripesImageURL = encodeURI(bucketPrefix + "stripes/" + imageID + ".png?request=24012022");
@@ -175,14 +175,17 @@ function setMerchBox(imageID, locationName, locationURL){
     element.href = locationURL;
     
 
-    var yeet = document.getElementById("underline-text");
-    myArray= imageID.split("/");
-    locationName = myArray[myArray.length - 1].replaceAll("+"," ")
+    var headerLocationLabel = document.getElementById("underline-text");
+    myArray = imageID.split("/");
     countryCode = myArray[0]
+    locationName = myArray[myArray.length - 1].replaceAll("+"," ")
     if (countryCode == locationName && locationName.length == 2){ // if it is just a country code, replace with name
         locationName = getCountryFromCountryCode(locationName);
+    } else if (myArray.length >= 3) {
+        pos = locationName.lastIndexOf(" ")
+        locationName = locationName.substring(0,pos) + ", " + locationName.substring(pos+1)
     }
-    yeet.textContent = locationName;
+    headerLocationLabel.textContent = locationName;
     toggleChangeLocation(action="hide");
     
     window.scrollTo(0,0); // scrolls to top of page to avoid layout shifts
