@@ -34,6 +34,9 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
     for row in csv_f:
         rowsList.append(row)
     location = rowsList[0][1]
+    if "state-province-data/processed" in csvPath:
+        location = rowsList[0][0]
+    print("Location: " + location)
     metadataList = rowsList[:15] # creates list containing file metadata
     rowsList = rowsList[15:] # removes data headers and descriptions
     #print(rowsList)
