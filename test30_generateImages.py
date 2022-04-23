@@ -87,7 +87,6 @@ class create_earth_images:
         except:
             print("----------error: data/hadcrut_dataset.csv")
 
-create_earth_images.main()
 now = datetime.now()
 #test25_create_state_images.main("labeled-stripes")
 #test25_create_state_images.main("stripes-svg")
@@ -143,7 +142,7 @@ test42_create_province_state_images.main("label")
 #     for chartType in chartTypes:
 #         test6.createChart(dataFile,"results/"+chartType+"/US",chartType=chartType)
 
-def createChartsFromData(dataFile,locationID,chartTypes=["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","stripes-svg"]):
+def createChartsFromData(dataFile,locationID,chartTypes=["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","stripes-svg","light-labeled-bars"]):
     for chartType in chartTypes:
         test6.createChart(dataFile,"results/"+chartType+"/"+locationID,chartType=chartType,save=True)
 
@@ -154,8 +153,12 @@ def create_charts_for_image_type(image_type: str):
     create_county_images.main(image_type)
     create_earth_images.main(image_type)
 
+for chart in ["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","stripes-svg","light-labeled-bars"]:
+    create_province_state_images.main(chart)
+
+
 #create_charts_for_image_type("light-labeled-bars")
 #createChartsFromData("data/hadcrut_dataset.csv","location/earth")
-#createChartsFromData("data/USA2021.csv","US")
+createChartsFromData("data/USA2021.csv","US")
 current_time = now.strftime("%H:%M:%S")
 print("Time Finished =", current_time)
