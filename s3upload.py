@@ -156,7 +156,7 @@ def test():
     #uploadFile("test5.svg",uploadFilePath="test5.svg")
     #uploadFile("results/json/US.json",uploadFilePath="v3/json/US.json")
     #uploadAll("../Earth Stripes Codebase/results/stripes/US.png")
-    uploadAll("results/stripes/location/earth.png")
+    #uploadAll("results/stripes/location/earth.png")
 
     pass
 
@@ -169,6 +169,12 @@ def uploadAll(file,chartTypes=["label","labeled-bars","labeled-stripes","snap-st
             uploadFile(file.replace("/stripes/","/"+chartType+"/").replace(".png",".json"),uploadFilePath="v3/"+file.replace("/stripes/","/"+chartType+"/").replace("results/","").replace(".png",".json"))
         else:
             uploadFile(file.replace("/stripes/","/"+chartType+"/"),uploadFilePath="v3/"+file.replace("/stripes/","/"+chartType+"/").replace("results/",""))
+
+# uploads all files for a foreign (non-US) state/province
+def uploadStateProvinces(stateProvinces = ["AU","CA","BR","CN","IN","RU"]):
+    for country in stateProvinces:
+        for type in ["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","light-labeled-bars","stripes-svg","json"]:
+            uploadNewChanges("../Earth Stripes Codebase/results/{}/{}".format(type,country),smartUpload=False)
 
 # this is the main function that will be called when the script is run
 # if the file is imported, it will not run the test function
