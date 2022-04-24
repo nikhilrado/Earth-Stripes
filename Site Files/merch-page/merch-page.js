@@ -149,7 +149,7 @@ function setMerchBox(imageID, locationName, locationURL){
     }
     imageTrackingCode.replaceAll('.','_');
 
-    merchLabel = "&t_location_txt=" + encodeURIComponent(locationName);//  + " " + startYear + "-" + endYear);
+    merchLabel = "&t_location_txt=" + encodeURIComponent(imageID.replaceAll('+',' '));//  + " " + startYear + "-" + endYear);
     customMerchLink = "https://www.zazzle" + getZazzleDomain(countryLang) + "/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&t_labeledstripes_iid=" + encodedLabeledStripesImageURL + "&tc=" + imageTrackingCode + "&ic=" + imageID.replace(/[^a-zA-z]/g,'_') + "&t_stripes_iid=" + encodedStripesImageURL + "&t_lightlabeledbars_iid=" + encodedLightLabeledBarsImageURL + merchLabel;
     console.log(customMerchLink);
     MerchButton.href = customMerchLink;
