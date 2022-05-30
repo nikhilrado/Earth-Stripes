@@ -14,6 +14,19 @@ color2021 = []
 temp2020 = []
 temp2021 = []
 
+with open('../Earth Stripes Codebase/data/location_common_names.csv', 'r') as csvfile:
+    reader = csv.reader(csvfile)
+    common_name_location_ids = []
+    common_name_common_names = []
+    for row in reader:
+        common_name_location_ids.append(row[0])
+        common_name_common_names.append(row[1])
+
+def look_for_common_name(location_id):
+    if location_id in common_name_location_ids:
+        return common_name_common_names[common_name_location_ids.index(location_id)]
+    return None
+
 # main function that takes in a data file and creates a chart.
 # parameter globe sets the color scale to the +0.75C to -0.75C scale when true
 def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2126,globe=False):
@@ -36,9 +49,12 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
     location = rowsList[0][1]
     if "state-province-data/processed" in csvPath:
         location = rowsList[0][0]
+    location_id = imagePath.replace("results/"+chartType,"")
+    if look_for_common_name(location_id) is not None:
+        location = look_for_common_name(location_id)
     print("Location: " + location)
-    metadataList = rowsList[:15] # creates list containing file metadata
-    rowsList = rowsList[15:] # removes data headers and descriptions
+    metadataList = rowsList[:5] # creates list containing file metadata
+    rowsList = rowsList[5:] # removes data headers and descriptions
     #print(rowsList)
     
     # adds the years to a list, and trims excess chars from the year to make it 4 digits
@@ -59,9 +75,9 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
     #print("temps: ", temps)
 
     # sets dataSource and dataSourceLink properties to be added to the JSON file, updates the JSON image metadata file
-    dataSource = metadataList[6][1] if metadataList[6][0] == "Data Source:" else None
-    dataSourceLink = metadataList[7][1] if metadataList[7][0] == "Data Source URL:" else None
-    manageJSON.updateMetadata(imagePath,chartType,width=width,height=height,startYear=firstYear,endYear=lastYear,dataSource=dataSource, dataSourceLink=dataSourceLink, name=location)
+    #dataSource = metadataList[6][1] if metadataList[6][0] == "Data Source:" else None
+    #dataSourceLink = metadataList[7][1] if metadataList[7][0] == "Data Source URL:" else None
+    #manageJSON.updateMetadata(imagePath,chartType,width=width,height=height,startYear=firstYear,endYear=lastYear,dataSource=dataSource, dataSourceLink=dataSourceLink, name=location)
 
 
     def drawBars(chartType=chartType,width=width, height=height):

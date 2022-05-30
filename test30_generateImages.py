@@ -154,11 +154,12 @@ def create_charts_for_image_type(image_type: str):
     create_county_images.main(image_type)
     create_earth_images.main(image_type)
 
-for chart in ["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","stripes-svg","light-labeled-bars"]:
-    create_province_state_images.main(chart)
+#for chart in ["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","stripes-svg","light-labeled-bars"]:
+#    create_province_state_images.main(chart)
 
 
 #create_charts_for_image_type("light-labeled-bars")
 #createChartsFromData("data/hadcrut_dataset.csv","location/earth")
+#createChartsFromData("data/country-data-berkley-earth/processed/GB - AnnTemp 1901-2020.csv","GB")
 current_time = now.strftime("%H:%M:%S")
 print("Time Finished =", current_time)
