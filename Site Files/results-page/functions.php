@@ -37,7 +37,7 @@ function generate_custom_meta_tags() {
 		return($es_canonical_url);
 	}
 
-	function get_resource_id(){
+	function es_get_resource_id(){
 		$queries = array();
 		parse_str($_SERVER['QUERY_STRING'], $queries);
 		$resource_id = 'https://earthstripes.s3.us-east-2.amazonaws.com/v3/stripes/' . $queries['country'];
@@ -78,7 +78,7 @@ function generate_custom_meta_tags() {
 		};
 	}
 
-	$es_resource_id = get_resource_id();
+	$es_resource_id = es_get_resource_id();
 	$es_image_url = $es_resource_id;
 	$es_snap_sticker_url = str_replace("/stripes", "/snap-sticker", $es_resource_id);
 	$es_twitter_card_url = str_replace("/stripes", "/twitter-card", $es_resource_id);
