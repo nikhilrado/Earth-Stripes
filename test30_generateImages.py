@@ -13,7 +13,7 @@ class create_state_images:
             imagePath = 'results/'+chartType+'/US/'+state
 
             try:
-                test6.createChart(dataFileName,imagePath,chartType)
+                test6.createChart(dataFileName,imagePath,chartType,data_start=15)
             except:
                 print("Error creating chart for " + dataFileName)
 
@@ -24,11 +24,11 @@ class create_country_images:
 
             imagePath = 'results/'+chartType+'/'+country
             try:
-                test6.createChart(dataFileName,imagePath,chartType)
+                test6.createChart(dataFileName,imagePath,chartType,data_start=5)
             except:
                 try:
                     dataFileName = "data/country-data-berkley-earth/processed/" + country + " - AnnTemp 1901-2015.csv"
-                    test6.createChart(dataFileName,imagePath,chartType)
+                    test6.createChart(dataFileName,imagePath,chartType,data_start=5)
                 except:
                     print("----------error: "+dataFileName)
 
@@ -46,11 +46,11 @@ class create_county_images:
 
             imagePath = 'results/'+chartType+'/US/'+row[0][-2:]+"/"+row[0]
             try:
-                test6.createChart(dataFileName,imagePath,chartType)
+                test6.createChart(dataFileName,imagePath,chartType,data_start=15)
             except:
                 print("----------error: "+dataFileName)
             #test6.createChart(fileName,imagePath,chartType)
-        createChartsFromData("data/USA2021.csv","US")
+        createChartsFromData("data/USA2021.csv","US",data_start=15) #TODO: some error is here
 
 class create_province_state_images:
     provincesToDownload = ["Acre", "Adygey", "Aga Buryat", "Alagoas", "Alberta", "Altay", "Amapá", "Amazonas", "Amur", "Andaman and Nicobar", "Andhra Pradesh", "Anhui", "Arkhangel'sk", "Arunachal Pradesh", "Assam", "Astrakhan'", "Australian Capital Territory", "Bahia", "Bashkortostan", "Beijing", "Belgorod", "Bihar", "British Columbia", "Bryansk", "Buryat", "Ceará", "Chandigarh", "Chechnya", "Chelyabinsk", "Chhattisgarh", "Chita", "Chongqing", "Chukot", "Chuvash", "City of St. Petersburg", "Dadra and Nagar Haveli", "Dagestan", "Daman and Diu", "Delhi", "Distrito Federal", "Espírito Santo", "Evenk", "Fujian", "Gansu", "Goa", "Goiás", "Gorno-Altay", "Guangdong", "Guangxi", "Guizhou", "Gujarat", "Hainan", "Haryana", "Hebei", "Heilongjiang", "Henan", "Himachal Pradesh", "Hubei", "Hunan", "Ingush", "Irkutsk", "Ivanovo", "Jammu and Kashmir", "Jharkhand", "Jiangsu", "Jiangxi", "Jilin", "Kabardin-Balkar", "Kaliningrad", "Kalmyk", "Kaluga", "Kamchatka", "Karachay-Cherkess", "Karelia", "Karnataka", "Kemerovo", "Kerala", "Khabarovsk", "Khakass", "Khanty-Mansiy", "Kirov", "Komi", "Komi-Permyak", "Koryak", "Kostroma", "Krasnodar", "Krasnoyarsk", "Kurgan", "Kursk", "Leningrad", "Liaoning", "Lipetsk", "Madhya Pradesh", "Maga Buryatdan", "Maharashtra", "Manipur", "Manitoba", "Maranhão", "Mariy-El", "Mato Grosso", "Mato Grosso do Sul", "Meghalaya", "Minas Gerais", "Mizoram", "Mordovia", "Moscow City", "Moskva", "Murmansk", "Nagaland", "Nei Mongol", "Nenets", "New Brunswick", "New South Wales", "Newfoundland and Labrador", "Ningxia Hui", "Nizhegorod", "North Ossetia", "Northern Territory", "Northwest Territories", "Nova Scotia", "Novgorod", "Novosibirsk", "Nunavut", "Omsk", "Ontario", "Orel", "Orenburg", "Orissa", "Pará", "Paraíba", "Paraná", "Penza", "Perm'", "Pernambuco", "Piauí", "Primor'ye", "Prince Edward Island", "Pskov", "Puducherry", "Punjab", "Qinghai", "Québec", "Queensland", "Rajasthan", "Rio de Janeiro", "Rio Grande do Norte", "Rio Grande do Sul", "Rondônia", "Roraima", "Rostov", "Ryazan'", "Sakha", "Sakhalin", "Samara", "Santa Catarina", "São Paulo", "Saratov", "Saskatchewan", "Sergipe", "Shaanxi", "Shandong", "Shanghai", "Shanxi", "Sichuan", "Sikkim", "Smolensk", "South Australia", "Stavropol'", "Sverdlovsk", "Tambov", "Tamil Nadu", "Tasmania", "Tatarstan", "Taymyr", "Tianjin", "Tocantins", "Tomsk", "Tripura", "Tula", "Tuva", "Tver'", "Tyumen'", "Udmurt", "Ul'yanovsk", "Ust-Orda Buryat", "Uttar Pradesh", "Uttaranchal", "Victoria", "Vladimir", "Volgograd", "Vologda", "Voronezh", "West Bengal", "Western Australia", "Xinjiang Uygur", "Xizang", "Yamal-Nenets", "Yaroslavl'", "Yevrey", "Yukon", "Yunnan", "Zhejiang"]
@@ -70,11 +70,11 @@ class create_province_state_images:
 
             imagePath = 'results/'+chartType+'/'+countryCode+'/'+province
             try:
-                test6.createChart(dataFileName,imagePath,chartType)
+                test6.createChart(dataFileName,imagePath,chartType,data_start=5)
             except:
                 try:
                    dataFileName = "data/state-province-data/processed/" + province + " - AnnTemp 1901-2015.csv"
-                   test6.createChart(dataFileName,imagePath,chartType)
+                   test6.createChart(dataFileName,imagePath,chartType,data_start=5)
                 except:
                     print("----------error: "+dataFileName)
 
@@ -84,7 +84,7 @@ class create_earth_images:
 
     def main(chartType="light-labeled-bars"):
         try:
-            test6.createChart("data/hadcrut_dataset.csv","results/" + chartType + "/location/earth",chartType,globe=True)
+            test6.createChart("data/hadcrut_dataset.csv","results/" + chartType + "/location/earth",chartType,globe=True,data_start=15)
         except:
             print("----------error: data/hadcrut_dataset.csv")
 
@@ -143,15 +143,16 @@ test42_create_province_state_images.main("label")
 #     for chartType in chartTypes:
 #         test6.createChart(dataFile,"results/"+chartType+"/US",chartType=chartType)
 
-def createChartsFromData(dataFile,locationID,chartTypes=["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","stripes-svg","light-labeled-bars"]):
+def createChartsFromData(dataFile,locationID,data_start=15,chartTypes=["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","stripes-svg","light-labeled-bars","large-square-stripes"]):
     for chartType in chartTypes:
-        test6.createChart(dataFile,"results/"+chartType+"/"+locationID,chartType=chartType,save=True)
+        test6.createChart(dataFile,"results/"+chartType+"/"+locationID,chartType=chartType,save=True,data_start=data_start)
 
 def create_charts_for_image_type(image_type: str):
     create_state_images.main(image_type)
     create_country_images.main(image_type)
     create_province_state_images.main(image_type)
     create_county_images.main(image_type)
+    print("----------finished creating charts for image type: "+image_type)
     create_earth_images.main(image_type)
 
 #for chart in ["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","stripes-svg","light-labeled-bars"]:
@@ -161,5 +162,7 @@ def create_charts_for_image_type(image_type: str):
 #create_charts_for_image_type("light-labeled-bars")
 #createChartsFromData("data/hadcrut_dataset.csv","location/earth")
 #createChartsFromData("data/country-data-berkley-earth/processed/GB - AnnTemp 1901-2020.csv","GB")
+#create_charts_for_image_type("twitter-card")
+create_charts_for_image_type("large-square-stripes")
 current_time = now.strftime("%H:%M:%S")
 print("Time Finished =", current_time)
