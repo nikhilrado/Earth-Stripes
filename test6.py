@@ -29,10 +29,13 @@ def look_for_common_name(location_id):
 
 # main function that takes in a data file and creates a chart.
 # parameter globe sets the color scale to the +0.75C to -0.75C scale when true
-def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2126,globe=False):
+def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2126,globe=False,data_start=5):
     # allows us to make all white labeled bars larger without altering other code
     if chartType=='light-labeled-bars' and width == 3780:
         createChart(csvPath,imagePath,chartType,save=save,width=int(width*1.5),globe=globe)
+        return
+    if chartType == "large-square-stripes" and width == 3780:
+        createChart(csvPath,imagePath,chartType,save=save,width=8000,height=8000,globe=globe)
         return
 
     global counter, color2020, color2021, temp2020, temp2021
@@ -52,9 +55,9 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
     location_id = imagePath.replace("results/"+chartType,"")
     if look_for_common_name(location_id) is not None:
         location = look_for_common_name(location_id)
-    print("Location: " + location)
-    metadataList = rowsList[:5] # creates list containing file metadata
-    rowsList = rowsList[5:] # removes data headers and descriptions
+    #print("Location: " + location)
+    metadataList = rowsList[:data_start] # creates list containing file metadata
+    rowsList = rowsList[data_start:] # removes data headers and descriptions
     #print(rowsList)
     
     # adds the years to a list, and trims excess chars from the year to make it 4 digits
@@ -276,13 +279,15 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
     if chartType == "snap-sticker":
         img = Image.new("RGBA", (4000, 4000))
     elif chartType == "twitter-card":
-        img = Image.new("RGBA", (600*2, 314*2))
+        img = Image.new("RGBA", (600*2, 315*2))
     elif chartType == "label":
         img = Image.new("RGBA", (2126, 150))
     elif chartType == "stripes-svg":
         pass
     elif chartType == "light-labeled-bars":
         img = Image.new("RGBA", (width, height), "white")
+    elif chartType == "large-square-stripes":
+        img = Image.new("RGB", (8000, 8000), "white")
     else:
         img = Image.new("RGB", (width, height))
     
@@ -323,7 +328,7 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
             img.save(imagePath + ".png")
     
     #img.save("C:/Users/radon/Downloads/test201" + ".png")
-    print("Done: Image %s: %s" % (str(counter),imagePath))
+    print("Location: " + location + "\t\t\t\tDone: Image %s: %s" % (str(counter),imagePath))
 
     #color2020.append(colors[len(colors-2)])
     #color2021.append(colors[len(colors-1)])
@@ -351,5 +356,5 @@ statesList = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","ID","IL","IN","
 #createChart("data/us-state-data-NOAA/CA.csv","results/stripes/US/CA",chartType="stripes",save=False)
 #createChart("data/us-county-data-NOAA/2021/Florida/Miami-Dade County FL - AnnTemp 1895-2021.csv","results/stripes-svg/US/FL/Miami-Dade County FL",chartType="stripes-svg",save=True)
 #createChart("C:/Users/radon/Downloads/azt2.csv","test7.png",chartType="stripes-svg",save=True,globe=False)
-#createChart("data/hadcrut_dataset.csv","./results/stripes/location/earth",chartType="stripes",save=True,globe=True)
+#createChart("data/hadcrut_dataset.csv","./results/large-square-stripes/location/earth",chartType="large-square-stripes",save=True,globe=True,width=8000,height=8000)
 
