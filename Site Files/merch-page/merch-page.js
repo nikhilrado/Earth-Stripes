@@ -11,6 +11,7 @@ function processPriceInfo(merchData){
         var x = document.getElementById('sale-banner');
         x.innerText = merchData['discount'];
         x.style.visibility = "visible";
+        couponCode = merchData['coupon_code'];
         
     }
 }
@@ -125,6 +126,8 @@ function getZazzleDomain(countryCode){
 const PRODUCT_NAMES = ["Cloth Mask","Mug","Tie","Stickers", "Magnet","Badge (Pin)", "T-Shirt", "Socks"];
 const PRODUCT_IDS = ['256670743725195335','168735114625411268','151119561160107608','217917661479101292','147753984968275362', '145354997245092652', '235484093576644423','256547457460896288'];
 function setMerchBox(imageID, locationName, locationURL){
+    globalImageID = imageID
+    
     var encodedLabeledStripesImageURL = encodeURI(bucketPrefix + "labeled-stripes/" + imageID + ".png?request=24012022");
     var encodedStripesImageURL = encodeURI(bucketPrefix + "stripes/" + imageID + ".png?request=24012022");
     var encodedLightLabeledBarsImageURL = encodeURI(bucketPrefix + "light-labeled-bars/" + imageID + ".png?request=24012022");
@@ -151,6 +154,8 @@ function setMerchBox(imageID, locationName, locationURL){
 
     merchLabel = "&t_location_txt=" + encodeURIComponent(imageID.replaceAll('+',' '));//  + " " + startYear + "-" + endYear);
     customMerchLink = "https://www.zazzle" + getZazzleDomain(countryLang) + "/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&t_labeledstripes_iid=" + encodedLabeledStripesImageURL + "&tc=" + imageTrackingCode + "&ic=" + imageID.replace(/[^a-zA-z]/g,'_') + "&t_stripes_iid=" + encodedStripesImageURL + "&t_lightlabeledbars_iid=" + encodedLightLabeledBarsImageURL + merchLabel;
+    customMerchLink += "&pm=" + 'LOVEFROMZAZZ';
+    customMerchLink += "&st=date_created"
     console.log(customMerchLink);
     MerchButton.href = customMerchLink;
     console.log(imageID.replace(/[^a-zA-z]/g,'_'));
@@ -164,9 +169,22 @@ function setMerchBox(imageID, locationName, locationURL){
         element.innerText = PRODUCT_NAMES[i-1];
         element = document.getElementById('Product'+i+"Link");
         element.href = customMerchLink;
-        element = document.getElementById('Product'+i+'Link2');
-        element.href = customMerchLink;
+        //element = document.getElementById('Product'+i+'Link2');
+        //element.href = customMerchLink;
     }
+    
+    /*
+    // This section was created in order to feature new products that didn't yet get through zazzle's systems
+
+    var thingg = document.getElementById("ProductImage31")
+    thingg.src = "https://rlv.zazzle.com/svc/view?pid=256511214137703962&max_dim=600&at=238391408801122257&t_largesquarestripes_url=https://earthstripes.s3.us-east-2.amazonaws.com/v3/large-square-stripes/"+imageID+".png?request=zazzle"
+    scarfLink = "https://www.zazzle.com/api/create/at-238391408801122257?rf=238391408801122257&ax=Linkover&pd=256511214137703962&ed=false&tc=&ic=&t_largesquarestripes_iid=https%3A%2F%2Fearthstripes.s3.us-east-2.amazonaws.com%2Fv3%2Flarge-square-stripes%2F"+imageID+".png"
+    console.log(scarfLink)
+    thingg2 = document.getElementById("Product31Link")
+    thingg2.href = scarfLink
+    thingg3 = document.getElementById("ProductButton31")
+    thingg3.href = scarfLink
+    */
     
     element = document.getElementById('locationName');
     element.innerText = imageID.replaceAll("+"," ");
@@ -175,17 +193,18 @@ function setMerchBox(imageID, locationName, locationURL){
     element.href = locationURL;
     
 
-    var headerLocationLabel = document.getElementById("underline-text");
-    myArray = imageID.split("/");
-    countryCode = myArray[0]
-    locationName = myArray[myArray.length - 1].replaceAll("+"," ")
+    var yeet = document.getElementById("underline-text");
+        myArray = imageID.split("/");
+        countryCode = myArray[0]
+        locationName = myArray[myArray.length - 1].replaceAll("+"," ")
     if (countryCode == locationName && locationName.length == 2){ // if it is just a country code, replace with name
         locationName = getCountryFromCountryCode(locationName);
     } else if (myArray.length >= 3) {
         pos = locationName.lastIndexOf(" ")
         locationName = locationName.substring(0,pos) + ", " + locationName.substring(pos+1)
+        
     }
-    headerLocationLabel.textContent = locationName;
+    yeet.textContent = locationName;
     toggleChangeLocation(action="hide");
     
     window.scrollTo(0,0); // scrolls to top of page to avoid layout shifts
@@ -394,9 +413,10 @@ function sendESAnalytics(ip){
     URL += '&user_agent=' + encodeURIComponent(navigator.userAgent)
     URL += '&ip=' + ip
     console.log("ip: " + ip)
-    URL += '&fbp' + fbp
+    URL += '&fbp=' + fbp
     URL += '&twclid=' + twclid
     URL += '&timestamp_unix=' + new Date().getTime()
+    URL += '&image_id=' + encodeURIComponent(globalImageID)
 
     fetch(URL)
     .then(function (u) {return u.json();})
