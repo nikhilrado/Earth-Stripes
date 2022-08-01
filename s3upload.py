@@ -150,7 +150,7 @@ def test():
     #uploadNewChanges(directory="results/json/US/",smartUpload=False)
     #uploadNewChanges(directory="results/",smartUpload=False)
     #uploadNewChanges(directory="photos/local-impact-photos/",smartUpload=False)
-    #uploadNewChanges(directory="../Earth Stripes Codebase/results/light-labeled-bars",smartUpload=False)
+    uploadNewChanges(directory="../Earth Stripes Codebase/results/large-square-stripes",smartUpload=False)
     #uploadFile("Site Files/map-page/countries2.js", uploadFilePath="map-stuff.js")
     #uploadFile("Map Stuff/mapData.csv",uploadFilePath="mapData2.csv")
     #uploadFile("test5.svg",uploadFilePath="test5.svg")
