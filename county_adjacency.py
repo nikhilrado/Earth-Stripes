@@ -53,13 +53,14 @@ for countyBlock in countyList:
         url = "/result/?country=US&state="+adjacentCountyStateCode+"&county="+county[0].split(",")[0].replace(" ", "%20")
 
         #Removes the state if state is same as current county.
-        if county[0][-2:] == stateCode:
-            shortCounty = county[0][:-4]
-            counties.insert(0,shortCounty)
-            links.insert(0,url)
-        else:
-            counties.append(county[0])
-            links.append(url)
+        if countyName + ", " + stateCode != county[0]:
+            if county[0][-2:] == stateCode:
+                shortCounty = county[0][:-4]
+                counties.insert(0,shortCounty)
+                links.insert(0,url)
+            else:
+                counties.append(county[0])
+                links.append(url)
 
     counties.append(globals.getStateAbrev(stateCode)) #adds state
     counties.append("United States") #adds US
@@ -76,6 +77,7 @@ for countyBlock in countyList:
     #adds the JSON to the JSON file, will print error if error occurs
     try:
         manageJSON.updateDataObjet("results/json/US/"+stateCode+"/"+countyName+" "+stateCode+".json","metadata", adjacencyJSON, "recommended locations")
+        pass
     except:
         print("--------error next line:")
         print(countyName, stateCode, countyGeoID)
