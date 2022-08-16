@@ -260,8 +260,8 @@ function getZazzleDomain(countryCode){
     return zazzleDomain;
 }
 
-const PRODUCT_NAMES = ["Cloth Mask","Mug","Tie","Stickers"]
-const PRODUCT_IDS = ['256670743725195335','168540946485519042','151119561160107608','217917661479101292']
+const PRODUCT_NAMES = ["Cloth Mask","Graph Mug","Tie","Stickers"]
+const PRODUCT_IDS = ['256670743725195335','168735114625411268','151119561160107608','217917661479101292']
 function setMerchBox(){
   var encodedLabeledStripesImageURL = encodeURI(bucketPrefix + "labeled-stripes/" + imageID + ".png?request=zazzle");
   var encodedStripesImageURL = encodeURI(bucketPrefix + "stripes/" + imageID + ".png?request=zazzle");
@@ -270,6 +270,7 @@ function setMerchBox(){
   merchLabel = "&t_location_txt=" + encodeURIComponent(locationName + " " + startYear + "-" + endYear);
   customMerchLink = "https://www.zazzle.com" + "/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&t_labeledstripes_iid=" + encodedLabeledStripesImageURL + "&t_stripes_iid=" + encodedStripesImageURL + "&t_lightlabeledbars_iid=" + encodedLightLabeledBarsImageURL + merchLabel;
   + encodedLabeledStripesImageURL + "&tc=results-merch-box&ic=" + imageID.replace(/[^a-zA-z]/g,'_') + "&t_stripes_iid=" + encodedStripesImageURL + merchLabel;
+  customMerchLink += "&pm=" + 'LOVEFROMZAZZ';
   MerchButton.href = customMerchLink;
   console.log(imageID.replace(/[^a-zA-z]/g,'_'))
 
@@ -433,16 +434,18 @@ function setEnergyGraph(energyData){
         min: 0,
       },
     },
+    interaction: {
+      intersect: false,
+      mode: 'index',
+    },
     animation: {
       duration: 750,
     },
-    tooltips: {
+    tooltip: {
       mode: "index",
-      intersect: false,
     },
     hover: {
-      mode: "nearest",
-      intersect: false,
+      mode: "index",
     },
     elements: {
       point: {

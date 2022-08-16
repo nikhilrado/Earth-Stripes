@@ -82,6 +82,8 @@ a{
   border-radius: 15px;
   border-color: black;
   border-width: 5px;
+
+  animation: fadeIn 2s;
   /*clip-path: circle(59 at 5, 5)*/
 }
 #ProductImage1, #ProductImage2, #ProductImage3, #ProductImage4 {
@@ -147,10 +149,13 @@ text-decoration: underline;
     margin-bottom: 5px;
     /*color: orange;*/
     font-size: 16px;
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    font-weight: 600;
 }
 .YaleBottomText {
     color: grey;
     font-size: 14px;
+    font-family: Roboto, sans-serif;
 }
 
 h2{
