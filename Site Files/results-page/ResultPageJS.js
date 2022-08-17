@@ -339,124 +339,145 @@ function getSenatorInfo(senatorData) {
     });
 }
 
-function setEnergyGraph(energyData){
+function setEnergyGraph(energyData) {
   var ctx = document.getElementById("myChart").getContext("2d");
 
   //console.log(energyData['years']);
 
   const colors = {
     green: {
-      fill: '#5eb84d',
-      stroke: '#5eb84d',
+      fill: "#5eb84d",
+      stroke: "#5eb84d",
     },
     lightBlue: {
-      stroke: '#bbbbbb',
-      fill: '#bbbbbb',
+      stroke: "#bbbbbb",
+      fill: "#bbbbbb",
     },
     yellow: {
-      fill: '#FFD000',
-      stroke: '#FFD000',
+      fill: "#FFD000",
+      stroke: "#FFD000",
     },
     purple: {
-      fill: 'purple',
-      stroke: 'purple',
+      fill: "purple",
+      stroke: "purple",
     },
     charcoal: {
-      fill: '#323232',
-      stroke: '#323232',
+      fill: "#323232",
+      stroke: "#323232",
     },
   };
 
-  const coal = energyData['coal'];
-  const naturalGas = energyData['natural gas'];
-  const petroleum = energyData['petroleum and other liquids'];
-  const nuclear = energyData['nuclear'];
-  const renewables = energyData['renewables and others'];
-  const xData = energyData['years'];
+  const coal = energyData["coal"];
+  const naturalGas = energyData["natural gas"];
+  const petroleum = energyData["petroleum and other liquids"];
+  const nuclear = energyData["nuclear"];
+  const renewables = energyData["renewables and others"];
+  const xData = energyData["years"];
 
   const myChart = new Chart(ctx, {
-    type: 'line',
+    type: "line",
     data: {
       labels: xData,
-      datasets: [{
-        label: "Coal",
-        fill: true,
-        backgroundColor: colors.charcoal.fill,
-        pointBackgroundColor: colors.charcoal.stroke,
-        borderColor: colors.charcoal.stroke,
-        pointHighlightStroke: colors.charcoal.stroke,
-        borderCapStyle: 'butt',
-        data: coal,
-
-      }, {
-        label: "Natural Gas",
-        fill: true,
-        backgroundColor: colors.purple.fill,
-        pointBackgroundColor: colors.purple.stroke,
-        borderColor: colors.purple.stroke,
-        pointHighlightStroke: colors.purple.stroke,
-        borderCapStyle: 'butt',
-        data: naturalGas,
-      }, {
-        label: "Petroleum",
-        fill: true,
-        backgroundColor: colors.lightBlue.fill,
-        pointBackgroundColor: colors.lightBlue.stroke,
-        borderColor: colors.lightBlue.stroke,
-        pointHighlightStroke: colors.lightBlue.stroke,
-        borderCapStyle: 'butt',
-        data: petroleum,
-      }, {
-        label: "Nuclear",
-        fill: true,
-        backgroundColor: colors.yellow.fill,
-        pointBackgroundColor: colors.yellow.stroke,
-        borderColor: colors.yellow.stroke,
-        pointHighlightStroke: colors.yellow.stroke,
-        data: nuclear,
-      }, {
-        label: "Renewables & Other",
-        fill: true,
-        backgroundColor: colors.green.fill,
-        pointBackgroundColor: colors.green.stroke,
-        borderColor: colors.green.stroke,
-        pointHighlightStroke: colors.green.stroke,
-        data: renewables,
-      }]
+      datasets: [
+        {
+          label: "Coal",
+          fill: true,
+          backgroundColor: colors.charcoal.fill,
+          pointBackgroundColor: colors.charcoal.stroke,
+          borderColor: colors.charcoal.stroke,
+          pointHighlightStroke: colors.charcoal.stroke,
+          borderCapStyle: "butt",
+          data: coal,
+        },
+        {
+          label: "Petroleum",
+          fill: true,
+          backgroundColor: colors.lightBlue.fill,
+          pointBackgroundColor: colors.lightBlue.stroke,
+          borderColor: colors.lightBlue.stroke,
+          pointHighlightStroke: colors.lightBlue.stroke,
+          borderCapStyle: "butt",
+          data: petroleum,
+        },
+        {
+          label: "Natural Gas",
+          fill: true,
+          backgroundColor: colors.purple.fill,
+          pointBackgroundColor: colors.purple.stroke,
+          borderColor: colors.purple.stroke,
+          pointHighlightStroke: colors.purple.stroke,
+          borderCapStyle: "butt",
+          data: naturalGas,
+        },
+        {
+          label: "Nuclear",
+          fill: true,
+          backgroundColor: colors.yellow.fill,
+          pointBackgroundColor: colors.yellow.stroke,
+          borderColor: colors.yellow.stroke,
+          pointHighlightStroke: colors.yellow.stroke,
+          data: nuclear,
+        },
+        {
+          label: "Renewables & Other",
+          fill: true,
+          backgroundColor: colors.green.fill,
+          pointBackgroundColor: colors.green.stroke,
+          borderColor: colors.green.stroke,
+          pointHighlightStroke: colors.green.stroke,
+          data: renewables,
+        },
+      ],
     },
     options: {
-    responsive: true,
-    // Can't just just `stacked: true` like the docs say
-    scales: {
-      yAxes: {
-        stacked: true,
-        max: 100,
-        min: 0,
+      responsive: true,
+      // Can't just just `stacked: true` like the docs say
+      scales: {
+        yAxes: {
+          stacked: true,
+          max: 100,
+          min: 0,
+        },
       },
-    },
-    interaction: {
-      intersect: false,
-      mode: 'index',
-    },
-    animation: {
-      duration: 750,
-    },
-    tooltip: {
-      mode: "index",
-    },
-    hover: {
-      mode: "index",
-    },
-    elements: {
-      point: {
-        radius: 0,
-      },
-      line: {
-        tension: 0.3,
-      },
-    },
+      interaction: {
+        intersect: false,
+        includeInvisible: true,
+        mode: "index",
+        itemSort: function (a, b) {
+          return b.datasetIndex - a.datasetIndex;
+        },
+        callbacks: {
+          label: function (context) {
+            let label = context.dataset.label || "";
 
-    }
+            if (label) {
+              label += ": ";
+            }
+            if (context.parsed.y !== null) {
+              label += context.parsed.y.toFixed(1);
+            }
+            return label + "%";
+          },
+        },
+      },
+      animation: {
+        duration: 750,
+      },
+      tooltip: {
+        mode: "index",
+      },
+      hover: {
+        mode: "index",
+      },
+      elements: {
+        point: {
+          radius: 0,
+        },
+        line: {
+          tension: 0.3,
+        },
+      },
+    },
   });
 }
 
@@ -464,6 +485,7 @@ function setEnergyGraph(energyData){
 function handleStateJSON(json){
     setLocalImpacts(json["local impacts"]);
     getSenatorInfo(json["SenatorInfo"]);
+    
 }
 
 if (country == "US" && typeof state == "string"){
