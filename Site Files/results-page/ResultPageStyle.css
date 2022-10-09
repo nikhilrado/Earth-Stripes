@@ -86,6 +86,22 @@ a{
   animation: fadeIn 2s;
   /*clip-path: circle(59 at 5, 5)*/
 }
+#image1:before {
+    content: "";
+    position: absolute;
+    
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    
+    background-color: gray;
+    z-index: 0;
+}
+#image1:after {
+    display: block;
+    z-index: 1;
+}
 #ProductImage1, #ProductImage2, #ProductImage3, #ProductImage4 {
     border-radius: 5px;
 }
@@ -184,7 +200,7 @@ h2{
     font-size: 14px;
     align-items: bottom;
 }
-  .location-button {
+.location-button {
   background-color: #FFFFFF;
   border: solid;
   color: black;
