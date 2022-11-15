@@ -6,16 +6,17 @@ port = SSHkeys.port
 password = SSHkeys.password
 username = SSHkeys.username
 
-ssh = paramiko.SSHClient()
-ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh.connect(host, port, username, password)
+# uploads a file to the server
+def upload(path, local_path):
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(host, port, username, password)
 
-sftp = ssh.open_sftp()
+    sftp = ssh.open_sftp()
 
-#def upload(path,localpath):
-path = "/public_html/result-sitemap.xml"
-localpath = "SEO/result-sitemap.xml"
-sftp.put(localpath, path)
+    #path = "/public_html/result-sitemap.xml"
+    #local_path = "SEO/result-sitemap.xml"
+    sftp.put(local_path, path)
 
-sftp.close()
-ssh.close()
+    sftp.close()
+    ssh.close()
