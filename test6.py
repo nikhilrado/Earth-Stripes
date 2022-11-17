@@ -32,10 +32,10 @@ def look_for_common_name(location_id):
 def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2126,globe=False,data_start=5):
     # allows us to make all white labeled bars larger without altering other code
     if chartType=='light-labeled-bars' and width == 3780:
-        createChart(csvPath,imagePath,chartType,save=save,width=int(width*1.5),globe=globe)
+        createChart(csvPath,imagePath,chartType,save=save,width=int(width*1.5),globe=globe,data_start=data_start)
         return
     if chartType == "large-square-stripes" and width == 3780:
-        createChart(csvPath,imagePath,chartType,save=save,width=8000,height=8000,globe=globe)
+        createChart(csvPath,imagePath,chartType,save=save,width=8000,height=8000,globe=globe,data_start=data_start)
         return
 
     global counter, color2020, color2021, temp2020, temp2021
@@ -328,7 +328,8 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
             img.save(imagePath + ".png")
     
     #img.save("C:/Users/radon/Downloads/test201" + ".png")
-    print("Location: " + location + "\t\t\t\tDone: Image %s: %s" % (str(counter),imagePath))
+    #print("Location: " + location + "\t\t\t\tDone: Image %s: %s" % (str(counter),imagePath))
+    print(f"Location: {location.ljust(30)} Done: Image {counter}: {imagePath}")
 
     #color2020.append(colors[len(colors-2)])
     #color2021.append(colors[len(colors-1)])

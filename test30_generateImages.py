@@ -14,8 +14,9 @@ class create_state_images:
 
             try:
                 test6.createChart(dataFileName,imagePath,chartType,data_start=15)
-            except:
+            except Exception as e:
                 print("Error creating chart for " + dataFileName)
+                print(e)
 
 class create_country_images:
     def main(chartType="stripes"):
