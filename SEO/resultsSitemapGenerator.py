@@ -3,7 +3,7 @@ import xml.dom.minidom
 sys.path.append('.')
 import SSHupload
 
-#returns a list of all files in a directory
+# returns a list of all files in a directory
 def get_all_files_in_dir(root):
     file_list = []
     for path, subdirs, files in os.walk(root):
@@ -18,16 +18,17 @@ print(files)
 for file_path in files:
     if "desktop.ini" in file_path or len(file_path) > 23:  # removes desktop.ini and county files for now
         continue
-    file_path = file_path.replace("\\","/") #fixes annoying formatting issue that messes up stuff
+    file_path = file_path.replace("\\","/")  # fixes annoying formatting issue that messes up stuff
     #f = open(file)
     #f = f.read()
     #f = json.loads(f)
 
+    # gets the url of the earthstripes.org webpage (TODO: to be moved to utility file)
     def getPageURL ():
         split_path = file_path.split("/")
-        split_path[-1] = split_path[-1].replace(".json","") #removes .json
-        split_path.remove('results') #removes irrelevant info
-        split_path.remove('json') #removes irrelevant info
+        split_path[-1] = split_path[-1].replace(".json","")  # removes .json
+        split_path.remove('results')  # removes irrelevant info
+        split_path.remove('json')  # removes irrelevant info
         url = "https://www.earthstripes.org/result/"
         for i in range(len(split_path)):
             if i == 0:
@@ -40,8 +41,6 @@ for file_path in files:
 
         url = url.replace("&","&amp;")
 
-        #print(url)
-        #print(splitPath)
         return url
 
     def addImage (image_url,image_caption,image_location,image_title,image_license):
@@ -77,4 +76,3 @@ with open('SEO/result-sitemap.xml', 'w') as f:
     f.write(pretty_xml_as_string)
 
 SSHupload.upload("/public_html/result-sitemap.xml","SEO/result-sitemap.xml")
-
