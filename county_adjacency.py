@@ -1,9 +1,11 @@
 import manageJSON
 import globals
+import csv
+import s3upload
 
 def extract_county_adjacency_data():
     # gets county adjacency data from https://www2.census.gov/geo/docs/reference/county_adjacency.txt
-    f = open("data/county_adjacency.txt", "r")
+    f = open("data/adjacent-location-data/county_adjacency.txt", "r")
     f = f.readlines()
 
     countyList = []
@@ -65,16 +67,19 @@ def extract_county_adjacency_data():
                     counties.append(county[0])
                     links.append(url)
 
-        counties.append(globals.getStateAbrev(stateCode))  # adds state
-        counties.append("United States")  # adds US
-
-        links.append("/result/?country=US&state="+stateCode)  # adds state link
-        links.append("/result/?country=US")  # adds US link
+        hierarchy_locations = [globals.getStateAbrev(stateCode), "United States","Earth"]
+        hierarchy_links = ["/result/?country=US&state="+stateCode, "/result/?country=US","/result/?location=earth"]
 
         # JSON template
         adjacencyJSON = {
-            "locations": counties[1:],
-            "links": links[1:]
+            "adjacent":{
+                "locations": counties[:1],
+                "links": links[:1],
+            },
+            "hierarchy": {
+                "locations": hierarchy_locations,
+                "links": hierarchy_links
+            }
         }
 
         # adds the JSON to the JSON file, will print error if error occurs
@@ -85,3 +90,62 @@ def extract_county_adjacency_data():
         except:
             print("--------error next line:")
             print(countyName, stateCode, countyGeoID)
+
+def extract_country_adjacency_data():
+    # gets country adjacency data from https://github.com/geodatasource/country-borders/blob/master/GEODATASOURCE-COUNTRY-BORDERS.CSV
+    f = open("data/adjacent-location-data/GEODATASOURCE-COUNTRY-BORDERS.CSV", "r")
+    # turn csv to python array
+    f = list(csv.reader(f, delimiter=','))
+    print(f)
+
+    compressed_data = {}
+
+    for line in f[1:]:
+        country_code = line[0]
+        adjacent_country_code = line[2]
+
+        # if country does not exist in our system pass
+        # TODO: make a better solution of this
+        try:
+            x = globals.getCountryCode(country_code) + globals.getCountryCode(adjacent_country_code)
+        except:
+            print("--------error")
+            print(country_code, adjacent_country_code)
+            continue
+
+        if country_code not in compressed_data:
+            compressed_data[country_code] = [adjacent_country_code]
+        else:
+            compressed_data[country_code].append(adjacent_country_code)
+
+    for country_code in compressed_data:
+        if compressed_data[country_code] == ['']:
+            continue
+        print(country_code, compressed_data[country_code])
+        country_names = [globals.getCountryCode(c) for c in compressed_data[country_code]]
+        links = ["/result/?country="+c for c in compressed_data[country_code]]
+
+        # JSON template
+        adjacencyJSON = {
+            "adjacent": {
+                "locations": country_names,
+                "links": links,
+            },
+            "hierarchy": {
+                "locations": ["Earth"],
+                "links": ["/result/?location=earth"]
+            }
+        }
+        print(adjacencyJSON)
+
+        # adds the JSON to the JSON file, will print error if error occurs
+        try:
+            manageJSON.updateDataObjet("results/json/"+country_code+".json", "metadata", adjacencyJSON, "recommended locations")
+            #s3upload.uploadFile("results/json/"+country_code+".json",uploadFilePath="v3/json/"+country_code+".json")
+            pass
+        except:
+            print("--------error next line:")
+            print(country_code)
+
+extract_country_adjacency_data()
+extract_county_adjacency_data()

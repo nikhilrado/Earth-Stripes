@@ -8,6 +8,7 @@ var state = URL_PARAMS.get('state');
 var county = URL_PARAMS.get('county');
 var country = URL_PARAMS.get('country');
 var loc = URL_PARAMS.get('location');
+var action = URL_PARAMS.get('action');
 
 const countriesWithStates = ["AU", "BR", "CA", "CN", "IN", "RU", "US"];
 if (countriesWithStates.includes(country)) {
@@ -21,8 +22,13 @@ if (countriesWithStates.includes(country)) {
   }
 } else if (loc) {
   var imageID = "location/"+loc;
-} else {
+} else if (country) {
   var imageID = country;
+} else if (action != "elementor"){
+  console.log("yrrr: "+action)
+  console.log(URL_PARAMS)
+  //window.location.replace("/result/?location=earth");
+  console.log("IN ELEMENTOR")
 }
 console.log(imageID);
 
@@ -341,6 +347,8 @@ function getSenatorInfo(senatorData) {
 
 function setEnergyGraph(energyData) {
   var ctx = document.getElementById("myChart").getContext("2d");
+  var energyTextBox = document.getElementById("EnergySubHeader")
+  energyTextBox.innerText = "Energy Consumption in " + locationName + " from " + energyData['years'][0] + " to " + energyData['years'][energyData['years'].length-1]
 
   //console.log(energyData['years']);
 
@@ -431,6 +439,7 @@ function setEnergyGraph(energyData) {
     },
     options: {
       responsive: true,
+      maintainAspectRatio: true,
       // Can't just just `stacked: true` like the docs say
       scales: {
         yAxes: {
@@ -494,31 +503,26 @@ if (country == "US" && typeof state == "string"){
     legislativeBox.style.display = "none";
 }
 
-//function to set related locations
+// function to set related locations
 function setRelatedLocations(relLocationsJSON){
-    var dataLen = relLocationsJSON['locations'].length;
-    //loops through first 5 locations
-    for (let i = 1; i <= 5; i++){
-        btn = document.getElementById("b"+i)
-        btn.innerText = relLocationsJSON['locations'][i-1]
-        link = document.getElementById("l"+i)
-        link.href = relLocationsJSON['links'][i-1]
-        console.log(relLocationsJSON['links'][i-1])
-    }
-    //hides the remaining locations if less than 5 provided
-    for (let i = 5; i > (dataLen-2); i--){
-        btn = document.getElementById("b"+i);
-        btn.style.display = "none";
-        console.log("b"+i)
-        
-    }
-    //sets the state and country
-    for (let i = 0; i <= 2; i++){
-        b6.innerText = relLocationsJSON['locations'][dataLen-2]
-        l6.href = relLocationsJSON['links'][dataLen-2]
-        b7.innerText = relLocationsJSON['locations'][dataLen-1]
-        l7.href = relLocationsJSON['links'][dataLen-1]
-    }
+    types = ["adjacent","hierarchy"]
+    types.forEach(function(type) {
+      var dataLen = relLocationsJSON[type]['locations'].length;
+      // loops through first 5 locations
+      for (let i = 1; i <= 5; i++){
+          btn = document.getElementById(type+"-location-button-"+i)
+          btn.innerText = relLocationsJSON[type]['locations'][i-1]
+          link = document.getElementById(type+"-location-link-"+i)
+          link.href = relLocationsJSON[type]['links'][i-1]
+          console.log(relLocationsJSON[type]['links'][i-1])
+      }
+      // hides the remaining locations if less than 5 provided
+      for (let i = 5; i > (dataLen); i--){
+          btn = document.getElementById(type+"-location-button-"+i);
+          btn.style.display = "none";
+          console.log(type+"location-button-"+i)
+      }
+    });
 }
 
 // main function that loads JSON data
@@ -568,19 +572,19 @@ try{
 
 setMerchBox();
 
+// if recommended/related locations exists in JSON, set them, else hide box
+if (data['metadata']['recommended locations']){
+    setRelatedLocations(data['metadata']['recommended locations']);
+}else {
+    relatedLocationsBox.style.display = "none";
+}
+
 if (data["energy consumption"] == null){
     console.warn("No Energy Data Found");
     energyBox.style.display = "none";
 } else {
     setEnergyGraph(data["energy consumption"]);
     energyData = data["energy consumption"];
-}
-
-// if recommended/related locations exists in JSON, set them, else hide box
-if (data['metadata']['recommended locations']){
-    setRelatedLocations(data['metadata']['recommended locations']);
-}else {
-    relatedLocationsBox.style.display = "none";
 }
 
 // this needs to be here cause it needs to get locationName from JSON
