@@ -40,7 +40,10 @@ def saveResource(resourceURL):
                     ["Access Date (UTC):",  datetime.datetime.now()]]
     my_list = metaDataList + my_list
 
-    file_path = f'data/us-state-data-NOAA/{endYear}/{getStateAbrev(state)} - AnnTemp {startYear}-{endYear}.csv'
+    if state == "Contiguous U.S.":
+        file_path = f'data/USA {endYear}.csv'
+    else:
+        file_path = f'data/us-state-data-NOAA/{endYear}/{getStateAbrev(state)} - AnnTemp {startYear}-{endYear}.csv'
 
     # create folder if it doesn't exist
     folder_path = file_path[:file_path.rfind("/")]
@@ -66,4 +69,5 @@ for i in range(51):
     if saveResource(resourceURL) == "done":
         continue
 
-
+# downloads all data for the contiguous US
+saveResource("https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/national/time-series/110/tavg/ann/1/1895-2022.csv?base_prd=true&begbaseyear=1901&endbaseyear=2000")

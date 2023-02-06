@@ -51,15 +51,12 @@ def saveResource(resourceURL):
         write = csv.writer(f)
         write.writerows(my_list)
 
-with open('County Data Stuff/test11.txt', "r") as myfile:
-    data = myfile.read()
-
 newData = ""
 counter = 0
 for state in stateShortName:
     for i in range(250):
         counter += 1
-
+        # TODO: Miami-Dade FIPS is 086, need to make new system
         noaa_data_url = "https://www.ncdc.noaa.gov/cag/county/time-series/%s-%s-tavg-12-12-1895-2022.csv?base_prd=true&begbaseyear=1901&endbaseyear=2000" % (state,f"{i*2+1:03d}")
 
         print("County: " + str(counter)  +  ' ' + noaa_data_url)
