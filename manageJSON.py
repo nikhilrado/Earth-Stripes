@@ -43,7 +43,7 @@ def updateDataObjet(fileName,name,data,subobject=False):
 
 #deletes stuff from the files
 def deleteObject(directoryOfJSONFiles,object,subobject=False):
-    for file in s3upload.getAllFilesInDir(directoryOfJSONFiles):
+    for file in s3upload.get_all_files_in_dir(directoryOfJSONFiles):
         f = open(file.replace("\\","/"),"r")
         f = f.read()
         f = json.loads(f)

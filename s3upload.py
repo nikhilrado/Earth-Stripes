@@ -16,39 +16,39 @@ S3_UPLOAD_BUCKET = "earthstripes"
 client = boto3.client('s3', aws_access_key_id=s3.access_key, aws_secret_access_key=s3.secret_access_key)
 
 # returns a list of all files in a directory
-def getAllFilesInDir(root):
-    fileList = []
+def get_all_files_in_dir(root):
+    file_list = []
     for path, subdirs, files in os.walk(root):
         for name in files:
-            fileList.append(os.path.join(path, name))
-    return fileList
+            file_list.append(os.path.join(path, name))
+    return file_list
 
 # will upload a file to s3 and print a statement stating which file was uploaded
-def uploadFile(file,uploadFilePath=False):
+def upload_file(file,upload_file_path=False):
     # lets the user specify if they want to add a custom file path
-    if uploadFilePath == False:
+    if upload_file_path == False:
         upload_file_path = "v3/" + file.replace(RESULTS_DIRECTORY,"")
     else:
-        upload_file_path = uploadFilePath
+        upload_file_path = upload_file_path
     
-    contentType = "txt"
+    content_type = "txt"
     if '.png' in file:
-        contentType = 'image/png'
-    if '.jpg' in file:
-        contentType = 'image/jpg'
-    if '.json' in file:
-        contentType = 'application/json'
-    if '.xml' in file:
-        contentType = 'text/xml'
-    if '.csv' in file:
-        contentType = 'text/csv'
-    if '.html' in file:
-        contentType = 'text/html'
-    if '.js' in file:
-        contentType = 'application/javascript'
-    if '.css' in file:
-        contentType = 'text/css'
-    client.upload_file(file, S3_UPLOAD_BUCKET, upload_file_path,ExtraArgs={'ACL':'public-read', "ContentType":contentType})
+        content_type = 'image/png'
+    elif '.jpg' in file:
+        content_type = 'image/jpg'
+    elif '.json' in file:
+        content_type = 'application/json'
+    elif '.xml' in file:
+        content_type = 'text/xml'
+    elif '.csv' in file:
+        content_type = 'text/csv'
+    elif '.html' in file:
+        content_type = 'text/html'
+    elif '.js' in file:
+        content_type = 'application/javascript'
+    elif '.css' in file:
+        content_type = 'text/css'
+    client.upload_file(file, S3_UPLOAD_BUCKET, upload_file_path,ExtraArgs={'ACL':'public-read', "ContentType":content_type})
     print("Uploaded: "+ file +" --to-- "+S3_UPLOAD_BUCKET+"/"+upload_file_path)
 
 
@@ -64,84 +64,84 @@ def sorting(lst):
     lst2 = sorted(lst, key=len)
     return lst2
 
-resourceTypes = sorting(os.listdir(RESULTS_DIRECTORY))
-resourceTypes.reverse()
+resource_types = sorting(os.listdir(RESULTS_DIRECTORY))
+resource_types.reverse()
 #print(resourceTypes)
-def getFileType(filePath):
-    for resourceType in resourceTypes:
-        if resourceType in filePath:
-            return resourceType
+def get_file_type(file_path):
+    for resource_type in resource_types:
+        if resource_type in file_path:
+            return resource_type
 
 # when run it will upload all files in a directory to s3, if smartUpload is "True", it will only upload files that have been changed since last upload
-def uploadNewChanges(directory=RESULTS_DIRECTORY,smartUpload=True, exclude=[]):
+def upload_new_changes(directory=RESULTS_DIRECTORY,smart_upload=True, exclude=[]):
     # opens the log file
     f = open(LOG_FILE,"r")
     csv_f = csv.reader(f)
-    rowsList = []
+    rows_list = []
     for row in csv_f:
-        rowsList.append(row)
+        rows_list.append(row)
     # sets variables from log file
-    lastUpload = rowsList[1][0]
-    costToDate = float(rowsList[1][-1])
-    savingsToDate = float(rowsList[1][-3])
-    lastUpload = datetime.strptime(lastUpload, '%Y-%m-%d %H:%M:%S.%f')
-    dateTimeStart = str(datetime.now())
+    last_upload = rows_list[1][0]
+    cost_to_date = float(rows_list[1][-1])
+    savings_to_date = float(rows_list[1][-3])
+    last_upload = datetime.strptime(last_upload, '%Y-%m-%d %H:%M:%S.%f')
+    date_time_start = str(datetime.now())
 
     # counters, metrics and analytics
-    itemsProcessed = 0
-    numUploaded = 0
+    items_processed = 0
+    num_uploaded = 0
 
     # will loop through all of the files
-    for file in getAllFilesInDir(directory):
+    for file in get_all_files_in_dir(directory):
         #if the file is not in the exclude list
         exclude.append("desktop.ini")
-        uploadFlag = True
+        upload_flag = True
         for ex in exclude:
             if ex in file:
                 print("skipping: "+file)
-                uploadFlag = False
+                upload_flag = False
                 break
-        if not uploadFlag:
+        if not upload_flag:
             continue
         file = file.replace("\\","/")  # fixes annoying formating issue that messes up s3
-        itemsProcessed += 1
+        items_processed += 1
 
         # if this is a smart upload then, read the json file, and determine if it needs to be uploaded
-        if smartUpload:
-            fileType = getFileType(file)
-            jsonFile = file.replace(fileType,"json").replace(".png",".json").replace(".jpeg",".json")
-            f = open(jsonFile)
+        if smart_upload:
+            file_type = get_file_type(file)
+            json_file = file.replace(file_type,"json").replace(".png",".json").replace(".jpeg",".json")
+            f = open(json_file)
             f = f.read()
             f = json.loads(f)
             #print(f)
 
             # find the date in the json file, if no date is present, skip file 
             try:
-                lastUpdated = f["resources"][fileType]["last updated"]
-                lastUpdated = datetime.strptime(lastUpdated, '%Y-%m-%d %H:%M:%S.%f')
-                if lastUpload < lastUpdated:
-                    uploadFile(file)
-                    numUploaded += 1
+                last_updated = f["resources"][file_type]["last updated"]
+                last_updated = datetime.strptime(last_updated, '%Y-%m-%d %H:%M:%S.%f')
+                if last_upload < last_updated:
+                    upload_file(file)
+                    num_uploaded += 1
             except:
                 continue
         # when smartUpload isn't true, just upload everything
         else:
-            uploadFile(file)
-            numUploaded += 1
+            upload_file(file)
+            num_uploaded += 1
         
 
     # open up the log file, and record data from the day's upload
     with open(LOG_FILE, 'w', newline="") as f:
         # using csv.writer method from CSV package
         # ['dateTimeStart', 'dateTimeFinish', 'numUploaded', 'numFailed', 'cost', '', 'smartUpload', 'itemsProcessed', 'itemsSaved', 'initialCost', 'smartCost', 'savings', 'savingsToDate' ,'costToDate']
-        cost = S3_PUT_COST*numUploaded
-        savings = S3_PUT_COST*itemsProcessed-S3_PUT_COST*numUploaded
-        uploadLogData = [dateTimeStart, str(datetime.now()), numUploaded,"?",cost,"-",smartUpload,itemsProcessed,itemsProcessed-numUploaded,S3_PUT_COST*itemsProcessed,S3_PUT_COST*numUploaded,savings,savingsToDate+savings,costToDate+cost]
-        rowsList.insert(1,uploadLogData)
+        cost = S3_PUT_COST*num_uploaded
+        savings = S3_PUT_COST*items_processed-S3_PUT_COST*num_uploaded
+        upload_log_data = [date_time_start, str(datetime.now()), num_uploaded,"?",cost,"-",smart_upload,items_processed,items_processed-num_uploaded,S3_PUT_COST*items_processed,S3_PUT_COST*num_uploaded,savings,savings_to_date+savings,cost_to_date+cost]
+        rows_list.insert(1,upload_log_data)
 
         write = csv.writer(f)
-        write.writerows(rowsList)
-        print(uploadLogData)
+        write.writerows(rows_list)
+        print(upload_log_data)
 
 
 def test():
@@ -150,7 +150,11 @@ def test():
     #uploadNewChanges(directory="results/json/US/",smartUpload=False)
     #uploadNewChanges(directory="results/",smartUpload=False)
     #uploadNewChanges(directory="photos/local-impact-photos/",smartUpload=False)
-    uploadNewChanges(directory="../Earth Stripes Codebase/results/large-square-stripes",smartUpload=False)
+    CHART_TYPES = ["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","stripes-svg","light-labeled-bars","large-square-stripes"]
+    CHART_TYPES += ["json"]
+    for chart_type in CHART_TYPES:
+        upload_new_changes(directory=f"../Earth Stripes Codebase/results/{chart_type}/US/FL/",smart_upload=False) 
+        #uploadFile(f"../Earth Stripes Codebase/results/{chartType}/US.json")
     #uploadFile("Site Files/map-page/countries2.js", uploadFilePath="map-stuff.js")
     #uploadFile("Map Stuff/mapData.csv",uploadFilePath="mapData2.csv")
     #uploadFile("test5.svg",uploadFilePath="test5.svg")
@@ -161,20 +165,20 @@ def test():
     pass
 
 # method to upload all of the image/file types to s3 by inputting the stripes file
-def uploadAll(file,chartTypes=["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","light-labeled-bars","stripes-svg","json"]):
-    for chartType in chartTypes:
-        if "svg" in chartType:
-            uploadFile(file.replace("/stripes/","/"+chartType+"/").replace(".png",".svg"),uploadFilePath="v3/"+file.replace("/stripes/","/"+chartType+"/").replace("results/","").replace(".png",".svg"))
-        elif "json" in chartType:
-            uploadFile(file.replace("/stripes/","/"+chartType+"/").replace(".png",".json"),uploadFilePath="v3/"+file.replace("/stripes/","/"+chartType+"/").replace("results/","").replace(".png",".json"))
+def upload_all(file,chart_types=["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","light-labeled-bars","stripes-svg","json"]):
+    for chart_type in chart_types:
+        if "svg" in chart_type:
+            upload_file(file.replace("/stripes/","/"+chart_type+"/").replace(".png",".svg"),upload_file_path="v3/"+file.replace("/stripes/","/"+chart_type+"/").replace("results/","").replace(".png",".svg"))
+        elif "json" in chart_type:
+            upload_file(file.replace("/stripes/","/"+chart_type+"/").replace(".png",".json"),upload_file_path="v3/"+file.replace("/stripes/","/"+chart_type+"/").replace("results/","").replace(".png",".json"))
         else:
-            uploadFile(file.replace("/stripes/","/"+chartType+"/"),uploadFilePath="v3/"+file.replace("/stripes/","/"+chartType+"/").replace("results/",""))
+            upload_file(file.replace("/stripes/","/"+chart_type+"/"),upload_file_path="v3/"+file.replace("/stripes/","/"+chart_type+"/").replace("results/",""))
 
 # uploads all files for a foreign (non-US) state/province
-def uploadStateProvinces(stateProvinces = ["AU","CA","BR","CN","IN","RU"]):
-    for country in stateProvinces:
+def upload_state_provinces(state_provinces = ["AU","CA","BR","CN","IN","RU"]):
+    for country in state_provinces:
         for type in ["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","light-labeled-bars","stripes-svg","json"]:
-            uploadNewChanges("../Earth Stripes Codebase/results/{}/{}".format(type,country),smartUpload=False)
+            upload_new_changes("../Earth Stripes Codebase/results/{}/{}".format(type,country),smart_upload=False)
 
 # this is the main function that will be called when the script is run
 # if the file is imported, it will not run the test function

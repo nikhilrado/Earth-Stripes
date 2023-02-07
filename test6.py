@@ -78,9 +78,13 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
     #print("temps: ", temps)
 
     # sets dataSource and dataSourceLink properties to be added to the JSON file, updates the JSON image metadata file
-    #dataSource = metadataList[6][1] if metadataList[6][0] == "Data Source:" else None
-    #dataSourceLink = metadataList[7][1] if metadataList[7][0] == "Data Source URL:" else None
-    #manageJSON.updateMetadata(imagePath,chartType,width=width,height=height,startYear=firstYear,endYear=lastYear,dataSource=dataSource, dataSourceLink=dataSourceLink, name=location)
+    try:
+        dataSource = metadataList[6][1] if metadataList[6][0] == "Data Source:" else None
+        dataSourceLink = metadataList[7][1] if metadataList[7][0] == "Data Source URL:" else None
+    except:
+        dataSource = None
+        dataSourceLink = None
+    manageJSON.updateMetadata(imagePath,chartType,width=width,height=height,startYear=firstYear,endYear=lastYear,dataSource=dataSource, dataSourceLink=dataSourceLink, name=location)
 
 
     def drawBars(chartType=chartType,width=width, height=height):
@@ -231,7 +235,7 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
 
         # attempts to get a color for the last 20 years, to show rate of warming
         jsonPath = imagePath.replace(chartType, "json")+".json"
-        last20YrsAnomaly = numpy.mean(anomalyList[-20:])
+        last20YrsAnomaly = numpy.mean(anomalyList[-50:])
         if last20YrsAnomaly < 0:
             last20YrsAnomaly = 0.5-(-1*last20YrsAnomaly/(range2))/2
         if last20YrsAnomaly >= 0:
@@ -239,7 +243,11 @@ def createChart(csvPath,imagePath,chartType="bars",save=True,width=3780,height=2
         if last20YrsAnomaly > 1:
             last20YrsAnomaly = 1
         AveColor = gradientList[round(last20YrsAnomaly*len(gradientList)-1)]
-        manageJSON.updateDataObjet(jsonPath, "metadata", AveColor, "color")
+        data = {
+            'color': AveColor,
+            'anomaly': last20YrsAnomaly
+        }
+        manageJSON.updateDataObjet(jsonPath, "metadata", data, "color")
 
     def drawInfo(text="New York, NY", infoType=chartType,height2=height,width=width):
         fnt = ImageFont.truetype("data/Roboto/Roboto-Regular.ttf", 130)
