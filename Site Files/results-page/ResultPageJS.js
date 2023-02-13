@@ -237,22 +237,25 @@ function setLocalImpacts(data){
 
 // sets the bars for yale data_function
 function setYaleBars() {
-    YaleSubHeader.innerText = "How people in " + data["YaleClimateOpinionData2020"]["data"]["GeoName"] + " view climate change";
+    YaleSubHeader.innerText = "How people in " + data["YaleClimateOpinionData"]["data"]["GeoName"] + " view climate change";
     datas = ["happening", "personal","harmUS", "congress","fundrenewables","teachGW"];
 
     for (let i = 0; i < datas.length; i++) {
         var agree1 = document.getElementById("Yaleagree" + (i + 1));
-        left = data["YaleClimateOpinionData2020"]["data"][datas[i]];
+        left = data["YaleClimateOpinionData"]["data"][datas[i]];
         agree1.setAttributeNS(null, "width", left);
         agree1text = document.getElementById("Yaleagree" + (i + 1) + "text");
         agree1text.innerHTML = Math.round(left) + "%";
         agree1text.setAttributeNS(null, "x", left - 1);
 
         var disagree1 = document.getElementById("Yaledisagree" + (i + 1));
-        right = data["YaleClimateOpinionData2020"]["data"][datas[i] + "Oppose"];
+        right = data["YaleClimateOpinionData"]["data"][datas[i] + "Oppose"];
         disagree1.setAttributeNS(null, "x", 100 - right);
         disagree1.setAttributeNS(null, "width", right);
     }
+    
+    yaleDataSource = document.getElementById('Yale-Source-Text')
+    yaleDataSource.innerText = "Yale Climate Opinion Survey " + data["YaleClimateOpinionData"]["metadata"]["year"]
 }
 
 const ZAZZLE_INT_COUNTRIES = ["us","ca","gb","de","es","fr","pt","se","nl","at","ch","be","br","au","nz","jp"];
@@ -349,6 +352,7 @@ function setEnergyGraph(energyData) {
   var ctx = document.getElementById("myChart").getContext("2d");
   var energyTextBox = document.getElementById("EnergySubHeader")
   energyTextBox.innerText = "Energy Consumption in " + locationName + " from " + energyData['years'][0] + " to " + energyData['years'][energyData['years'].length-1]
+  
 
   //console.log(energyData['years']);
 

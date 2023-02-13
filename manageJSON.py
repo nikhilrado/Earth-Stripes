@@ -44,10 +44,15 @@ def updateDataObjet(fileName,name,data,subobject=False):
 #deletes stuff from the files
 def deleteObject(directoryOfJSONFiles,object,subobject=False):
     for file in s3upload.get_all_files_in_dir(directoryOfJSONFiles):
-        f = open(file.replace("\\","/"),"r")
-        f = f.read()
-        f = json.loads(f)
-        #print(f)
+        if not ".json" in file:
+            continue
+
+        try:
+            f = open(file.replace("\\","/"),"r")
+            f = f.read()
+            f = json.loads(f)
+        except Exception as e:
+            print(str(e) + f" - ({file})")
         
         if subobject:
             try:
@@ -61,6 +66,8 @@ def deleteObject(directoryOfJSONFiles,object,subobject=False):
                 continue
         with open(file, "w") as myFile:
             myFile.write(json.dumps(f, indent=2))
+        #print(f"deleted {object} from {file}")
+    print(f"deleted {object} from all files in {directoryOfJSONFiles}")
 #deleteObject("results/json","resources","bars")
 
 def updateMetadata(resourceID,resourceType,width=None,height=None,startYear=None,endYear=None,dataSource=None,dataSourceLink=None,name=None):
