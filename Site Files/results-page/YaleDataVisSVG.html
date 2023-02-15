@@ -1,22 +1,25 @@
 <style>
-    .barColors{
-        fill:rgb(255, 208, 0)
+    .barColors {
+        fill: rgb(255, 208, 0)
     }
+
     .lineColors {
         fill: #e6e5e5
     }
 </style>
+<link rel="stylesheet" href="ResultPageStyle.css">
+
 <svg viewBox="0 0 100 5">
-    <rect id="line1" class="lineColors" x="0" y="0" width="100" height="5"/>
-    <rect id="agree1" class="barColors" x="0" y="0" width="20" height="5"/>
+    <rect id="line1" class="lineColors" x="0" y="0" width="100" height="5" />
+    <rect id="agree1" class="barColors" x="0" y="0" width="20" height="5" />
     <text id="agree1text" x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="3">50%</text>
-    <rect id="disagree1" class="barColors" x="80" y="0" width="20" height="5"/>
+    <rect id="disagree1" class="barColors" x="80" y="0" width="20" height="5" />
 </svg>
 
 <p style="text-align:left;">
     Agree with Climate Change
-        <span style="float:right;">
-    Disgree with Climate Change
+    <span style="float:right;">
+        Disgree with Climate Change
     </span>
 </p>
 
@@ -24,14 +27,115 @@
     right = 20
     left = 50
     var agree1 = document.getElementById("agree1");
-    agree1.style.fill="green";
+    agree1.style.fill = "green";
     agree1.setAttributeNS(null, 'width', left);
 
     var disagree1 = document.getElementById("disagree1");
-    disagree1.style.fill="red";
-    disagree1.setAttributeNS(null, 'x', 100-right);
+    disagree1.style.fill = "red";
+    disagree1.setAttributeNS(null, 'x', 100 - right);
     disagree1.setAttributeNS(null, 'width', right);
     agree1text.innerHTML = "yrr"
-</script>  
+</script>
 
-<a href="/sources#ypccc" target="_blank"><p class=source id="Yale-Source-Text">Yale Climate Opinion Survey<p></a>
+<a href="/sources#ypccc" target="_blank">
+    <p class=source id="Yale-Source-Text">Yale Climate Opinion Survey<p>
+</a>
+
+<div id=Yalebox1>
+    <p id="Yalebarheader1" class="YaleBarHeader">Global Warming is Happening</p>
+    <svg viewBox="0 0 100 5">
+        <rect id="Yaleline1" class="YaleBox" x="0" y="0" width="100" height="5" />
+        <rect id="Yaleagree1" class="YaleLeftline" x="0" y="0" width="5" height="5" />
+        <text id="Yaleagree1text" x="50%" y="50%" dominant-baseline="middle" text-anchor="end" font-size="3">0%</text>
+        <rect id="Yaledisagree1" class="YaleRightline" x="95" y="0" width="5" height="5" />
+        <rect id="YaleNationalAverage1" class="YaleAverageBox" x="0" y="0" width="1" height="5" />
+    </svg>
+    <p class="YaleBottomText" style="text-align:left;">Yes<span style="float:right;">No</span></p>
+</div>
+
+<style>
+    .YaleAverageBox {
+        fill: #a8a8a8;
+    }
+</style>
+
+<!--Yale Climate Information-->
+<style>
+    .YaleAverageBox {
+        fill: #00000065;
+    }
+</style>
+
+<div id=Yalebox1>
+    <p id="Yalebarheader1" class="YaleBarHeader">Global Warming is Happening</p>
+    <svg viewBox="0 0 100 5">
+        <rect id="Yaleline1" class="YaleBox" x="0" y="0" width="100" height="5" />
+        <rect id="Yaleagree1" class="YaleLeftline" x="0" y="0" width="5" height="5" />
+        <text id="Yaleagree1text" x="50%" y="50%" dominant-baseline="middle" text-anchor="end" font-size="3">0%</text>
+        <rect id="Yaledisagree1" class="YaleRightline" x="95" y="0" width="5" height="5" />
+        <rect id="YaleNationalAverage1" class="YaleAverageBox" x="0" y="0" width="1" height="5" />
+    </svg>
+    <p class="YaleBottomText" style="text-align:left;">Yes<span style="float:right;">No</span></p>
+</div>
+
+<div id=Yalebox2>
+    <p id="Yalebarheader2" class="YaleBarHeader">Global warming will harm me personally</p>
+    <svg viewBox="0 0 100 5">
+        <rect id="Yaleline2" class="YaleBox" x="0" y="0" width="100" height="5" />
+        <rect id="Yaleagree2" class="YaleLeftline" x="0" y="0" width="5" height="5" />
+        <text id="Yaleagree2text" x="50%" y="50%" dominant-baseline="middle" text-anchor="end" font-size="3">0%</text>
+        <rect id="Yaledisagree2" class="YaleRightline" x="95" y="0" width="5" height="5" />
+        <rect id="YaleNationalAverage2" class="YaleAverageBox" x="0" y="0" width="1" height="5" />
+    </svg>
+    <p class="YaleBottomText" style="text-align:left;">Great/Moderate Amount<span style="float:right;">Little/Not at
+            all</span></p>
+</div>
+
+<div id=Yalebox3>
+    <p id="Yalebarheader3" class="YaleBarHeader">Global warming is already harming people in the US</p>
+    <svg viewBox="0 0 100 5">
+        <rect id="Yaleline3" class="YaleBox" x="0" y="0" width="100" height="5" />
+        <rect id="Yaleagree3" class="YaleLeftline" x="0" y="0" width="5" height="5" />
+        <text id="Yaleagree3text" x="50%" y="50%" dominant-baseline="middle" text-anchor="end" font-size="3">0%</text>
+        <rect id="Yaledisagree3" class="YaleRightline" x="95" y="0" width="5" height="5" />
+        <rect id="YaleNationalAverage3" class="YaleAverageBox" x="0" y="0" width="1" height="5" />
+    </svg>
+    <p class="YaleBottomText" style="text-align:left;">Now/Within 10 years<span style="float:right;">25+
+            years/Never</span></p>
+</div>
+
+<div id=Yalebox4>
+    <p id="Yalebarheader4" class="YaleBarHeader">Congress should do more to address global warming</p>
+    <svg viewBox="0 0 100 5">
+        <rect id="Yaleline4" class="YaleBox" x="0" y="0" width="100" height="5" />
+        <rect id="Yaleagree4" class="YaleLeftline" x="0" y="0" width="5" height="5" />
+        <text id="Yaleagree4text" x="50%" y="50%" dominant-baseline="middle" text-anchor="end" font-size="3">0%</text>
+        <rect id="Yaledisagree4" class="YaleRightline" x="95" y="0" width="5" height="5" />
+        <rect id="YaleNationalAverage4" class="YaleAverageBox" x="0" y="0" width="1" height="5" />
+    </svg>
+    <p class="YaleBottomText" style="text-align:left;">More<span style="float:right;">Less</span></p>
+</div>
+
+<div id=Yalebox5>
+    <p id="Yalebarheader5" class="YaleBarHeader">Fund research into renewable energy sources</p>
+    <svg viewBox="0 0 100 5">
+        <rect id="Yaleline5" class="YaleBox" x="0" y="0" width="100" height="5" />
+        <rect id="Yaleagree5" class="YaleLeftline" x="0" y="0" width="5" height="5" />
+        <text id="Yaleagree5text" x="50%" y="50%" dominant-baseline="middle" text-anchor="end" font-size="3">0%</text>
+        <rect id="Yaledisagree5" class="YaleRightline" x="95" y="0" width="5" height="5" />
+        <rect id="YaleNationalAverage5" class="YaleAverageBox" x="0" y="0" width="1" height="5" />
+    </svg>
+    <p class="YaleBottomText" style="text-align:left;">Support<span style="float:right;">Oppose</span></p>
+</div>
+
+<div id=Yalebox6>
+    <p id="Yalebarheader6" class="YaleBarHeader">Schools should teach global warming</p>
+    <svg viewBox="0 0 100 5">
+        <rect id="Yaleline6" class="YaleBox" x="0" y="0" width="100" height="5" />
+        <rect id="Yaleagree6" class="YaleLeftline" x="0" y="0" width="5" height="5" />
+        <rect id="Yaledisagree6" class="YaleRightline" x="95" y="0" width="5" height="5" />
+        <rect id="YaleNationalAverage6" class="YaleAverageBox" x="0" y="0" width="1" height="5" />
+        <text id="Yaleagree6text" x="50%" y="50%" dominant-baseline="middle" text-anchor="end" font-size="3">0%</text>
+    </svg>
+    <p class="YaleBottomText" style="text-align:left;">Agree<span style="float:right;">Disagree</span></p>
+</div>

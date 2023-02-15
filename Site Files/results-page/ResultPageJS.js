@@ -248,6 +248,9 @@ function setYaleBars() {
         agree1text.innerHTML = Math.round(left) + "%";
         agree1text.setAttributeNS(null, "x", left - 1);
 
+        var agreeNationalAverage1 = document.getElementById("YaleNationalAverage" + (i + 1));
+        agreeNationalAverage1.setAttributeNS(null, "width", data["YaleClimateOpinionData"]["national_data"][datas[i]]);
+
         var disagree1 = document.getElementById("Yaledisagree" + (i + 1));
         right = data["YaleClimateOpinionData"]["data"][datas[i] + "Oppose"];
         disagree1.setAttributeNS(null, "x", 100 - right);

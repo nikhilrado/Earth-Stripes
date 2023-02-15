@@ -1,6 +1,7 @@
 # this program takes the data from the Yale Climate Opinion Survey and places it in the respective JSON files
 import csv
 import sys
+import json
 sys.path.insert(0, '../Earth Stripes Codebase')
 import globals
 import manageJSON
@@ -8,6 +9,7 @@ import manageJSON
 RESULTS_DIR = "../Earth Stripes Codebase/results/json/"
 YCOM_DATA_FILE = '../Earth Stripes Codebase/data/yale-climate/YCOM_2021_Data.csv'
 YCOM_DATA_YEAR = "2021"
+NATIONAL_DATA_FILE = "../Earth Stripes Codebase/results/json/US.json"
 
 # intercepts function for globals.py to accommodate dif DC naming convention
 def get_state_abbrev(state):
@@ -29,6 +31,12 @@ def get_resource_id_from_yale(row):
         return row[2]
     return None
 
+# opens the national data file and appends it, should probably load independently
+with open(NATIONAL_DATA_FILE, "r") as file:
+    national_json = json.load(file)
+    national_data = national_json["YaleClimateOpinionData"]["data"]
+
+#TODO: will add old data as national if not run twice
 with open(YCOM_DATA_FILE, "r") as file:
     rows_list = list(csv.reader(file))
 data_headers = rows_list.pop(0)  # sets first row as headers and removes it
@@ -47,7 +55,8 @@ for i, row in enumerate(rows_list):
                 "year": YCOM_DATA_YEAR
             },
             # translates YCOM csv data structure to our json via dictionary comprehension
-            "data": {key_name: value for key_name, value in zip(data_headers, row)}
+            "data": {key_name: value for key_name, value in zip(data_headers, row)},
+            "national_data": national_data
         }
     }
     
