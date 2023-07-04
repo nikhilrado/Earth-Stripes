@@ -8,35 +8,48 @@
     <script src="https://unpkg.com/@mapbox/mapbox-sdk/umd/mapbox-sdk.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+    
         #main-header {
             color: #2d4739;
         }
         * {
-            box-sizing: border-box;
+        box-sizing: border-box;
         }
+
         body {
             font: 16px Arial;
         }
+
         /*the container must be positioned relative:*/
         .autocomplete {
             position: relative;
             display: inline-block;
         }
+
         input {
             border: 1px solid transparent;
             background-color: #f1f1f1;
             padding: 10px;
             font-size: 16px;
         }
+
         input[type=text] {
             background-color: #f1f1f1;
             width: 100%;
         }
+
         input[type=submit] {
             background-color: blue;
             color: #fff;
             cursor: pointer;
         }
+        
+        [type=button] {
+            background-color: red !important;
+            color: red !important;
+            cursor: POINTER;
+        }
+
         .autocomplete-items {
             position: absolute;
             border: 1px solid #d4d4d4;
@@ -48,16 +61,19 @@
             left: 0;
             right: 0;
         }
+
         .autocomplete-items div {
             padding: 10px;
             cursor: pointer;
             background-color: #fff;
             border-bottom: 1px solid #d4d4d4;
         }
+
         /*when hovering an item:*/
         .autocomplete-items div:hover {
             background-color: #e9e9e9;
         }
+
         /*when navigating through the items using the arrow keys:*/
         .autocomplete-active {
             background-color: #e5c687 !important;
@@ -78,7 +94,7 @@
 <a href="/result/?country=US&state=NY&county=New%20York%20County"><button class="button button1">New York</button></a>
 <a href="/result/?country=US&state=CA&county=Los%20Angeles%20County"><button class="button button2">Los Angeles</button></a>
 <a href="/result/?country=US&state=FL&county=Miami-Dade%20County"><button class="button button3">Miami</button></a>
-<a href="/result/?country=US&state=IL&county=Cook%20County"><button class="button button4">Chicago</button></a>
+<a href="/result/?location=earth"><button class="button button4">Earth</button></a>
 <a onclick="getLocationForButton()"><button id="b5" class="button button5">Your Location</button></a>
 </div>
 
@@ -91,8 +107,7 @@ document.getElementById("autocomplete-mapbox").focus(); //focuses on search bar 
 
 //modified from https://stackoverflow.com/a/60447419
 
-    //var geocodingClient = mapboxSdk({accessToken: 'pk.eyJ1Ijoib3J0YW5hdGVjaCIsImEiOiJja3NnaDQ5YmUxazlzMm9udnNqNGd5a2ZuIn0.igvWjSd5QsKCz_e-XSMChA'});
-    var geocodingClient = mapboxSdk({accessToken: 'pk.eyJ1Ijoib3J0YW5hdGVjaCIsImEiOiJja3ZmZjBzb3oxZzAyMm9ueXl2YW91ZzVvIn0.OJ87qkFX03LHAa_NgTdSxg'});
+    var geocodingClient = mapboxSdk({accessToken: 'pk.eyJ1Ijoib3J0YW5hdGVjaCIsImEiOiJja3NnaDQ5YmUxazlzMm9udnNqNGd5a2ZuIn0.igvWjSd5QsKCz_e-XSMChA'});
 
     function autocompleteSuggestionMapBoxAPI(inputParams, callback) {
         geocodingClient.geocoding.forwardGeocode({
@@ -101,7 +116,7 @@ document.getElementById("autocomplete-mapbox").focus(); //focuses on search bar 
             autocomplete: true,
             types: ["country","region","postcode","district","place","locality"],
             limit: 5,
-            proximity: [-78,39]
+            proximity: [42.6, -73.8]
         })
             .send()
             .then(response => {
@@ -111,7 +126,7 @@ document.getElementById("autocomplete-mapbox").focus(); //focuses on search bar 
             });
     }
     
-    // supports custom redirect function
+    //supports custom redirect function
     // extract country short name (e.g. GB for Great Britain) from google geocode API result
     function getCountry2(addrComponents,locality) {
         for (var i = 0; i < addrComponents.length; i++) {
@@ -133,7 +148,7 @@ document.getElementById("autocomplete-mapbox").focus(); //focuses on search bar 
         var currentFocus;
         inp.addEventListener("input", function (e) {
             var a, b, i, val = this.value;
-            closeAllLists();
+            
             if (!val) {
                 return false;
             }
@@ -148,6 +163,7 @@ document.getElementById("autocomplete-mapbox").focus(); //focuses on search bar 
                 a.style.marginTop = "-45px";
             }
             this.parentNode.appendChild(a);
+            
 
             // suggestion list MapBox api called with callback
             autocompleteSuggestionMapBoxAPI($('#autocomplete-mapbox').val(), function (results) {
@@ -163,27 +179,32 @@ document.getElementById("autocomplete-mapbox").focus(); //focuses on search bar 
                         inp.value = $(this).find('input').val();
                         $(inp).attr('data-lat', lat);
                         $(inp).attr('data-lng', long);
-                        closeAllLists();
+                        closeAllLists(a);
                         console.log(key);
                         getRedirectURLMapbox(key,true);
                     });
                     a.appendChild(b);
                 });
             })
+            //closeAllLists(a);
         });
 
 
-        // execute a function presses a key on the keyboard:
+        /*execute a function presses a key on the keyboard:*/
         inp.addEventListener("keydown", function (e) {
             var x = document.getElementById(this.id + "autocomplete-list");
             if (x) x = x.getElementsByTagName("div");
-            if (e.keyCode == 40) { // down
-                // if the arrow DOWN key is pressed, increase the currentFocus variable
+            if (e.keyCode == 40) {
+                /*If the arrow DOWN key is pressed,
+                increase the currentFocus variable:*/
                 currentFocus++;
-                // and and make the current item more visible
+                /*and and make the current item more visible:*/
                 addActive(x);
-            } else if (e.keyCode == 38) { // up
+            } else if (e.keyCode == 38) { //up
+                /*If the arrow UP key is pressed,
+                decrease the currentFocus variable:*/
                 currentFocus--;
+                /*and and make the current item more visible:*/
                 addActive(x);
             } else if (e.keyCode == 13) {
                 /*If the ENTER key is pressed, prevent the form from being submitted,*/
@@ -198,25 +219,26 @@ document.getElementById("autocomplete-mapbox").focus(); //focuses on search bar 
         });
 
         function addActive(x) {
-            // a function to classify an item as "active"
+            /*a function to classify an item as "active":*/
             if (!x) return false;
-            // start by removing the "active" class on all items
+            /*start by removing the "active" class on all items:*/
             removeActive(x);
             if (currentFocus >= x.length) currentFocus = 0;
             if (currentFocus < 0) currentFocus = (x.length - 1);
-            // add class "autocomplete-active"
+            /*add class "autocomplete-active":*/
             x[currentFocus].classList.add("autocomplete-active");
         }
 
         function removeActive(x) {
-            // a function to remove the "active" class from all autocomplete items
+            /*a function to remove the "active" class from all autocomplete items:*/
             for (var i = 0; i < x.length; i++) {
                 x[i].classList.remove("autocomplete-active");
             }
         }
 
         function closeAllLists(elmnt) {
-            // close all autocomplete lists in the document, except the one passed as an argument:*/
+            /*close all autocomplete lists in the document,
+            except the one passed as an argument:*/
             var x = document.getElementsByClassName("autocomplete-items");
             for (var i = 0; i < x.length; i++) {
                 if (elmnt != x[i] && elmnt != inp) {
@@ -225,7 +247,7 @@ document.getElementById("autocomplete-mapbox").focus(); //focuses on search bar 
             }
         }
 
-        // execute a function when someone clicks in the document
+        /*execute a function when someone clicks in the document:*/
         document.addEventListener("click", function (e) {
             closeAllLists(e.target); 
         });

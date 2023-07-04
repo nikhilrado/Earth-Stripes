@@ -2,10 +2,10 @@ import os
 import json
 import csv
 
-#this code was written very slopily because deadline was approaching very quickly
-#and I was waiting on contacting mapbox sales about bulk geocoder
+# this code was written very sloppily because deadline was approaching very quickly
+# and I was waiting on contacting mapbox sales about bulk geocoder
 
-#returns a list of all files in a directory
+# returns a list of all files in a directory
 def getAllFilesInDir(root):
     fileList = []
     for path, subdirs, files in os.walk(root):
@@ -15,7 +15,7 @@ def getAllFilesInDir(root):
 
 files = getAllFilesInDir("results/json")
 
-#static file of county information
+# static file of county information
 f = open("Map Stuff/countyCoordinates.csv")
 
 csv_f = csv.reader(f)
@@ -24,7 +24,7 @@ rowsList = []
 for row in csv_f:
     rowsList.append(row)
 
-#returns a filtered list of counties, in case counties in multiple states have the same name
+# returns a filtered list of counties, in case counties in multiple states have the same name
 def getCountiesOfState(stateCode):
     list = []
     for row in rowsList:
@@ -32,7 +32,7 @@ def getCountiesOfState(stateCode):
             list.append(row)
     return list
 
-#returns the coordinates of the county
+# returns the coordinates of the county
 def getCoordsOfCounty(county,countiesList):
     for row in countiesList:
         if "[" in row[3]:
@@ -44,9 +44,9 @@ def getCoordsOfCounty(county,countiesList):
             return Latitude,Longitude
 
 mapData = []
-#taken from the sitemap generator
+# taken from the sitemap generator
 for filePath in files:
-    filePath = filePath.replace("\\","/") #fixes annoying formating issue that messes up stuff
+    filePath = filePath.replace("\\","/")  # fixes annoying formating issue that messes up stuff
 
 
     

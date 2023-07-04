@@ -47,7 +47,8 @@ def get_result_page(location_id):
     print(location_id)
 
     url = "/result/"
-
+    if "location/" in location_id:
+        return url + "?location=" + location_id[1]
     url += "?country=" + location_id[0] if location_id[0] else ""
     url += "&state=" + location_id[1] if location_id[1] else ""
     url += "&county=" + location_id[2] if location_id[2] else ""

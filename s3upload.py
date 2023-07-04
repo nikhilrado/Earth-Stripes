@@ -93,7 +93,7 @@ def upload_new_changes(directory=RESULTS_DIRECTORY,smart_upload=True, exclude=[]
 
     # will loop through all of the files
     for file in get_all_files_in_dir(directory):
-        #if the file is not in the exclude list
+        # if the file is not in the exclude list
         exclude.append("desktop.ini")
         upload_flag = True
         for ex in exclude:
@@ -147,14 +147,14 @@ def upload_new_changes(directory=RESULTS_DIRECTORY,smart_upload=True, exclude=[]
 def test():
     #uploadNewChanges()
     #uploadFile("results/sunny.png")
-    #uploadNewChanges(directory="results/json/US/",smartUpload=False)
+    upload_new_changes(directory="../Earth Stripes Codebase/results/json/US/",smart_upload=False)
     #uploadNewChanges(directory="results/",smartUpload=False)
     #uploadNewChanges(directory="photos/local-impact-photos/",smartUpload=False)
-    CHART_TYPES = ["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","stripes-svg","light-labeled-bars","large-square-stripes"]
-    CHART_TYPES += ["json"]
-    for chart_type in CHART_TYPES:
-        upload_new_changes(directory=f"../Earth Stripes Codebase/results/{chart_type}/US/FL/",smart_upload=False) 
-        #uploadFile(f"../Earth Stripes Codebase/results/{chartType}/US.json")
+    # CHART_TYPES = ["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","stripes-svg","light-labeled-bars","large-square-stripes"]
+    # CHART_TYPES += ["json"]
+    # for chart_type in CHART_TYPES:
+    #     upload_new_changes(directory=f"../Earth Stripes Codebase/results/{chart_type}/US/FL/",smart_upload=False) 
+    #     #uploadFile(f"../Earth Stripes Codebase/results/{chartType}/US.json")
     #uploadFile("Site Files/map-page/countries2.js", uploadFilePath="map-stuff.js")
     #uploadFile("Map Stuff/mapData.csv",uploadFilePath="mapData2.csv")
     #uploadFile("test5.svg",uploadFilePath="test5.svg")
