@@ -10,7 +10,7 @@ import sys
 
 # declaration of basic variables
 RESULTS_DIRECTORY = "../Earth Stripes Codebase/results/"
-LOG_FILE = "../Earth Stripes Codebase/s3upload-log.csv"
+LOG_FILE = "../Earth Stripes Codebase/logs/s3upload-log.csv"
 S3_PUT_COST = 0.005/1000
 S3_UPLOAD_BUCKET = "earthstripes"
 client = boto3.client('s3', aws_access_key_id=s3.access_key, aws_secret_access_key=s3.secret_access_key)

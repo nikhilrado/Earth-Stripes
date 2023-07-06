@@ -159,4 +159,5 @@ for territory in berklyTerritories:
 print("Could not access the following data files:")
 for url in countryErrorList:
     print(url)
+    #TODO: more accurate error reporting
 

@@ -72,7 +72,7 @@ for line in xml_file_list:
 dom = xml.dom.minidom.parseString(xml_file) #xml.dom.minidom.parse(xml_fname)
 pretty_xml_as_string = dom.toprettyxml()
 
-with open('SEO/result-sitemap.xml', 'w') as f:
+with open('logs/result-sitemap.xml', 'w') as f:
     f.write(pretty_xml_as_string)
 
-SSHupload.upload("/public_html/result-sitemap.xml","SEO/result-sitemap.xml")
+SSHupload.upload("/public_html/result-sitemap.xml","logs/result-sitemap.xml")
