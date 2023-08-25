@@ -285,7 +285,6 @@ function setMerchBox(){
   merchLabel = "&t_location_txt=" + encodeURIComponent(locationName + " " + startYear + "-" + endYear);
   customMerchLink = "https://www.zazzle.com" + "/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&t_labeledstripes_iid=" + encodedLabeledStripesImageURL + "&t_stripes_iid=" + encodedStripesImageURL + "&t_lightlabeledbars_iid=" + encodedLightLabeledBarsImageURL + merchLabel;
   + encodedLabeledStripesImageURL + "&tc=results-merch-box&ic=" + imageID.replace(/[^a-zA-z]/g,'_') + "&t_stripes_iid=" + encodedStripesImageURL + merchLabel;
-  customMerchLink += "&pm=" + 'LOVEFROMZAZZ';
   MerchButton.href = customMerchLink;
   console.log(imageID.replace(/[^a-zA-z]/g,'_'))
 
