@@ -248,9 +248,6 @@ function setYaleBars() {
         agree1text.innerHTML = Math.round(left) + "%";
         agree1text.setAttributeNS(null, "x", left - 1);
 
-        var agreeNationalAverage1 = document.getElementById("YaleNationalAverage" + (i + 1));
-        agreeNationalAverage1.setAttributeNS(null, "width", data["YaleClimateOpinionData"]["national_data"][datas[i]]);
-
         var disagree1 = document.getElementById("Yaledisagree" + (i + 1));
         right = data["YaleClimateOpinionData"]["data"][datas[i] + "Oppose"];
         disagree1.setAttributeNS(null, "x", 100 - right);
@@ -272,23 +269,23 @@ function getZazzleDomain(countryCode){
     return zazzleDomain;
 }
 
-const PRODUCT_NAMES = ["Cloth Mask","Graph Mug","Tie","Stickers"]
-const PRODUCT_IDS = ['256670743725195335','168735114625411268','151119561160107608','217917661479101292']
+const PRODUCT_NAMES = ["Stripes Scarf","Graph Mug","Tie","Stripes Mug"]
+const PRODUCT_IDS = ['256511214137703962','168735114625411268','151119561160107608','168455519534063514']
 function setMerchBox(){
   var encodedLabeledStripesImageURL = encodeURI(bucketPrefix + "labeled-stripes/" + imageID + ".png?request=zazzle");
   var encodedStripesImageURL = encodeURI(bucketPrefix + "stripes/" + imageID + ".png?request=zazzle");
   var encodedLightLabeledBarsImageURL = encodeURI(bucketPrefix + "light-labeled-bars/" + imageID + ".png?request=24012022");
+  var encodedLargeSquareStripesImageURL = encodeURI(bucketPrefix + "large-square-stripes/" + imageID + ".png?request=large-square");
 
   merchLabel = "&t_location_txt=" + encodeURIComponent(locationName + " " + startYear + "-" + endYear);
   customMerchLink = "https://www.zazzle.com" + "/api/create/at-238391408801122257?rf=238391408801122257&ax=DesignBlast&sr=250403062909979961&cg=196064354850369877&t__useQpc=false&t__smart=false&t_labeledstripes_iid=" + encodedLabeledStripesImageURL + "&t_stripes_iid=" + encodedStripesImageURL + "&t_lightlabeledbars_iid=" + encodedLightLabeledBarsImageURL + merchLabel;
-  + encodedLabeledStripesImageURL + "&tc=results-merch-box&ic=" + imageID.replace(/[^a-zA-z]/g,'_') + "&t_stripes_iid=" + encodedStripesImageURL + merchLabel;
-  customMerchLink += "&pm=" + 'LOVEFROMZAZZ';
+  + encodedLabeledStripesImageURL + "&tc=results-merch-box&ic=" + imageID.replace(/[^a-zA-z]/g,'_') + "&t_stripes_iid=" + encodedStripesImageURL+ "&t_largelabeledstripes_iid=" + encodedLargeSquareStripesImageURL + merchLabel;
   MerchButton.href = customMerchLink;
   console.log(imageID.replace(/[^a-zA-z]/g,'_'))
 
   for (i=1; i<=PRODUCT_NAMES.length; i++){
     element = document.getElementById('ProductImage' + i);
-    var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+PRODUCT_IDS[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedStripesImageURL + '&t_labeledstripes_url='+ encodedLabeledStripesImageURL + '&t_lightlabeledbars_url=' + encodedLightLabeledBarsImageURL;
+    var imageID2 = 'https://rlv.zazzle.com/svc/view?pid='+PRODUCT_IDS[i-1]+'&max_dim=600&at=238391408801122257&t_stripes_url='+encodedStripesImageURL + '&t_labeledstripes_url='+ encodedLabeledStripesImageURL + '&t_lightlabeledbars_url=' + encodedLightLabeledBarsImageURL+ '&t_largesquarestripes_url=' + encodedLargeSquareStripesImageURL;
     element.src = imageID2;
     element.alt = "Warming Stripes " + PRODUCT_NAMES[i-1]
     element = document.getElementById('ProductName' + i);
