@@ -85,7 +85,8 @@ def columnToJSON(column):
             if column[i+7] != "":
                 z["img"]["alt"] = sanitizeText(column[i+7])
             if column[i+8] != "":
-                z["img"]["caption"] = sanitizeText(column[i+8])
+                temp = sanitizeText(column[i+8])
+                z["img"]["caption"] = temp[0].upper() + temp[1:]
             if column[i+8] != "":
                 z["img"]["credit"] = sanitizeText(column[i+9])
             
