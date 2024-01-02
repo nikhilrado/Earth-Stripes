@@ -23,7 +23,7 @@ def saveResource(resourceURL):
         county = my_list[0][0]
     except:
         return "done"
-    state = my_list[0][1].strip()
+    state = " ".join(my_list[0][1].split(" ")[:-3]).strip()
     basePeriod = my_list[2][0][-9:]
     startYear = my_list[5][0][:4]
     endYear = my_list[-1][0][:4]
@@ -39,8 +39,9 @@ def saveResource(resourceURL):
                     ["Data File URL:", resourceURL],
                     ["Access Date (UTC):",  datetime.datetime.now()]]
     my_list = metaDataList + my_list
-
-    file_path = 'data/us-county-data-NOAA/2022/%s/%s %s - AnnTemp %s-%s.csv' % (state,county,getStateAbrev(state),startYear,endYear)
+    #TODO: restore previous data folder
+    #TODO: make year date reflect end year (dynamic)
+    file_path = 'data/us-county-data-NOAA/2023/%s/%s %s - AnnTemp %s-%s.csv' % (state,county,getStateAbrev(state),startYear,endYear)
 
     # create folder if it doesn't exist
     folder_path = file_path[:file_path.rfind("/")]
@@ -58,6 +59,7 @@ for state in stateShortName:
         counter += 1
         # TODO: Miami-Dade FIPS is 086, need to make new system
         noaa_data_url = "https://www.ncdc.noaa.gov/cag/county/time-series/%s-%s-tavg-12-12-1895-2022.csv?base_prd=true&begbaseyear=1901&endbaseyear=2000" % (state,f"{i*2+1:03d}")
+        noaa_data_url = f"https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/county/time-series/{state}-{f'{i*2+1:03d}'}-tavg-12-12-1895-2022.csv?base_prd=true&begbaseyear=1901&endbaseyear=2000"
 
         print("County: " + str(counter)  +  ' ' + noaa_data_url)
 
@@ -67,5 +69,3 @@ for state in stateShortName:
                 continue
         except Exception as e:
             print("Error: " + str(e))
-
-

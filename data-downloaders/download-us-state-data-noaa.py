@@ -23,7 +23,7 @@ def saveResource(resourceURL):
         county = my_list[0][0]
     except:
         return "done"
-    state = my_list[0][0].strip()
+    state = " ".join(my_list[0][0].split(" ")[:-3])
     basePeriod = my_list[2][0][-9:]
     startYear = my_list[5][0][:4]
     endYear = my_list[-1][0][:4]
@@ -56,9 +56,11 @@ def saveResource(resourceURL):
 
 newData = ""
 counter = 0
-for i in range(51):
+for i in range(1,51):
     counter += 1
-    resourceURL = "https://www.ncdc.noaa.gov/cag/statewide/time-series/"+str(i)+"-tavg-12-12-1895-2022.csv?base_prd=true&begbaseyear=1901&endbaseyear=2000"
+    resourceURL = "https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/statewide/time-series/1/tavg/1/11/1895-2023.csv?base_prd=true&begbaseyear=1901&endbaseyear=2000"
+    resourceURL = f"https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/statewide/time-series/{str(i)}/tavg/1/11/1895-2023.csv?base_prd=true&begbaseyear=1901&endbaseyear=2000"
+    #resourceURL = "https://www.ncdc.noaa.gov/cag/statewide/time-series/"+str(i)+"-tavg-12-12-1895-2022.csv?base_prd=true&begbaseyear=1901&endbaseyear=2000"
     #use for custom URL request
     #resourceURL = "https://www.ncdc.noaa.gov/cag/county/time-series/FL-086-tavg-12-12-1895-2021.csv"
     #"/cag/statewide/time-series/1-tavg-12-12-1895-2021.json?base_prd=true&begbaseyear=1901&endbaseyear=2000"
