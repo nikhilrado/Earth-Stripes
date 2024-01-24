@@ -74,6 +74,8 @@ def get_file_type(file_path):
 
 # when run it will upload all files in a directory to s3, if smartUpload is "True", it will only upload files that have been changed since last upload
 def upload_new_changes(directory=RESULTS_DIRECTORY,smart_upload=True, exclude=[]):
+    print(f"Uploading new changes... from: {directory}, smart_upload: {smart_upload}, exclude: {exclude}")
+
     # opens the log file
     f = open(LOG_FILE,"r")
     csv_f = csv.reader(f)
@@ -147,7 +149,7 @@ def upload_new_changes(directory=RESULTS_DIRECTORY,smart_upload=True, exclude=[]
 def test():
     #uploadNewChanges()
     #uploadFile("results/sunny.png")
-    upload_new_changes(directory="../Earth Stripes Codebase/results/json/US/",smart_upload=False)
+    upload_new_changes(directory="../Earth Stripes Codebase/results/json/",smart_upload=False, exclude=["/2020","/2021"])
     #uploadNewChanges(directory="results/",smartUpload=False)
     #uploadNewChanges(directory="photos/local-impact-photos/",smartUpload=False)
     # CHART_TYPES = ["label","labeled-bars","labeled-stripes","snap-sticker","stripes","twitter-card","stripes-svg","light-labeled-bars","large-square-stripes"]
