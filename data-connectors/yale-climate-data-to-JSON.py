@@ -7,9 +7,9 @@ import globals
 import manageJSON
 
 RESULTS_DIR = "../Earth Stripes Codebase/results/json/"
-YCOM_DATA_FILE = '../Earth Stripes Codebase/data/yale-climate/YCOM_2021_Data.csv'
-YCOM_DATA_YEAR = "2021"
-NATIONAL_DATA_FILE = "../Earth Stripes Codebase/results/json/US.json"
+YCOM_DATA_FILE = '../Earth Stripes Codebase/data/yale-climate/YCOM7_2023_Data.csv'
+YCOM_DATA_YEAR = "2023"
+NATIONAL_ES_JSON_FILE = "../Earth Stripes Codebase/results/json/US.json"
 
 # intercepts function for globals.py to accommodate dif DC naming convention
 def get_state_abbrev(state):
@@ -21,18 +21,19 @@ def get_state_abbrev(state):
 
 # gets the resource ID of the file by seeing what location category the yale data belongs to
 def get_resource_id_from_yale(row):
-    if row[0] == "County":
+    territory_level = row[0].lower()
+    if territory_level == "county":
         county = row[2].split(",")[0]
         state_code = get_state_abbrev(row[2].split(",")[1].strip())
         return "US/"+state_code+"/"+county+" "+state_code
-    if row[0] == "State":
+    if territory_level == "state":
         return "US/" + get_state_abbrev(row[2])
-    if row[0] == "National":
+    if territory_level == "national":
         return row[2]
     return None
 
 # opens the national data file and appends it, should probably load independently
-with open(NATIONAL_DATA_FILE, "r") as file:
+with open(NATIONAL_ES_JSON_FILE, "r") as file:
     national_json = json.load(file)
     national_data = national_json["YaleClimateOpinionData"]["data"]
 
@@ -40,6 +41,10 @@ with open(NATIONAL_DATA_FILE, "r") as file:
 with open(YCOM_DATA_FILE, "r") as file:
     rows_list = list(csv.reader(file))
 data_headers = rows_list.pop(0)  # sets first row as headers and removes it
+
+# this renames the headers so they are the same as the YCOM6_2021 data headers
+# for backwards compatibility
+data_headers = ["GeoType", "GEOID", "GeoName", "TotalPop"] + data_headers[4:]
 
 # loops through csv to translate the data
 for i, row in enumerate(rows_list):

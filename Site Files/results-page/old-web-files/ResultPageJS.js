@@ -238,7 +238,7 @@ function setLocalImpacts(data){
 // sets the bars for yale data_function
 function setYaleBars() {
     YaleSubHeader.innerText = "How people in " + data["YaleClimateOpinionData"]["data"]["GeoName"] + " view climate change";
-    datas = ["happening", "personal","harmUS", "congress","fundrenewables","teachGW"];
+    datas = ["happening", "personal","harmus", "congress","fundrenewables","teachgw"];
 
     for (let i = 0; i < datas.length; i++) {
         var agree1 = document.getElementById("Yaleagree" + (i + 1));
